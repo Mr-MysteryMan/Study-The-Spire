@@ -11,3 +11,5 @@ link-李 sm 触发 CI/CD 操作,有人有 Unity 2023.3 及以上的版本吗
 groundedlens-邓 xf 触发 CI/CD 操作
 
 Dong3gold-董 x 触发 CI/CD 操作, 有的，这样的版本还有unity 6（国区除外）
+
+Kina-牛 触发 CI/CD 操作
