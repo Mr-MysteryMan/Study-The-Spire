@@ -12,4 +12,6 @@ groundedlens-邓 xf 触发 CI/CD 操作
 
 Dong3gold-董 x 触发 CI/CD 操作, 有的，这样的版本还有unity 6（国区除外）
 
-Kina-牛 触发 CI/CD 操作
+Kina-牛 触发 CI/CD 操作 dw
+
+Nyx12333 触发 CI/CD 操作, 有的兄弟有的
