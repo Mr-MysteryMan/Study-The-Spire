@@ -5,6 +5,9 @@ using System.Collections.Generic;
 public class CardOverview : MonoBehaviour
 {
     public GameObject CardPrefab; // 卡片预制件
+
+    public GameObject CardOverviewDialog; // 自身游戏元素
+
     public GameObject Background;
 
     public GameObject Dialog; // 卡片池
@@ -12,36 +15,19 @@ public class CardOverview : MonoBehaviour
     public List<Card> myCards;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        CreateCards();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }    
-    
     //生成卡片
-    private void CreateCards()
+    public void CreateCards(List<CardData> cardDatas)
     {
-        const int cardCount = 10; // 创建的卡片数量
-        List<string> cardStrings = new List<string> {"A","2","3","4","5","6","7","8","9","10","J","Q","K"}; // 示例卡片文本
-
+        int cardCount = cardDatas.Count; // 卡片数量
         for (int i = 0; i < cardCount;i++) {
-            // 从cardStrings随机选择一个字符串
-            int randomIndex = Random.Range(0, cardStrings.Count);
-            string cardString = cardStrings[randomIndex];
-
+            CardData cardData = cardDatas[i]; // 获取卡片数据
             // 在Dialog中实例化卡片
             GameObject cardObject = Instantiate(CardPrefab, Dialog.transform);
             cardObject.transform.localPosition = GetCardPosition(i, cardCount); // 设置卡片位置
             cardObject.transform.localRotation = Quaternion.Euler(GetCardRotation(i, cardCount)); // 设置卡片旋转
-            cardObject.GetComponent<Card>().SetCardText(cardString); // 设置卡片文本
-            // 随机设置卡片是否弃牌
-            if (Random.Range(0, 2) == 0)
-            {
+            cardObject.GetComponent<Card>().SetCardText(cardData.content); // 设置卡片文本
+            // 弃牌
+            if (cardData.isDiscarded) {
                 cardObject.GetComponent<Card>().setDiscard(); // 设置为弃牌
             }
         }
@@ -66,5 +52,9 @@ public class CardOverview : MonoBehaviour
     {
         float z = (float)(-index + total / 2.0 + 0.5);
         return new Vector3(0, 0, z);
+    }
+
+    public void  closeDialog() {
+        Destroy(CardOverviewDialog);
     }
 }

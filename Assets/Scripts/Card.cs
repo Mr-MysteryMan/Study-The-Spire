@@ -12,7 +12,6 @@ public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler
 
     private int originalSiblingIndex; // 原始的层级索引
 
-
     public void SetCardText(string content)
     {
         // 设置卡片文本
@@ -26,7 +25,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler
         this.isDiscarded = true;
         // 设置背景透明度为0.5
         Color color = this.background.color;
-        color.a = 0.5f;
+        color.a = 0.7f;
         this.background.color = color;
     }
 
