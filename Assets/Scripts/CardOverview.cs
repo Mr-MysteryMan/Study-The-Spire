@@ -4,11 +4,12 @@ using System.Collections.Generic;
 
 public class CardOverview : MonoBehaviour
 {
+    [Header("卡片预制件")]
     public GameObject CardPrefab; // 卡片预制件
 
+    [Header("自身元素绑定")]
     public GameObject CardOverviewDialog; // 自身游戏元素
-
-    public GameObject Background;
+    public GameObject Canvas; // 画布元素
 
     public GameObject Dialog; // 卡片池
 

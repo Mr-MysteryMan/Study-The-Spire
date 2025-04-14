@@ -8,7 +8,8 @@ public class ViewCards : MonoBehaviour
     {
         // 创建卡片预览窗口
         GameObject cardOverview = Instantiate(CardOverViewPrefab);
-        cardOverview.GetComponent<CardOverview>().CreateCards(randomCardData()); // 创建卡片
+        CardOverview obj = cardOverview.GetComponent<CardOverview>();
+        obj.CreateCards(randomCardData()); // 生成卡片
     }
 
 
