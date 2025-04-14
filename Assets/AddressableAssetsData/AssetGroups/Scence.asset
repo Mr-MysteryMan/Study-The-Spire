@@ -16,7 +16,12 @@ MonoBehaviour:
   m_GUID: 2ff5319586490144c9054684a1a3a399
   m_SerializeEntries:
   - m_GUID: 3c1faa7164435974799ed9ca9e6b55fa
-    m_Address: Assets/Scenes/Map.unity
+    m_Address: Map
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a6850fcbb120e6045826ed00386e3fdd
+    m_Address: Assets/Scenes/MinorEnemy.unity
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
