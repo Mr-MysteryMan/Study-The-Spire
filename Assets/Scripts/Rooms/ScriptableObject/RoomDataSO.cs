@@ -9,6 +9,6 @@ public class RoomDataSO : ScriptableObject
 
     public RoomType roomType;
 
-    public AssetReference senceToLoad;
+    public AssetReference sceneToLoad;
 
 }

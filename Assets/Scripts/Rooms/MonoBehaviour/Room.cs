@@ -13,6 +13,9 @@ public class Room : MonoBehaviour
 
     public RoomState roomState;
 
+    [Header("广播")]
+    public ObjectEventSO loadRoomEvent;
+
     private void Start()
     {
         SetupRoom(1, 1, roomData);
@@ -24,6 +27,7 @@ public class Room : MonoBehaviour
     private void OnMouseDown()
     {
         Debug.Log("点击了房间：" + roomData.roomType);
+        loadRoomEvent.RaiseEvent(roomData, this);
     }
 
 //外部创建房间时进行调用，填充房间的位置/属性
