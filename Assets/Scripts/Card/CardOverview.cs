@@ -26,11 +26,7 @@ public class CardOverview : MonoBehaviour
             GameObject cardObject = Instantiate(CardPrefab, Dialog.transform);
             cardObject.transform.localPosition = GetCardPosition(i, cardCount); // 设置卡片位置
             cardObject.transform.localRotation = Quaternion.Euler(GetCardRotation(i, cardCount)); // 设置卡片旋转
-            cardObject.GetComponent<Card>().SetCardText(cardData.content); // 设置卡片文本
-            // 弃牌
-            if (cardData.isDiscarded) {
-                cardObject.GetComponent<Card>().setDiscard(); // 设置为弃牌
-            }
+            cardObject.GetComponent<Card>().updateCardStatus(cardData); // 更新卡片状态
         }
     }
 
