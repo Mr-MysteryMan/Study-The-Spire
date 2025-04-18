@@ -1,41 +1,36 @@
-using Unity.Mathematics;
-using UnityEngine;
-
-[CreateAssetMenu(fileName = "CharacterData", menuName = "Scriptable Objects/CharacterData")]
-public class CharacterData : ScriptableObject
+namespace Combat
 {
-    [SerializeField] private string characterName; // 角色名称
-    [SerializeField] private ReactiveIntVariable curHP;
-    [SerializeField] private int maxHP; // 最大生命值
+    public class CharacterData
+    {
+        public int MaxHp { get; private set; }
+        public int HP { get; private set; }
+        public int Ammor { get; private set; }
 
-    public int CurHP {
-        get => curHP.Value;
-    }
+        public CharacterData(int maxHp, int hp, int ammor)
+        {
+            MaxHp = maxHp;
+            HP = hp;
+            Ammor = ammor;
+        }
 
-    public int MaxHP => maxHP; 
-    public string CharacterName => characterName;
+        public void TakeAmmorDamage(int damage)
+        {
+            Ammor -= damage;
+        }
 
-    [SerializeField] private ReactiveIntVariable curAmmor;
+        public void TakeHpDamage(int damage)
+        {
+            HP -= damage;
+        }
 
-    public int CurAmmor {
-        get => curAmmor.Value;
-    }
+        public void Heal(int heal)
+        {
+            HP += heal;
+        }
 
-
-    private void Init() {
-        curHP = new ReactiveIntVariable("CurHP", "HPChangedEvent", 0, this);
-        curAmmor = new ReactiveIntVariable("CurAmmor", "AmmorChangedEvent", 0, this);
-    }
-
-    private void OnEnable() {
-        Init();
-    }
-
-    public void TakeAmmorDamage(int damage) {
-        this.curAmmor.Value = math.max(0, this.curAmmor.Value - damage);
-    }
-
-    public void TakeHPDamage(int damage) {
-        this.curHP.Value -= damage;
+        public void AddAmmor(int ammor)
+        {
+            Ammor += ammor;
+        }
     }
 }

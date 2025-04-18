@@ -1,31 +1,34 @@
-using UnityEngine;
-
-public class ReactiveVariable<T>
+namespace Combat.EventVarible
 {
-    private T _value;
-    public T Value {
-        get => _value;
-        set {
-            var oldValue = _value;
-            _value = value;
-            if (EventManager.instance != null && oldValue != null && !oldValue.Equals(value))
+    public class ReactiveVariable<T>
+    {
+        private T _value;
+        public T Value
+        {
+            get => _value;
+            set
             {
-                EventManager.instance.Publish(Name, new ValueChangedEvent<T>(_eventName, oldValue, value));
+                var oldValue = _value;
+                _value = value;
+                if (EventManager.instance != null && oldValue != null && !oldValue.Equals(value))
+                {
+                    EventManager.instance.Publish(Name, new ValueChangedEvent<T>(_eventName, oldValue, value));
+                }
             }
         }
-    }
 
-    public string Name;
+        public string Name;
 
-    private string _eventName;
+        private string _eventName;
 
-    public Object Source {get;}
+        public object Source { get; }
 
-    public ReactiveVariable(string name, string eventName, T value, Object source = null)
-    {
-        Name = name;
-        _eventName = eventName;
-        _value = value;
-        Source = source;
+        public ReactiveVariable(string name, string eventName, T value, object source = null)
+        {
+            Name = name;
+            _eventName = eventName;
+            _value = value;
+            Source = source;
+        }
     }
 }

@@ -1,16 +1,19 @@
 using System;
 
-public class ValueChangedEvent<T>
+namespace Combat.EventVarible
 {
-    public T OldValue { get; } // 旧值
-    public T NewValue { get; } // 新值
-
-    public string ValueName { get; } // 事件名称
-
-    public ValueChangedEvent(string name, T oldValue, T newValue)
+    public class ValueChangedEvent<T>
     {
-        ValueName = name;
-        OldValue = oldValue;
-        NewValue = newValue;
+        public T OldValue { get; } // 旧值
+        public T NewValue { get; } // 新值
+
+        public string ValueName { get; } // 事件名称
+
+        public ValueChangedEvent(string name, T oldValue, T newValue)
+        {
+            ValueName = name;
+            OldValue = oldValue;
+            NewValue = newValue;
+        }
     }
 }

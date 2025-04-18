@@ -1,3 +1,7 @@
-public enum DamageType {
-    Normal,
+namespace Combat
+{
+    public enum DamageType
+    {
+        Normal,
+    }
 }
