@@ -10,21 +10,24 @@ public class SceneLoadManager : MonoBehaviour
     private AssetReference currentScene;
     
     public AssetReference map;
-
+    private Vector2Int currentRoomVector;
+    private Room currentRoom;
+    
+    public ObjectEventSO afterRoomLoadedEvent;
     public async void OnLoadRoomEvent(object data)
     {
-        if (data is RoomDataSO)
+        if (data is Room)
         {
-            var room = (RoomDataSO)data;
-            Debug.Log(room.roomType);
-            currentScene = room.sceneToLoad;
+            currentRoom = (Room)data;
+            RoomDataSO currentData = currentRoom.roomData;
+            currentRoomVector = new Vector2Int(currentRoom.col, currentRoom.row);
+            // 璁剧疆褰撳墠鍦烘櫙
+            currentScene = currentData.sceneToLoad;
+
         }
-
-        //卸载当前房间
         await UnloadSceneTask();
-
-        //加载新房间
-        await LoadSceneTask();
+        await LoadSceneTask();   
+        afterRoomLoadedEvent.RaiseEvent(currentRoomVector, this);
     }
 
     private async Awaitable LoadSceneTask()
