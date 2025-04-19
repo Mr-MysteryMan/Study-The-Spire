@@ -7,25 +7,20 @@ namespace Combat
     // 单例模式的事件管理器类
     public class EventManager : MonoBehaviour
     {
-        public static EventManager instance;
+        public delegate void EventDelegate<T>(T eventData);
+        private Dictionary<Type, Delegate> eventTable;
 
-        private void Awake()
+        public Dictionary<string, Delegate> stringEventTable;
+
+        private void Initialize()
         {
-            if (instance == null)
-            {
-                instance = this;
-                DontDestroyOnLoad(gameObject); // 阻止销毁
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
+            eventTable = new Dictionary<Type, Delegate>();
+            stringEventTable = new Dictionary<string, Delegate>();
         }
 
-        public delegate void EventDelegate<T>(T eventData);
-        private Dictionary<Type, Delegate> eventTable = new();
-
-        public Dictionary<string, Delegate> stringEventTable = new();
+        private void Awake() {
+            Initialize();
+        }
 
         // 订阅事件
         public void Subscribe<T>(EventDelegate<T> eventDelegate)

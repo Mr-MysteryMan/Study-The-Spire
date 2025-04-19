@@ -1,9 +1,11 @@
-namespace Combat
+using Combat.Command;
+
+namespace Combat.Command
 {
-    public struct AttackCommand
+    public struct AttackCommand : ICommand
     {
-        public Character Attacker;
-        public Character Target;
+        public Character Source {get; set;}
+        public Character Target {get; set;}
         public int BaseDamage; // 基础伤害
         public DamageType Type;
         public int FinalDamage; // 最终伤害
@@ -12,13 +14,18 @@ namespace Combat
 
         public AttackCommand(Character attacker, Character target, int baseDamage, DamageType type)
         {
-            Attacker = attacker;
+            Source = attacker;
             Target = target;
             BaseDamage = baseDamage;
             Type = type;
             FinalDamage = 0;
             AmmorDamage = 0;
             HPDamage = 0;
+        }
+
+        public void Execute() {
+            Target._TakeAmmorDamage(AmmorDamage);
+            Target._TakeHpDamage(HPDamage);
         }
     }
 }

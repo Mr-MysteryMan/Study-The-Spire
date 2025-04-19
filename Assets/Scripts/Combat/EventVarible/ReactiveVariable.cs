@@ -1,8 +1,11 @@
+using UnityEngine;
 namespace Combat.EventVarible
 {
-    public class ReactiveVariable<T>
+    public class ReactiveVariable<T> : ScriptableObject
     {
-        private T _value;
+        [SerializeField] private T _value;
+        [SerializeField] private EventManager _eventManager;
+
         public T Value
         {
             get => _value;
@@ -10,25 +13,22 @@ namespace Combat.EventVarible
             {
                 var oldValue = _value;
                 _value = value;
-                if (EventManager.instance != null && oldValue != null && !oldValue.Equals(value))
+                if (_eventManager != null && oldValue != null && !oldValue.Equals(value))
                 {
-                    EventManager.instance.Publish(Name, new ValueChangedEvent<T>(_eventName, oldValue, value));
+                    _eventManager.Publish(_name, new ValueChangedEvent<T>(_eventName, Parent, oldValue, value));
                 }
             }
         }
 
-        public string Name;
+        [SerializeField] private string _name;
 
-        private string _eventName;
+        [SerializeField] private string _eventName;
 
-        public object Source { get; }
+        public object Parent;
 
-        public ReactiveVariable(string name, string eventName, T value, object source = null)
+        public void SetParent(object parent)
         {
-            Name = name;
-            _eventName = eventName;
-            _value = value;
-            Source = source;
+            Parent = parent;
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using Combat.Command;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -15,7 +16,31 @@ namespace Combat {
 
         public int Ammor => ammor;
 
-        internal void TakeHpDamage(int damage) {
+
+        [SerializeField] private CombatSystem combatSystem;
+
+        public void Attack(Character target, int damage) {
+            combatSystem.ProcessCommand(new AttackCommand(this, target, damage, DamageType.Normal));
+        }
+
+        public void Heal(Character target, int heal) {
+            combatSystem.ProcessCommand(new HealCommand(this, target, heal));
+        }
+
+        public void Heal(int heal) {
+            combatSystem.ProcessCommand(new HealCommand(this, this, heal));
+        }
+
+        public void AddAmmor(Character character, int ammor) {
+            combatSystem.ProcessCommand(new AddAmmorCommand(this, character, ammor));
+        }
+
+        public void AddAmmor(int ammor) {
+            combatSystem.ProcessCommand(new AddAmmorCommand(this, this, ammor));
+        }
+
+
+        internal void _TakeHpDamage(int damage) {
             Assert.IsTrue(damage >= 0, "Damage cannot be negative.");
             curHp -= damage;
             if (curHp < 0) {
@@ -23,7 +48,7 @@ namespace Combat {
             }
         }
 
-        internal void TakeAmmorDamage(int damage) {
+        internal void _TakeAmmorDamage(int damage) {
             Assert.IsTrue(damage >= 0, "Damage cannot be negative.");
             ammor -= damage;
             if (ammor < 0) {
@@ -31,7 +56,7 @@ namespace Combat {
             }
         }
 
-        internal void Heal(int heal)
+        internal void _Heal(int heal)
         {
             Assert.IsTrue(heal >= 0, "Heal cannot be negative.");
             curHp += heal;
@@ -40,18 +65,18 @@ namespace Combat {
             }
         }
 
-        internal void AddAmmor(int ammor)
+        internal void _AddAmmor(int ammor)
         {
             Assert.IsTrue(ammor >= 0, "Ammor cannot be negative.");
             this.ammor += ammor;
         }
 
-        internal void AddMaxHp(int maxHp) {
+        internal void _AddMaxHp(int maxHp) {
             Assert.IsTrue(maxHp >= 0, "MaxHp cannot be negative.");
             this.maxHp += maxHp;
         }
 
-        internal void MinusMaxHp(int maxHp) {
+        internal void _MinusMaxHp(int maxHp) {
             Assert.IsTrue(maxHp >= 0, "MaxHp cannot be negative.");
             this.maxHp -= maxHp;
             if (this.maxHp < 0) {
@@ -62,12 +87,13 @@ namespace Combat {
             }
         }
 
-        internal void SetMaxHp(int maxHp) {
+        internal void _SetMaxHp(int maxHp) {
             Assert.IsTrue(maxHp >= 0, "MaxHp cannot be negative.");
             this.maxHp = maxHp;
             if (curHp > this.maxHp) {
                 curHp = this.maxHp;
             }
         }
+
     }
 }

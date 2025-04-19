@@ -9,9 +9,12 @@ namespace Combat.EventVarible
 
         public string ValueName { get; } // 事件名称
 
-        public ValueChangedEvent(string name, T oldValue, T newValue)
+        public object Parent { get; } // 所在对象
+
+        public ValueChangedEvent(string name, object parent, T oldValue, T newValue)
         {
             ValueName = name;
+            Parent = parent;
             OldValue = oldValue;
             NewValue = newValue;
         }
