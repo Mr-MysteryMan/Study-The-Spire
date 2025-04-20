@@ -13,6 +13,7 @@ public enum ShopMode {
 }
 
 public class ShopPanelManager : MonoBehaviour {
+    private CardManager cardManager;
     private Transform topCenter;
     private Transform buyBtn;
     private Transform deleteBtn;
@@ -41,6 +42,7 @@ public class ShopPanelManager : MonoBehaviour {
     public ShopMode curMode = ShopMode.normal;
 
     void Start() {
+        cardManager = CardManager.Instance;
         CacheUI();
         InitClick();
         RefreshUI();
@@ -120,11 +122,11 @@ public class ShopPanelManager : MonoBehaviour {
         Text popupContent = confirmPopup.Find("Content").GetComponent<Text>();
 
         if (curMode == ShopMode.buy) {
-            popupContent.text = $"是否花费 {selectedItemData.gold} 金币购买 {selectedItemData.name}？";
+            popupContent.text = $"是否花费 {selectedItemData.gold} 金币购买选中卡牌？";
             popupConfirmBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             popupConfirmBtn.GetComponent<Button>().onClick.AddListener(DoBuyItem);
         } else if (curMode == ShopMode.delete) {
-            popupContent.text = $"是否花费 100 金币移除 {selectedItemData.name}？";
+            popupContent.text = $"是否花费 100 金币移除选中卡牌？";
             popupConfirmBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             popupConfirmBtn.GetComponent<Button>().onClick.AddListener(DoDeleteItem);
         }
@@ -136,13 +138,12 @@ public class ShopPanelManager : MonoBehaviour {
     }
 
     private void DoBuyItem() {
-        Debug.Log($"购买：{selectedItemData.name}");
+        cardManager.SpendGold(selectedItemData.gold);
+        cardManager.AddCard(selectedItemData);
 
-        // TODO：检查gold额度，扣除gold，添加item到背包
-        
         // 从 shopItems 中移除该商品
         shopItems.Remove(selectedItemData);
-        SaveItemDataToJson("ItemData/shop_items", shopItems);
+        // SaveItemDataToJson("ItemData/shop_items", shopItems);
 
         Destroy(selectedItemGO);
         selectedItemGO = null;
@@ -153,18 +154,17 @@ public class ShopPanelManager : MonoBehaviour {
     }
 
     private void DoDeleteItem() {
-         Debug.Log($"删除：{selectedItemData.name}");
+        // 与CardManager交互
+        const int deleteCost = 100;
+        cardManager.SpendGold(deleteCost);
+        cardManager.RemoveCard(selectedItemData.cardId);
 
-        // TODO: 从玩家卡组中删除该卡牌，并扣除拟定金币
-
-        // 从玩家卡组（package_items）中删除该卡牌(仅测试界面，金币定为100)
-
-        shopItems.Remove(selectedItemData);
-        SaveItemDataToJson("ItemData/package_items", shopItems);
+        // SaveItemDataToJson("ItemData/package_items", shopItems);
 
         Destroy(selectedItemGO);
         selectedItemGO = null;
         selectedItemData = null;
+
 
         confirmPopup.gameObject.SetActive(false);
         detailPanel.gameObject.SetActive(false);
@@ -226,8 +226,10 @@ public class ShopPanelManager : MonoBehaviour {
         confirmPopup.gameObject.SetActive(false);
 
         // 加载内容
-        if (curMode != ShopMode.normal) {
+        if (curMode == ShopMode.buy) {
             LoadShopItems();
+        } else if (curMode == ShopMode.delete) {
+            LoadBackItems();
         }
     }
 
@@ -249,26 +251,21 @@ public class ShopPanelManager : MonoBehaviour {
     private ItemData selectedItemData = null;
 
     private void LoadShopItems() {
-        if (curMode == ShopMode.buy) {
-            Debug.Log("加载商店中的商品...");
-            shopItems = LoadItemDataFromJson("ItemData/shop_items");
-        } else if (curMode == ShopMode.delete) {
-            Debug.Log("加载背包中的物品...");
-            shopItems = LoadItemDataFromJson("ItemData/package_items");  // 仅测试  TODO
-        }
+        Debug.Log("加载商店中的商品...");
+        // shopItems = LoadItemDataFromJson("ItemData/shop_items");
 
         foreach (ItemData item in shopItems) {
             GameObject itemGO = Instantiate(ShopUIItemPrefab, scrollViewContent);
 
             // 设置图标
             Image icon = itemGO.transform.Find("Top/Icon").GetComponent<Image>();
-            Sprite sprite = Resources.Load<Sprite>(item.iconPath);
+            Sprite sprite = CardUI.GetCardBackground(item.cardType);
             if (sprite) icon.sprite = sprite;
 
             // 设置名称
             Text nameText = itemGO.transform.Find("Bottom/NameText").GetComponent<Text>();
             if (curMode != ShopMode.buy) {
-                nameText.text = item.name;
+                nameText.text = item.cardValue.ToString();
             }
             // Debug.Log("加载了：" + item.name);
 
@@ -285,12 +282,53 @@ public class ShopPanelManager : MonoBehaviour {
             Button btn = itemGO.GetComponent<Button>();
             if (btn != null) {
                 btn.onClick.AddListener(() => {
-                    Debug.Log("点击了：" + item.name);
                     OnItemClicked(itemGO, item);
                 });
             }
         }
-        
+    }
+
+    private List<CardData> backItems = new List<CardData>();
+    private void LoadBackItems() {
+        Debug.Log("Loading back items...");
+    if (ShopUIItemPrefab == null) 
+    {
+        Debug.LogError("ShopUIItemPrefab is not assigned!");
+        return;
+    }
+        Debug.Log("加载背包中的物品...");
+        backItems = cardManager.GetAllCards();
+
+        foreach (CardData item in backItems) {
+            GameObject itemGO = Instantiate(ShopUIItemPrefab, scrollViewContent);
+
+            // 设置图标
+            Image icon = itemGO.transform.Find("Top/Icon").GetComponent<Image>();
+            Sprite sprite = CardUI.GetCardBackground(item.cardType);
+            if (sprite) icon.sprite = sprite;
+
+            // 设置名称
+            Text nameText = itemGO.transform.Find("Bottom/NameText").GetComponent<Text>();
+            if (curMode != ShopMode.buy) {
+                nameText.text = item.cardValue.ToString();
+            }
+            // Debug.Log("加载了：" + item.name);
+
+            // 设置金币区域
+            Transform golds = itemGO.transform.Find("Bottom/Golds");
+            golds.gameObject.SetActive(false);
+
+            // 默认未选中
+            itemGO.transform.Find("Select").gameObject.SetActive(false);
+
+            // 设置选中按钮
+            Button btn = itemGO.GetComponent<Button>();
+            if (btn != null) {
+                btn.onClick.AddListener(() => {
+                    OnItemClicked(itemGO, new ItemData(item.cardType, item.cardValue, 0));
+                });
+            }
+        }
     }
 
 
@@ -322,10 +360,10 @@ public class ShopPanelManager : MonoBehaviour {
         Image iconImage = detailPanel.Find("Center/Icon").GetComponent<Image>();
         Text descText = detailPanel.Find("Bottom/Description").GetComponent<Text>();
 
-        nameText.text = item.name;
-        descText.text = item.description;
+        // nameText.text = item.name;
+        // descText.text = item.description;
 
-        Sprite icon = Resources.Load<Sprite>(item.iconPath);
+        Sprite icon = CardUI.GetCardBackground(item.cardType);
         if (icon) iconImage.sprite = icon;
     }
 }
