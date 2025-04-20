@@ -396,7 +396,6 @@ MonoBehaviour:
     m_SubObjectType: 
     m_EditorAssetChanged: 0
   afterRoomLoadedEvent: {fileID: 11400000, guid: b6053c9baa42c204492e5b15b7dc7078, type: 2}
-  updateRoomEvent: {fileID: 0}
 --- !u!4 &1874029907
 Transform:
   m_ObjectHideFlags: 0
