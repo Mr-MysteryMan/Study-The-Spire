@@ -2,19 +2,26 @@
 using System;
 
 [Flags]
-public enum RoomType //·¿¼äÀàÐÍ
+public enum RoomType //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 {
-    MinorEnemy = 1, //ÆÕÍ¨µÐÈË
-    EliteEnemy = 2, //¾«Ó¢µÐÈË
-    Shop = 4, //ÉÌµê
-    Treasure = 8, //±¦Ïä
-    RestRoom = 16, //ÐÝÕû
+    MinorEnemy = 1, //ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½
+    EliteEnemy = 2, //ï¿½ï¿½Ó¢ï¿½ï¿½ï¿½ï¿½
+    Shop = 4, //ï¿½Ìµï¿½
+    Treasure = 8, //ï¿½ï¿½ï¿½ï¿½
+    RestRoom = 16, //ï¿½ï¿½ï¿½ï¿½
     BossRoom = 32
 }
 
-public enum RoomState //·¿¼ä×´Ì¬
+public enum RoomState //ï¿½ï¿½ï¿½ï¿½×´Ì¬
 {
-    Locked, //ÔÝÊ±ÎÞ·¨µ½´ï
-    Visited, //ÒÑ¾­¾­¹ýµÄ
-    Attainable //¿ÉÒÔÇ°ÍùµÄ
+    Locked,
+    Visited,
+    Attainable,
+    Passed,
+}
+
+public enum LineState
+{
+    Move,
+    NoMove
 }
