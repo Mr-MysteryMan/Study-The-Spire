@@ -16,8 +16,6 @@ public class BackpackPanelManager : MonoBehaviour
     private Transform bottomPanel;
     private Transform bottomMenus;
     private Transform detailBtn;
-
-    // 当前选中的卡牌类型
     private CardType currentType;
 
     // 卡牌展示用的预制体
@@ -29,8 +27,6 @@ public class BackpackPanelManager : MonoBehaviour
         Debug.Log(cardManager == null ? "CardManager 为 null!" : "CardManager 初始化成功");
         CacheUI();
         InitClick();
-
-        // 初始默认展示攻击卡牌
         ShowCardsByType(CardType.Attack);
     }
 
@@ -66,6 +62,7 @@ public class BackpackPanelManager : MonoBehaviour
         detailBtn = bottomMenus.Find("DetailBtn");
 
         detailPanel.gameObject.SetActive(false);
+        bottomMenus.Find("Gold/amount").GetComponent<Text>().text = cardManager.Gold.ToString();
     }
 
     private void InitClick()
@@ -77,53 +74,42 @@ public class BackpackPanelManager : MonoBehaviour
         detailBtn.GetComponent<Button>().onClick.AddListener(OnDetail);
     }
 
-    /// <summary>
-    /// 点击关闭按钮
-    /// </summary>
+    // 点击关闭按钮
     private void OnClickClose()
     {
         gameObject.SetActive(false);
     }
 
-    /// <summary>
-    /// 点击Attack分类
-    /// </summary>
+    // 点击Attack分类
     private void OnClickAttack()
     {
         Debug.Log("进入attack卡牌界面");
         ShowCardsByType(CardType.Attack);
     }
 
-    /// <summary>
-    /// 点击Defence分类
-    /// </summary>
+    // 点击Defence分类
     private void OnClickDefence()
     {
         Debug.Log("进入defence卡牌界面");
         ShowCardsByType(CardType.Defense);
     }
 
-    /// <summary>
-    /// 点击Heal分类
-    /// </summary>
+    // 点击Heal分类
     private void OnClickHeal()
     {
         Debug.Log("进入heal卡牌界面");
         ShowCardsByType(CardType.Heal);
     }
 
-    /// <summary>
-    /// 点击查看详情按钮（后续扩展）
-    /// </summary>
+    // 点击查看详情按钮（后续扩展）
     private void OnDetail()
     {
-        Debug.Log("展示详情待实现");
-        detailPanel.gameObject.SetActive(true);
+        if (selectedCard != null) {
+            ShowCardDetail(selectedCard);
+        }
     }
 
-    /// <summary>
-    /// 展示指定类型的卡牌，并刷新 Scroll View
-    /// </summary>
+    // 展示指定类型的卡牌，并刷新 Scroll View
     private void ShowCardsByType(CardType type)
     {
         currentType = type;
@@ -131,9 +117,7 @@ public class BackpackPanelManager : MonoBehaviour
         RefreshCardList(type);
     }
 
-    /// <summary>
-    /// 根据卡牌类型更新顶部按钮图标状态
-    /// </summary>
+    // 根据卡牌类型更新顶部按钮图标状态
     private void UpdateTopIcons(CardType selectedType)
     {
         bool isAttack = selectedType == CardType.Attack;
@@ -153,34 +137,68 @@ public class BackpackPanelManager : MonoBehaviour
         healSelect.gameObject.SetActive(isHeal);
     }
 
-    /// <summary>
-    /// 刷新Scroll View中的卡牌列表（根据卡牌类型）
-    /// </summary>
+    // 刷新Scroll View中的卡牌列表（根据卡牌类型）
     private void RefreshCardList(CardType type)
     {
-        // 清除原有内容
         foreach (Transform child in scrollViewContent)
         {
             Destroy(child.gameObject);
         }
 
-        // 获取指定类型的卡牌
         List<CardData> cards = cardManager.GetCardsByType(type);
 
-        // 动态创建 UI 元素
         foreach (var card in cards)
         {
             GameObject itemGO = Instantiate(BackpackUIItem, scrollViewContent);
 
-            // 设置图标
             Image icon = itemGO.transform.Find("Top/Icon").GetComponent<Image>();
             Sprite sprite = CardUI.GetCardBackground(type);
             if (sprite) icon.sprite = sprite;
-
-            // 设置名称
             Text text = itemGO.transform.Find("Bottom/Text").GetComponent<Text>();
             text.text = card.cardValue.ToString();
+
+            itemGO.transform.Find("Select").gameObject.SetActive(false);
+
+            Button btn = itemGO.GetComponent<Button>();
+            if (btn != null) {
+                btn.onClick.AddListener(() => {
+                    OnCardClicked(itemGO, card);
+                });
+            }
         }
-            Debug.Log($"展示{type}类卡牌，共 {cards.Count} 张");
+        Debug.Log($"展示{type}类卡牌，共 {cards.Count} 张");
+    }
+
+    private GameObject selectedCardGO = null;
+    private CardData selectedCard = null;
+
+    private void OnCardClicked(GameObject itemGO, CardData card) {
+        if (selectedCardGO != null) {
+            selectedCardGO.transform.Find("Select").gameObject.SetActive(false);
+        }
+
+        selectedCardGO = itemGO;
+        selectedCard = card;
+        selectedCardGO.transform.Find("Select").gameObject.SetActive(true);
+    }
+
+    private void ShowCardDetail(CardData card) {
+        detailPanel.gameObject.SetActive(true);
+
+        Text nameText = detailPanel.Find("Top/Title").GetComponent<Text>();
+        Image iconImage = detailPanel.Find("Center/Icon").GetComponent<Image>();
+        Text descText = detailPanel.Find("Bottom/Description").GetComponent<Text>();
+        Sprite icon = CardUI.GetCardBackground(card.cardType);
+        if (icon) iconImage.sprite = icon;
+        if (card.cardType == CardType.Attack) {
+            nameText.text = "攻击卡牌";
+            descText.text = $"该卡牌攻击属性为{card.cardValue}";
+        } else if (card.cardType == CardType.Defense) {
+            nameText.text = "防御卡牌";
+            descText.text = $"该卡牌防御属性为{card.cardValue}";
+        } else if (card.cardType == CardType.Heal)  {
+            nameText.text = "治愈卡牌";
+            descText.text = $"该卡牌治愈属性为{card.cardValue}";
+        }
     }
 }

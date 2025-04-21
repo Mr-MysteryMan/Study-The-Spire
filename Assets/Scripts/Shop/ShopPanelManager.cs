@@ -290,12 +290,6 @@ public class ShopPanelManager : MonoBehaviour {
 
     private List<CardData> backItems = new List<CardData>();
     private void LoadBackItems() {
-        Debug.Log("Loading back items...");
-    if (ShopUIItemPrefab == null) 
-    {
-        Debug.LogError("ShopUIItemPrefab is not assigned!");
-        return;
-    }
         Debug.Log("加载背包中的物品...");
         backItems = cardManager.GetAllCards();
 
