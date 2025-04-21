@@ -2,6 +2,7 @@ using Type = System.Type;
 using Combat.Command;
 
 namespace Combat.Trigger {
+    // 角色死亡的触发器，用于处理角色死亡事件
     public class CharacterDeathTrigger : ITrigger<AttackCommand> {
         public Type CommandType => typeof(AttackCommand);
         public int Priority => 100;

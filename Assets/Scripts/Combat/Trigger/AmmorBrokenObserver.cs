@@ -1,6 +1,7 @@
 namespace Combat.Trigger {
     using Combat.Command;
 
+    // 护甲破碎的触发器，用于处理护甲破碎事件
     public class AmmorBrokenTrigger : ITrigger<AttackCommand> {
         public System.Type CommandType => typeof(AttackCommand);
 
