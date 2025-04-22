@@ -83,7 +83,7 @@ namespace Combat
             {
                 return Enumerable.Empty<IProcessor<T>>();
             }
-            return list.Values.OfType<IProcessor<T>>().ToList();
+            return list.Values.OfType<IProcessor<T>>();
         }
 
         public IEnumerable<ITrigger<T>> GetTrigger<T>() where T : ICommand

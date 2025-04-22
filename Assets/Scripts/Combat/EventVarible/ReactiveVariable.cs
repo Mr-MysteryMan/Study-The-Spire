@@ -24,9 +24,9 @@ namespace Combat.EventVarible
 
         [SerializeField] private string _eventName;
 
-        public object Parent;
+        public GameObject Parent;
 
-        public void SetParent(object parent)
+        public void SetParent(GameObject parent)
         {
             Parent = parent;
         }
