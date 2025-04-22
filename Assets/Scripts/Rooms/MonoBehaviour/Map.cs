@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class Map : MonoBehaviour
 {
-    [Header(header:"µØÍ¼ÅäÖÃ±í")]
     public MapConfigSO mapConfig;
-
-    [Header(header: "Ô¤ÖÆÌå")]
+    public MapLayoutSO mapLayout;
     public Room roomPrefab;
     public LineRenderer linePrefab;
 
@@ -22,6 +20,8 @@ public class Map : MonoBehaviour
     private Vector3 generatePoint;
 
     public List<RoomDataSO> roomDataList = new();
+    private List<Room> rooms = new List<Room>();
+    private List<LineRenderer> lines = new List<LineRenderer>();
 
     private Dictionary<RoomType, RoomDataSO> roomDataDict = new();
 
@@ -40,14 +40,22 @@ public class Map : MonoBehaviour
     
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        CreatMap();
-        Debug.Log("ÕıÔÚÉèÖÃµØÍ¼");
-
+        Debug.Log("OnEnable" + mapLayout);
+       // CreateMap();
+        if (mapLayout.mapRoomDataList.Count > 0)
+        {
+          //  CreateMap();
+            LoadMap();
+        }
+        else
+        {
+            CreateMap();
+        }
     }
 
-    public void CreatMap()
+    public void CreateMap()
     {
         List<Room> preColRooms = new();
 
@@ -61,28 +69,39 @@ public class Map : MonoBehaviour
 
             rowWidth = screenHeight / (amount + 1);
 
-            //Ñ­»·Éú³Éµ±Ç°ÁĞµÄ·¿¼ä
+            //Ñ­ï¿½ï¿½ï¿½ï¿½ï¿½Éµï¿½Ç°ï¿½ĞµÄ·ï¿½ï¿½ï¿½
             for (int i = 0; i < amount; i++)
             {
                 generatePoint = new Vector3(-(screenWidth / 2) + colWidth * (col + 1), screenHeight / 2 - rowWidth * (i + 1), 0);
 
                 var room = Instantiate(roomPrefab, generatePoint,Quaternion.identity,transform);
                 RoomType newType = GetRandomRoomType(mapConfig.roomBlueprint[col].roomType);
+                if (col == 0)
+                {
+                    room.roomState = RoomState.Attainable;
+                }
+                else
+                {
+                    room.roomState = RoomState.Locked;
+                }
                 room.SetupRoom(col, i, GetRoomData(newType));
-
+                
+                rooms.Add(room);
                 curColRooms.Add(room);
             }
 
-            //ÅĞ¶ÏÁ¬Ïß
+            //ï¿½Ğ¶ï¿½ï¿½ï¿½ï¿½ï¿½
             if (preColRooms.Count > 0)
             {
-                // ´´½¨Á½¸öÁĞ±íµÄ·¿¼äÁ¬Ïß
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ±ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 CreateConnection(preColRooms, curColRooms);
             }
 
             preColRooms = curColRooms;
 
         }
+        
+        SaveMap();
     }
 
     private void CreateConnection(List<Room> column1, List<Room> column2)
@@ -95,7 +114,7 @@ public class Map : MonoBehaviour
             connectedColumn2Rooms.Add(targetRoom);
         }
 
-        // ¼ì²éÈ·±£ Column2 ÖĞËùÓĞ·¿¼ä¶¼ÓĞÁ¬½ÓµÄ·¿¼ä
+        // ï¿½ï¿½ï¿½È·ï¿½ï¿½ Column2 ï¿½ï¿½ï¿½ï¿½ï¿½Ğ·ï¿½ï¿½ä¶¼ï¿½ï¿½ï¿½ï¿½ï¿½ÓµÄ·ï¿½ï¿½ï¿½
         foreach (var room in column2)
         {
             if (!connectedColumn2Rooms.Contains(room))
@@ -106,11 +125,11 @@ public class Map : MonoBehaviour
     }
 
     /// <summary>
-    /// ½« room Óë column2 ÉÏÒ»¸öËæ»úµÄ·¿¼ä½øĞĞÏàÁ¬
+    /// ï¿½ï¿½ room ï¿½ï¿½ column2 ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
-    /// <param name="room">ĞèÒªÁ¬ÏßµÄ·¿¼ä</param>
-    /// <param name="column2">ĞèÒª±»Á¬½ÓµÄ·¿¼äÁĞ±í</param>
-    /// <param name="check">Èç¹ûÊÇºóÃæµÄ·¿¼äÏòÇ°Á¬½ÓÔòÎªtrue£¬Èç¹ûÊÇÇ°ÃæµÄ·¿¼äÏòºóÁ¬½ÓÔòÎªfalse</param>
+    /// <param name="room">ï¿½ï¿½Òªï¿½ï¿½ï¿½ßµÄ·ï¿½ï¿½ï¿½</param>
+    /// <param name="column2">ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ÓµÄ·ï¿½ï¿½ï¿½ï¿½Ğ±ï¿½</param>
+    /// <param name="check">ï¿½ï¿½ï¿½ï¿½Çºï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªtrueï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªfalse</param>
     /// <returns></returns>
     private Room ConnectToRandomRoom(Room room, List<Room> column2, bool check)
     {
@@ -118,38 +137,21 @@ public class Map : MonoBehaviour
         Room targetRoom;
 
         targetRoom = column2[UnityEngine.Random.Range(0, column2.Count)];
+        if (check)
+        {
+            targetRoom.linkTo.Add(new Vector2Int(room.col, room.row));
+            Debug.Log("123");
+        }
+        else
+        {
+            Debug.Log("123");
+            room.linkTo.Add(new Vector2Int(targetRoom.col, targetRoom.row));
+        }
+
         var line = Instantiate(linePrefab, transform);
         line.SetPosition(0, room.transform.position);
         line.SetPosition(1, targetRoom.transform.position);
-
-        //if (check)
-        //{
-        //    // ËµÃ÷ÊÇºóÃæµÄ·¿¼äÏòÇ°Á¬½Ó
-        //    targetRoom.linkTo.Add(new Vector2Int(room.column, room.line));
-        //}
-        //else
-        //{
-        //    // ËµÃ÷ÊÇÇ°ÃæµÄ·¿¼äÏòºóÁ¬½Ó
-        //    room.linkTo.Add(new Vector2Int(targetRoom.column, targetRoom.line));
-        //}
-
-        //// ´´½¨·¿¼äÖ®¼äµÄÁ¬Ïß
-        //var line = Instantiate(linePrefab, transform);
-        //// ÒªÈ·±£Ò»ÏÂÁ¬ÏßµÄ·½ÏòÊÇÕıÈ·µÄ
-        //if (check)
-        //{
-        //    // ËµÃ÷ÊÇºóÃæµÄ·¿¼äÏòÇ°Á¬½Ó
-        //    line.SetPosition(0, targetRoom.transform.position);
-        //    line.SetPosition(1, room.transform.position);
-        //}
-        //else
-        //{
-        //    // ËµÃ÷ÊÇÇ°ÃæµÄ·¿¼äÏòºóÁ¬½Ó
-        //    line.SetPosition(0, room.transform.position);
-        //    line.SetPosition(1, targetRoom.transform.position);
-        //}
-        //lines.Add(line);
-
+        lines.Add(line);
         return targetRoom;
     }
 
@@ -165,6 +167,68 @@ public class Map : MonoBehaviour
         string roomType = options[UnityEngine.Random.Range(0, options.Length)];
     
         return (RoomType)Enum.Parse(typeof(RoomType), roomType);
+    }
+    
+    private void SaveMap()
+    {
+      
+        mapLayout.mapRoomDataList = new List<MapRoomData>();
+        Debug.Log("222 " + mapLayout.mapRoomDataList.Count);
+        // æ·»åŠ å·²ç»ç”Ÿæˆçš„æˆ¿é—´
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            var mapRoom = new MapRoomData()
+            {
+                posX = rooms[i].transform.position.x,
+                posY = rooms[i].transform.position.y,
+                column = rooms[i].col,
+                row = rooms[i].row,
+                roomData = rooms[i].roomData,
+                roomState = rooms[i].roomState,
+                linkTo = rooms[i].linkTo,
+            };
+
+            mapLayout.mapRoomDataList.Add(mapRoom);
+        }
+
+        mapLayout.linePositionList = new List<LinePosition>();
+        // æ·»åŠ è¿çº¿
+        for (int i = 0; i < lines.Count; i++)
+        {
+            var line = new LinePosition()
+            {
+                startPos = new SerializeVector3(lines[i].GetPosition(0)),
+                endPos = new SerializeVector3(lines[i].GetPosition(1))
+            };
+
+            mapLayout.linePositionList.Add(line);
+        }
+    }
+    
+    private void LoadMap()
+    {
+        // è¯»å–æˆ¿é—´æ•°æ®ç”Ÿæˆæˆ¿é—´
+        for (int i = 0; i < mapLayout.mapRoomDataList.Count; i++)
+        {
+            MapRoomData roomData = mapLayout.mapRoomDataList[i];
+            var newPos = new Vector3(roomData.posX, roomData.posY, 0);
+            var newRoom = Instantiate(roomPrefab, newPos, Quaternion.identity, transform);
+            newRoom.roomState = roomData.roomState;
+            newRoom.SetupRoom(roomData.column, roomData.row, roomData.roomData);
+            newRoom.linkTo = roomData.linkTo;
+
+            rooms.Add(newRoom);
+        }
+
+        // è¯»å–è¿çº¿æ•°æ®ç”Ÿæˆè¿çº¿
+        for (int i = 0; i < mapLayout.linePositionList.Count; i++)
+        {
+            var line = Instantiate(linePrefab, transform);
+            line.SetPosition(0, mapLayout.linePositionList[i].startPos.GetVector3());
+            line.SetPosition(1, mapLayout.linePositionList[i].endPos.GetVector3());
+
+            lines.Add(line);
+        }
     }
 
 

@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class StopManager : MonoBehaviour
 {
+    [Header("UI绑定")]
     public Button exitButton;
 
     // Start is called before the first frame update
@@ -16,7 +17,7 @@ public class StopManager : MonoBehaviour
 
     void OnExit()
     {
-        SceneManager.LoadScene("DialogueScene");
+        SceneManager.LoadScene("MainScene");
     }
 
     // Update is called once per frame

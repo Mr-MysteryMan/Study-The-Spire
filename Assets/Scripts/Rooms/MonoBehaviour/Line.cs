@@ -10,7 +10,7 @@ public class Line : MonoBehaviour
     {
         if (lineRenderer != null)
         {
-            // »ñÈ¡µ±Ç°ÎÆÀíÆ«ÒÆ
+            // ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Æ«ï¿½ï¿½
             var offset = lineRenderer.material.mainTextureOffset;
             offset.x -= offsetSpeed * Time.deltaTime;
             lineRenderer.material.mainTextureOffset = offset;

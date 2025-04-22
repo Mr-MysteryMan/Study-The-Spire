@@ -180,7 +180,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -7149231321410546293, guid: 9396526d65a6a9149bedaf0e92b9532a, type: 3}
+  m_Sprite: {fileID: -7065328449616517929, guid: 43b4686959e591549a351043d4c15fb1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -200,8 +200,8 @@ Transform:
   m_GameObject: {fileID: 140000117}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0262, y: 0.0131, z: 0}
-  m_LocalScale: {x: 1.759864, y: 2.005563, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.2636065, y: 1.4400219, z: 0.7180138}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -236,6 +236,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapConfig: {fileID: 11400000, guid: f37c9d4891d2d55499de9ef400ee6cd3, type: 2}
+  mapLayout: {fileID: 11400000, guid: 21750d0ff1d8aa04daeda41a18352233, type: 2}
   roomPrefab: {fileID: 7377700896534063892, guid: bf986025b354a574aa103da01f43162f, type: 3}
   linePrefab: {fileID: 3666303531835063274, guid: b73121998691c1640a5a1c44d967477b, type: 3}
   roomDataList:
