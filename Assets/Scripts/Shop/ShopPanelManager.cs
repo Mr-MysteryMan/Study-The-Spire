@@ -156,15 +156,12 @@ public class ShopPanelManager : MonoBehaviour {
     private void DoDeleteItem() {
         // 与CardManager交互
         const int deleteCost = 100;
-        cardManager.SpendGold(deleteCost);
-        cardManager.RemoveCard(selectedItemData.cardId);
-
-        // SaveItemDataToJson("ItemData/package_items", shopItems);
-
-        Destroy(selectedItemGO);
-        selectedItemGO = null;
-        selectedItemData = null;
-
+        if (cardManager.SpendGold(deleteCost)) {
+            cardManager.RemoveCard(selectedItemData.cardId);
+            Destroy(selectedItemGO);
+            selectedItemGO = null;
+            selectedItemData = null;
+        }
 
         confirmPopup.gameObject.SetActive(false);
         detailPanel.gameObject.SetActive(false);

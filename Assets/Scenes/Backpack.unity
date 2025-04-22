@@ -4463,7 +4463,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1981055106}
   - component: {fileID: 1981055108}
-  - component: {fileID: 1981055109}
   m_Layer: 5
   m_Name: BackpackPanel
   m_TagString: Untagged
@@ -4511,18 +4510,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BackpackUIItem: {fileID: 7223660852474320572, guid: 8e1cc09245b070e41a65d540e90de5a7, type: 3}
---- !u!114 &1981055109
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1981055105}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5809fcd4dcd41f419824f64382a920d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2089129718
 GameObject:
   m_ObjectHideFlags: 0
