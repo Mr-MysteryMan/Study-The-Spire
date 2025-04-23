@@ -15,19 +15,14 @@ public static class CardUI {
   }
 
   public static Sprite GetCardBackground(CardType cardType) {
-    Debug.Log("GetCardBackground called with cardType: " + cardType);
     switch (cardType) {
       case CardType.Attack:
-      Debug.Log("AttackCardBg" + AttackCardBg.name);
         return AttackCardBg;
       case CardType.Defense:
-      Debug.Log("DefenseCardBg" + DefenseCardBg.name);
         return DefenseCardBg;
       case CardType.Heal:
-      Debug.Log("HealCardBg" + HealCardBg.name);
         return HealCardBg;
       default:
-      Debug.Log("BlankCardBg" + BlankCardBg.name);
         return BlankCardBg;
     }
   }

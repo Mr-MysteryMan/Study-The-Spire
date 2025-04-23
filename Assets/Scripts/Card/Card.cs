@@ -1,11 +1,13 @@
 using System.Collections;
+using Combat;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler
+public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler, IPointerClickHandler
 {
     [Header("卡片游戏组件")]
     //----------------------游戏组件---------------------//
+    public GameObject cardObj;
     public Image background; // 卡片背景
     public Text cardValueText; // 卡片数值文本
 
@@ -19,6 +21,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler
 
     public CardEffect effect; // 卡牌效果接口
     public bool isDiscarded = false; // 是否是弃牌
+    private CardManager manager; // 卡片管理器
 
     //----------------------更新方法---------------------//
 
@@ -69,6 +72,19 @@ public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler
         animationCoroutine = StartCoroutine(AnimateTransform(originalScale));
     }
 
+    public void addManager(CardManager manager) {
+        this.manager = manager; // 设置卡片管理器
+    }
+
+    public void OnPointerClick(PointerEventData eventData) {
+        var from = manager.getUser(this); // 获取使用者
+        var to = manager.getTarget(this); // 获取目标
+        if (from && to) { // 如果有使用者和目标
+            this.effect.work(from, to); // 执行卡牌效果
+            manager.reportUse(this); // 向卡片管理器报告使用
+        }
+    }
+
     private IEnumerator AnimateTransform(Vector3 targetScale)
     {
         float timer = 0f;
@@ -105,6 +121,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler
             this.background.color = color;
         }
     }
+
     //----------------------卡牌效果---------------------//
     public CardEffect getCardEffect() {
         switch (cardType) {
@@ -119,24 +136,6 @@ public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler
         }
     }
 }
-
-public class Character {
-    public void getAttacked(int damage) {
-        // 处理受伤逻辑
-    }
-    public void attack(Character target,int damage) {
-        // 处理攻击逻辑
-    }
-    public void heal(int heal) {
-        // 处理治疗逻辑
-    }
-    public void defend(int defend) {
-        // 处理防御逻辑
-    }
-}
-public class Survivor : Character{}
-public class Enemy : Character{}
-
 public interface CardEffect {
-    public void work(Survivor survivor, Enemy enemy);
+    public void work(Character from, Character to);
 }

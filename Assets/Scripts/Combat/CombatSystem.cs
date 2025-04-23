@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using Combat.Processor;
 using Combat.Trigger;
-using Combat.Events;
-using System.Collections;
 using Combat.Command;
 using System.Linq;
 using UnityEngine;
@@ -18,6 +16,9 @@ namespace Combat
     [RequireComponent(typeof(EventManager), typeof(Character))]
     public class CombatSystem : MonoBehaviour
     {
+        public GameObject CharacterPrefab; // 角色预制体
+
+        public GameObject UI; // 战斗UI页面
 
         // 来源角色的处理器列表
         private Dictionary<(Type, Character), SortedList<(int, long), IProcessor>> sourceProcessors;
@@ -27,33 +28,87 @@ namespace Combat
 
         private Dictionary<Type, SortedList<(int, long), ITrigger>> triggers;
 
-        private EventManager eventManager;
+        private EventManager eventManager; // 事件管理器
+
+        private CardManager cardManager; // 卡片管理器
 
         // 系统角色，用于一些没有直接来源的命令，暂时没用
         private Character systemCharacter;
 
         // 角色列表，所有参与战斗的角色
-        public List<Character> characters;
+        private Character playerCharacter;
+        private List<Character> monsterCharacter;
 
         [SerializeField] private BasicRulesLibSO rulesLibSO;
 
-        public void Initialize(EventManager eventManager, Character systemCharacter)
+        void Awake()
+        {
+            CreateCharacters(); // 获取角色
+
+            var eventManager = GetComponent<EventManager>();
+            var character = GetComponent<Character>();
+            var cardManager = GetComponent<CardManager>();
+            Initialize(eventManager, character, cardManager);
+
+            cardManager.init(); // 初始化卡片管理器
+            cardManager.drewCard(); // 抽卡
+        }
+
+        public void Initialize(EventManager eventManager, Character systemCharacter, CardManager cardManager)
         {
             this.eventManager = eventManager;
             this.systemCharacter = systemCharacter;
+            this.cardManager = cardManager;
+            this.cardManager.addCharacter(this.playerCharacter, this.monsterCharacter); // 添加角色到卡片管理器
             sourceProcessors = new();
             targetProcessors = new();
             triggers = new();
             RegisterTrigger(new DamageDealtTrigger());
 
-            foreach (var character in characters)
+            RegisterProcessorForCharacter(this.playerCharacter); // 注册玩家角色的处理器
+            foreach (var character in this.monsterCharacter) // 注册怪物角色的处理器
             {
-                foreach (var rule in rulesLibSO.Rules)
+                RegisterProcessorForCharacter(character);
+            }
+        }
+
+        private void CreateCharacters() {
+            // 指定角色位置
+            Vector3 playerPosition = new Vector3(-300, 0, 0); // 玩家位置
+            Vector3 monsterPosition = new Vector3(300, 0, 0); // 玩家位置
+            // 暂且1v1
+
+            int curHp = 100; // TODO: 接入背包系统, 获取当前血量
+            // 创建玩家角色
+            playerCharacter = CreateCharacter(playerPosition);
+            playerCharacter.SetHP(Setting.PlayerHp,curHp);
+            // 创建怪物角色
+            // TODO: 接入关卡管理, 获取敌人数据
+            monsterCharacter = new List<Character>();
+            for (int i = 0; i < 1; i++)
+            {
+                var monster = CreateCharacter(monsterPosition);
+                monsterCharacter.Add(monster);
+            }
+        }
+
+        private Character CreateCharacter(Vector3 position)
+        {
+            // 根据位置坐标在UI上创建角色
+            var Obj = Instantiate(CharacterPrefab, UI.transform);
+            Obj.transform.localPosition = position;
+            var character = Obj.GetComponent<Character>();
+            character.combatSystem = this; // 设置战斗系统为自身
+            return character;
+        }
+
+        private void RegisterProcessorForCharacter(Character character)
+        {
+            foreach (var rule in rulesLibSO.Rules)
+            {
+                if (rule is IProcessor processor)
                 {
-                    if (rule is IProcessor processor)
-                    {
-                        RegisterProcessor(processor, character);
-                    }
+                    RegisterProcessor(processor, character);
                 }
             }
         }
@@ -66,13 +121,6 @@ namespace Combat
                 ProcessorEffectSideType.Target => targetProcessors,
                 _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
             };
-        }
-
-        void Awake()
-        {
-            var eventManager = GetComponent<EventManager>();
-            var character = GetComponent<Character>();
-            Initialize(eventManager, character);
         }
 
         public IEnumerable<IProcessor<T>> GetProcessors<T>(Character character, ProcessorEffectSideType effectSide) where T : ICommand
