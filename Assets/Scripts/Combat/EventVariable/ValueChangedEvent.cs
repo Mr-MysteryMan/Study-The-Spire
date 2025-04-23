@@ -1,6 +1,6 @@
 using System;
 
-namespace Combat.EventVarible
+namespace Combat.EventVariable
 {
     public class ValueChangedEvent<T>
     {
