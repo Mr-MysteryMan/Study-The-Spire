@@ -8,6 +8,7 @@ namespace Combat {
     // 角色类，表示游戏中的角色，包含生命值、护甲值等属性
     public class Character : MonoBehaviour
     {
+        public GameObject HPbar;
         [SerializeField] private int maxHp = 100;
         [SerializeField] private int curHp = 100;
         [SerializeField] private int ammor = 0;
@@ -21,14 +22,29 @@ namespace Combat {
         // 角色的护甲值
         public int Ammor => ammor;
 
-        [SerializeField] private CombatSystem combatSystem;
+        public CombatSystem combatSystem;
 
+    public void SetHP(int maxHp,int curHp) // 设置当前生命值数据
+    {
+        this.curHp = curHp;
+        this.maxHp = maxHp;
+    }
+
+    public void Start()
+    {
+        if (HPbar != null) // 存在血条时(非系统对象), 启动血条
+        {
+            HPController hPController = HPbar.GetComponent<HPController>();
+            hPController.eventManager = this.combatSystem.GetComponent<EventManager>();
+            hPController.launch();
+        }
+    }
         // 攻击target,造成damage点伤害，会触发相应事件
         public void Attack(Character target, int damage) {
             combatSystem.ProcessCommand(new AttackCommand(this, target, damage, DamageType.Normal));
         }
 
-        // 为target添加护甲值，会触发相应事件
+        // 为target加血，会触发相应事件
         public void Heal(Character target, int heal) {
             combatSystem.ProcessCommand(new HealCommand(this, target, heal));
         }

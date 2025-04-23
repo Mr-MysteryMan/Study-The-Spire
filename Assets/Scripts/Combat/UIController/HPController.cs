@@ -6,10 +6,11 @@ using UnityEngine.UI;
 public class HPController : MonoBehaviour
 {
     [SerializeField] private Slider slider;
-    [SerializeField] private EventManager eventManager;
+    public EventManager eventManager;
     [SerializeField] private Combat.Character character;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    // 由Character启动
+    public void launch()
     {
         eventManager.Subscribe<DamageDealtEvent>(OnHpChange);
     }

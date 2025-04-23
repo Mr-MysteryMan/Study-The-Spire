@@ -14,8 +14,7 @@ public class ViewCards : MonoBehaviour
 
 
     // TODO对接卡牌管理逻辑
-    private List<CardData> randomCardData() { // 测试用随机卡片数据
-        const int cardCount = 20; // 卡片数量
+    public static List<CardData> randomCardData(int cardCount = 20) { // 测试用随机卡片数据
         List<CardData> cardDatas = new List<CardData>();
 
         for (int i = 0; i < cardCount; i++)

@@ -255,7 +255,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &2721075707906006587
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -285,6 +285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 066bca855fb0030489c00c1ff767db68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardObj: {fileID: 8322347904643196781}
   background: {fileID: 8056765783910982522}
   cardValueText: {fileID: 1809302309454191242}
   cardType: 0
