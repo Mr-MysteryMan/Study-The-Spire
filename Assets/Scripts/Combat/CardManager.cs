@@ -12,14 +12,19 @@ public class CardManager : MonoBehaviour
     private Character player; // 玩家角色
     private List<Character> enemy; // 敌人角色
 
-    private List<CardData> NewCardData = new List<CardData>(); // 新卡片数据列表
-    private List<CardData> HandCardData = new List<CardData>(); // 手牌数据列表
-    private List<CardData> DiscardCardData = new List<CardData>(); // 弃牌数据列表
+    public List<CardData> NewCardData = new List<CardData>(); // 新卡片数据列表
+    public List<CardData> HandCardData = new List<CardData>(); // 手牌数据列表
+    public List<CardData> DiscardCardData = new List<CardData>(); // 弃牌数据列表
 
     public void init()
     {
         // TODO: 接入背包系统, 暂用随机生成的卡片
-        this.NewCardData = ViewCards.randomCardData(100);
+        this.NewCardData = ViewCards.randomCardData(30);
+        // 所有卡片置为非弃置
+        foreach (var cardData in NewCardData)
+        {
+            cardData.Reset();
+        }
     }
     // 抽卡
     public void drewCard(int num = -1) {
@@ -55,6 +60,7 @@ public class CardManager : MonoBehaviour
         int index = HandCardData.FindIndex(c => c.cardId == card.cardId);
         if (index != -1)
         {
+            HandCardData[index].Discard(); // 将卡片标记为弃置
             DiscardCardData.Add(HandCardData[index]); // 将卡片添加到弃牌数据列表
             HandCardData.RemoveAt(index); // 从手牌数据列表中移除已弃掉的卡片
         }

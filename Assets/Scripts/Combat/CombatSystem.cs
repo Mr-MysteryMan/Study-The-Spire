@@ -74,8 +74,8 @@ namespace Combat
 
         private void CreateCharacters() {
             // 指定角色位置
-            Vector3 playerPosition = new Vector3(-300, 0, 0); // 玩家位置
-            Vector3 monsterPosition = new Vector3(300, 0, 0); // 玩家位置
+            Vector3 playerPosition = new Vector3(-300, 20, 0); // 玩家位置
+            Vector3 monsterPosition = new Vector3(300, 20, 0); // 敌人位置
             // 暂且1v1
 
             int curHp = 100; // TODO: 接入背包系统, 获取当前血量
