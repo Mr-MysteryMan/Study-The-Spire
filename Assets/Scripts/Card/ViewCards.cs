@@ -4,12 +4,22 @@ using UnityEngine;
 public class ViewCards : MonoBehaviour
 {
     public GameObject CardOverViewPrefab; // 卡片预制件
+
+    public GameObject CardManager; // 卡片管理
     public void OpenCardOverview()
     {
         // 创建卡片预览窗口
         GameObject cardOverview = Instantiate(CardOverViewPrefab);
         CardOverview obj = cardOverview.GetComponent<CardOverview>();
-        obj.CreateCards(randomCardData()); // 生成卡片
+
+        if (CardManager) {
+            CardManager cardManager = CardManager.GetComponent<CardManager>();
+            obj.CreateCards(cardManager.NewCardData, 0); // 根据卡片管理器生成卡片
+            obj.CreateCards(cardManager.HandCardData, 1); // 根据卡片管理器生成卡片
+            obj.CreateCards(cardManager.DiscardCardData, 2); // 根据卡片管理器生成卡片
+        } else {
+            obj.CreateCards(randomCardData()); // 生成随机卡片
+        }
     }
 
 

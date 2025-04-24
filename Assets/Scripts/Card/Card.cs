@@ -77,6 +77,8 @@ public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler, IPo
     }
 
     public void OnPointerClick(PointerEventData eventData) {
+        if (manager == null) return; // 如果没有卡片管理器, 则不执行
+        
         var from = manager.getUser(this); // 获取使用者
         var to = manager.getTarget(this); // 获取目标
         if (from && to) { // 如果有使用者和目标
