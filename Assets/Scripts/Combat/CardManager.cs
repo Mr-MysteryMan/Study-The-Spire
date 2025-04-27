@@ -57,13 +57,11 @@ public class CardManager : MonoBehaviour
     }
 
     public void discardCard(Card card) {
-        // 从手牌中找到对应的卡片
-        int index = HandCardData.FindIndex(c => c.cardId == card.cardId);
-        if (index != -1)
+        if (HandCardData.Exists(x => x == card.CardData))
         {
-            HandCardData[index].Discard(); // 将卡片标记为弃置
-            DiscardCardData.Add(HandCardData[index]); // 将卡片添加到弃牌数据列表
-            HandCardData.RemoveAt(index); // 从手牌数据列表中移除已弃掉的卡片
+            card.CardData.Discard();
+            DiscardCardData.Add(card.CardData); // 将卡片添加到弃牌数据列表
+            HandCardData.Remove(card.CardData); // 从手牌数据列表中移除已弃掉的卡片
         }
         // 销毁卡片对象
         DestroyImmediate(card.cardObj); // 销毁卡片对象

@@ -13,23 +13,24 @@ public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler, IPo
 
     [Header("卡片基本信息")]
     //----------------------基本信息---------------------//
-    public CardType cardType; // 卡牌类型
+    private CardData cardData;
 
-    public int cardValue; // 卡牌数值
+    public CardData CardData => cardData; // 卡片数据
 
-    public int cardId; // 卡牌ID
+    public CardType cardType => cardData.cardType; // 卡牌类型
+
+    public int cardValue => cardData.cardValue; // 卡牌数值
+
+    public int cardId => cardData.cardId; // 卡牌ID
 
     public CardEffect effect; // 卡牌效果接口
-    public bool isDiscarded = false; // 是否是弃牌
+    public bool isDiscarded => cardData.isDiscarded; // 是否是弃牌
     private CardManager manager; // 卡片管理器
 
     //----------------------更新方法---------------------//
 
     public void updateCardStatus(CardData data) {
-        cardType = data.cardType; // 卡牌类型
-        cardValue = data.cardValue; // 卡牌数值
-        cardId = data.cardId; // 卡牌ID
-        isDiscarded = data.isDiscarded; // 是否是弃牌
+        cardData = data;
         // 生成卡片效果
         this.effect = getCardEffect(); // 生成卡片效果
         // 更新UI
