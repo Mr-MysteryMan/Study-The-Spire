@@ -21,9 +21,10 @@ public class ViewCards : MonoBehaviour
         for (int i = 0; i < cardCount; i++)
         {
             // 随机生成卡片数据
-            string content = Random.Range(0, 100).ToString(); // 随机卡片内容
-            bool isDiscarded = Random.Range(0, 2) == 0; // 随机弃牌状态
-            cardDatas.Add(new CardData(content, isDiscarded));
+            int cardType = Random.Range(0, 3); // 随机卡片类型
+            CardType type = (CardType)cardType; // 转换为枚举类型
+            int value = Random.Range(0, 100); // 随机卡片内容
+            cardDatas.Add(new CardData(type,value)); // 随机生成卡片数据
         }
 
         return cardDatas;
