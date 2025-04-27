@@ -8,6 +8,7 @@ using UnityEngine;
 
 using ITrigger = Combat.Trigger.ITrigger;
 using Combat.Processor.Rules;
+using Combat.Characters;
 
 namespace Combat
 {
@@ -16,7 +17,8 @@ namespace Combat
     [RequireComponent(typeof(EventManager), typeof(Character))]
     public class CombatSystem : MonoBehaviour
     {
-        public GameObject CharacterPrefab; // 角色预制体
+        public GameObject AdventurerPrefab; // 角色预制体
+        public GameObject EnemyPrefab; 
 
         public GameObject UI; // 战斗UI页面
 
@@ -30,6 +32,8 @@ namespace Combat
 
         private EventManager eventManager; // 事件管理器
 
+        public EventManager EventManager => eventManager; // 事件管理器
+
         private CardManager cardManager; // 卡片管理器
 
         // 系统角色，用于一些没有直接来源的命令，暂时没用
@@ -37,7 +41,11 @@ namespace Combat
 
         // 角色列表，所有参与战斗的角色
         private Character playerCharacter;
-        private List<Character> monsterCharacter;
+
+        private List<Enemy> monsterCharacter;
+
+        public Character PlayerCharacter => playerCharacter; // 玩家角色
+        public List<Enemy> MonsterCharacter => monsterCharacter; // 怪物角色
 
         [SerializeField] private BasicRulesLibSO rulesLibSO;
 
@@ -84,18 +92,25 @@ namespace Combat
             playerCharacter.SetHP(Setting.PlayerHp,curHp);
             // 创建怪物角色
             // TODO: 接入关卡管理, 获取敌人数据
-            monsterCharacter = new List<Character>();
+            monsterCharacter = new List<Enemy>();
             for (int i = 0; i < 1; i++)
             {
-                var monster = CreateCharacter(monsterPosition);
+                var monster = CreateCharacter(monsterPosition, CharacterType.Enemy) as Enemy;
                 monsterCharacter.Add(monster);
             }
         }
 
-        private Character CreateCharacter(Vector3 position)
+        private enum CharacterType
         {
+            Player,
+            Enemy
+        }
+
+        private Character CreateCharacter(Vector3 position, CharacterType type = CharacterType.Player)
+        {
+            var Prefab = type == CharacterType.Player ? AdventurerPrefab : EnemyPrefab;
             // 根据位置坐标在UI上创建角色
-            var Obj = Instantiate(CharacterPrefab, UI.transform);
+            var Obj = Instantiate(Prefab, UI.transform);
             Obj.transform.localPosition = position;
             var character = Obj.GetComponent<Character>();
             character.combatSystem = this; // 设置战斗系统为自身

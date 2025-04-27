@@ -535,7 +535,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 869e3bbc26ba119429fa2bfe958ecdf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterPrefab: {fileID: 8887891203348593607, guid: bff855922a8903b43a7d26229b53d669, type: 3}
+  AdventurerPrefab: {fileID: 8887891203348593607, guid: bff855922a8903b43a7d26229b53d669, type: 3}
+  EnemyPrefab: {fileID: 8887891203348593607, guid: 64b40806dfa432542b20bb0941f929fe, type: 3}
   UI: {fileID: 518319091}
   rulesLibSO: {fileID: 11400000, guid: 48420e6f6666f3a41a646992888b6368, type: 2}
 --- !u!114 &1160243197

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Combat;
+using Combat.Characters;
 using UnityEngine;
 
 public class CardManager : MonoBehaviour
@@ -10,7 +11,7 @@ public class CardManager : MonoBehaviour
     private List<GameObject> cards = new List<GameObject>(); // 卡片列表
 
     private Character player; // 玩家角色
-    private List<Character> enemy; // 敌人角色
+    private List<Enemy> enemy; // 敌人角色
 
     public List<CardData> NewCardData = new List<CardData>(); // 新卡片数据列表
     public List<CardData> HandCardData = new List<CardData>(); // 手牌数据列表
@@ -80,7 +81,7 @@ public class CardManager : MonoBehaviour
         updateCardPosition(); // 更新卡片位置
     }
 
-    public void addCharacter(Character player, List<Character> enemy)
+    public void addCharacter(Character player, List<Enemy> enemy)
     {
         this.player = player;
         this.enemy = enemy;

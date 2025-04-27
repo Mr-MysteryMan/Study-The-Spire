@@ -1,6 +1,6 @@
 namespace Combat.CardEffect
 {
-    public interface ICardEffect
+    public interface IEffect
     {
         void Work(Character source, Character target);
     }

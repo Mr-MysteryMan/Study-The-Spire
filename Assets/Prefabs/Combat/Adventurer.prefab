@@ -428,9 +428,9 @@ GameObject:
   - component: {fileID: 8757322853931480289}
   - component: {fileID: 4284497372401680258}
   - component: {fileID: 8854411703700379425}
-  - component: {fileID: 5831093091456547971}
+  - component: {fileID: -8629974245159876961}
   m_Layer: 5
-  m_Name: Character
+  m_Name: Adventurer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -502,7 +502,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &8854411703700379425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -520,7 +520,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &5831093091456547971
+--- !u!114 &-8629974245159876961
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -529,7 +529,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8887891203348593607}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18334e9dbf9892642a6bbeb9fa1aa4cb, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a7e3b0bdda3cf642bf11432c8650d26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   HPbar: {fileID: 1346142233314231824}
@@ -537,6 +537,7 @@ MonoBehaviour:
   curHp: 100
   ammor: 0
   combatSystem: {fileID: 0}
+  Mana: 3
 --- !u!1 &9113332101766150313
 GameObject:
   m_ObjectHideFlags: 0
@@ -715,7 +716,7 @@ PrefabInstance:
     - target: {fileID: 9172828737643203452, guid: 2ef6e866b3d53a244af00d58f2fa1a4a, type: 3}
       propertyPath: character
       value: 
-      objectReference: {fileID: 5831093091456547971}
+      objectReference: {fileID: -8629974245159876961}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
