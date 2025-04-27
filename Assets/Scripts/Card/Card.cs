@@ -1,0 +1,142 @@
+using System.Collections;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler
+{
+    [Header("卡片游戏组件")]
+    //----------------------游戏组件---------------------//
+    public Image background; // 卡片背景
+    public Text cardValueText; // 卡片数值文本
+
+    [Header("卡片基本信息")]
+    //----------------------基本信息---------------------//
+    public CardType cardType; // 卡牌类型
+
+    public int cardValue; // 卡牌数值
+
+    public int cardId; // 卡牌ID
+
+    public CardEffect effect; // 卡牌效果接口
+    public bool isDiscarded = false; // 是否是弃牌
+
+    //----------------------更新方法---------------------//
+
+    public void updateCardStatus(CardData data) {
+        cardType = data.cardType; // 卡牌类型
+        cardValue = data.cardValue; // 卡牌数值
+        cardId = data.cardId; // 卡牌ID
+        isDiscarded = data.isDiscarded; // 是否是弃牌
+        // 生成卡片效果
+        this.effect = getCardEffect(); // 生成卡片效果
+        // 更新UI
+        UpdateCardUI();
+    }
+
+    //----------------------鼠标放上时升起, 离开时落下---------------------//
+    private float animationDuration = 0.2f; // 动画时间
+    private int originalSiblingIndex; // 原始的层级索引
+    
+    private Coroutine animationCoroutine; // 用于存储协程
+
+    private Vector3 originalScale = new Vector3(1f,1f,1f); // 原始缩放比例
+    private Vector3 targetScale = new Vector3(1.1f,1.1f,1.1f); // 放大比例
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        // 如果已经有动画在播放，先停止它
+        if (animationCoroutine != null)
+        {
+            StopCoroutine(animationCoroutine);
+        }
+        // 记录原始的层级索引
+        originalSiblingIndex = transform.GetSiblingIndex();
+        // 将当前卡片的层级提升到最上面
+        transform.SetAsLastSibling();
+        // 开始放大动画
+        animationCoroutine = StartCoroutine(AnimateTransform(originalScale * 1.1f));
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        // 如果已经有动画在播放，先停止它
+        if (animationCoroutine != null)
+        {
+            StopCoroutine(animationCoroutine);
+        }
+        // 恢复原始的层级索引
+        transform.SetSiblingIndex(originalSiblingIndex);
+        // 开始还原大小和层级动画
+        animationCoroutine = StartCoroutine(AnimateTransform(originalScale));
+    }
+
+    private IEnumerator AnimateTransform(Vector3 targetScale)
+    {
+        float timer = 0f;
+        Vector3 startingScale = transform.localScale;
+
+        while (timer < animationDuration)
+        {
+            timer += Time.deltaTime;
+            transform.localScale = Vector3.Lerp(startingScale, targetScale, timer / animationDuration);
+            yield return null;
+        }
+
+        // 确保最终大小和层级正确
+        transform.localScale = targetScale;
+
+        // 清除协程引用
+        animationCoroutine = null;
+    }
+
+    //----------------------更新UI---------------------//
+    public void UpdateCardUI() {
+        // 背景
+        this.background.sprite = CardUI.GetCardBackground(cardType); // 设置卡片背景
+        // 数字
+        this.cardValueText.text = cardValue.ToString(); // 设置卡片数值文本
+        // 弃牌
+        if (isDiscarded) { //弃置时背景半透明
+            Color color = this.background.color;
+            color.a = 0.7f;
+            this.background.color = color;
+        } else {
+            Color color = this.background.color;
+            color.a = 1f;
+            this.background.color = color;
+        }
+    }
+    //----------------------卡牌效果---------------------//
+    public CardEffect getCardEffect() {
+        switch (cardType) {
+            case CardType.Attack:
+                return new AttackEffect(cardValue);
+            case CardType.Defense:
+                return new DefenseEffect(cardValue);
+            case CardType.Heal:
+                return new HealEffect(cardValue);
+            default:
+                return null;
+        }
+    }
+}
+
+public class Character {
+    public void getAttacked(int damage) {
+        // 处理受伤逻辑
+    }
+    public void attack(Character target,int damage) {
+        // 处理攻击逻辑
+    }
+    public void heal(int heal) {
+        // 处理治疗逻辑
+    }
+    public void defend(int defend) {
+        // 处理防御逻辑
+    }
+}
+public class Survivor : Character{}
+public class Enemy : Character{}
+
+public interface CardEffect {
+    public void work(Survivor survivor, Enemy enemy);
+}
