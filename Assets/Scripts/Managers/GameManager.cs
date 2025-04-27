@@ -5,6 +5,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public MapLayoutSO mapLayout;
+    public static int money;
+    public static int blood;
     
     public void UpdateMapLayoutData(object value)
     {
@@ -50,4 +52,16 @@ public class GameManager : MonoBehaviour
             linkedRoom.roomState = RoomState.Attainable;
         }
     }
+    
+    public void OnNewGameEvent()
+    {
+        mapLayout.mapRoomDataList.Clear();
+        mapLayout.linePositionList.Clear();
+    }
+
+    public int getMoney()
+    {
+        return money;
+    }
+
 }

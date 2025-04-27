@@ -21,7 +21,7 @@ public class SceneLoadManager : MonoBehaviour
     {
         currentRoomVector = Vector2Int.one * -1;
          LoadMenu();
-         LoadMap();
+      //   LoadMap();
     }
     public async void OnLoadRoomEvent(object data)
     {
@@ -58,7 +58,12 @@ public class SceneLoadManager : MonoBehaviour
 
     public async void LoadMap()
     {
-        await UnloadSceneTask();
+        if (currentScene != null)
+        {
+            await UnloadSceneTask();
+        }
+
+//        await UnloadSceneTask();
 
         if (currentRoomVector != Vector2.one * -1)
         {
