@@ -1,8 +1,9 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Room : MonoBehaviour
 {
-    //记录房间在地图上的位置
+    //锟斤拷录锟斤拷锟斤拷锟节碉拷图锟较碉拷位锟斤拷
     public int col;
 
     public int row;
@@ -12,32 +13,40 @@ public class Room : MonoBehaviour
     public RoomDataSO roomData;
 
     public RoomState roomState;
+    public List<Vector2Int> linkTo = new List<Vector2Int>();
 
-    [Header("广播")]
+    [Header("锟姐播")]
     public ObjectEventSO loadRoomEvent;
-
-    private void Start()
-    {
-        SetupRoom(1, 1, roomData);
-    }
+    
     private void Awake() {
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
     private void OnMouseDown()
     {
-        Debug.Log("点击了房间：" + roomData.roomType);
-        loadRoomEvent.RaiseEvent(roomData, this);
+        if (roomState == RoomState.Attainable)
+        {
+            loadRoomEvent.RaiseEvent(this, this);
+        }
+
+        
     }
 
-//外部创建房间时进行调用，填充房间的位置/属性
+//锟解部锟斤拷锟斤拷锟斤拷锟斤拷时锟斤拷锟叫碉拷锟矫ｏ拷锟斤拷浞匡拷锟斤拷位锟斤拷/锟斤拷锟斤拷
 
     public void SetupRoom(int col, int row, RoomDataSO roomData)
     {
         this.col = col;
         this.row = row;
         this.roomData = roomData;
-        Debug.Log("正在设置房间：(" + col + ", "+ row +") "+roomData.roomType);
         spriteRenderer.sprite = roomData.roomIcon;
+        spriteRenderer.color = roomState switch
+        {
+            RoomState.Locked => Color.grey,
+            RoomState.Visited => new Color(0.6f, 0.8f, 0.6f, 1f),
+            RoomState.Attainable => Color.white,
+            RoomState.Passed => Color.black,
+            _ => throw new System.NotImplementedException(),
+        };
     }
 }

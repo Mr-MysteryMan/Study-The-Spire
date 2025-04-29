@@ -10,21 +10,33 @@ public class SceneLoadManager : MonoBehaviour
     private AssetReference currentScene;
     
     public AssetReference map;
-
+    public AssetReference menu;  
+    
+    private Vector2Int currentRoomVector;
+    private Room currentRoom;
+    public ObjectEventSO updateRoomEvent;
+    public ObjectEventSO afterRoomLoadedEvent;
+    
+    private void Awake()
+    {
+        currentRoomVector = Vector2Int.one * -1;
+         LoadMenu();
+      //   LoadMap();
+    }
     public async void OnLoadRoomEvent(object data)
     {
-        if (data is RoomDataSO)
+        if (data is Room)
         {
-            var room = (RoomDataSO)data;
-            Debug.Log(room.roomType);
-            currentScene = room.sceneToLoad;
+            currentRoom = (Room)data;
+            RoomDataSO currentData = currentRoom.roomData;
+            currentRoomVector = new Vector2Int(currentRoom.col, currentRoom.row);
+            // 璁剧疆褰撳墠鍦烘櫙
+            currentScene = currentData.sceneToLoad;
+
         }
-
-        //卸载当前房间
         await UnloadSceneTask();
-
-        //加载新房间
-        await LoadSceneTask();
+        await LoadSceneTask();   
+        afterRoomLoadedEvent.RaiseEvent(currentRoomVector, this);
     }
 
     private async Awaitable LoadSceneTask()
@@ -46,13 +58,27 @@ public class SceneLoadManager : MonoBehaviour
 
     public async void LoadMap()
     {
-        await UnloadSceneTask();
+        if (currentScene != null)
+        {
+            await UnloadSceneTask();
+        }
 
-        //if (currentRoomVector != Vector2.one * -1)
-        //{
-        //    updateRoomEvent.RaiseEvent(currentRoomVector, this);
-        //}
+//        await UnloadSceneTask();
+
+        if (currentRoomVector != Vector2.one * -1)
+        {
+            updateRoomEvent.RaiseEvent(currentRoomVector, this);
+        }
         currentScene = map;
+        await LoadSceneTask();
+    }
+    
+    public async void LoadMenu()
+    {
+        if (currentScene != null)
+            await UnloadSceneTask();
+
+        currentScene = menu;
         await LoadSceneTask();
     }
 
