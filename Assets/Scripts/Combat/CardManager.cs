@@ -76,6 +76,7 @@ public class CardManager : MonoBehaviour
         {
             Destroy(card); // 销毁卡片对象
         }
+        cards.Clear();
         updateCardPosition(); // 更新卡片位置
     }
 
