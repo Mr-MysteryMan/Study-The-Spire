@@ -9,6 +9,7 @@ using UnityEngine;
 using ITrigger = Combat.Trigger.ITrigger;
 using Combat.Processor.Rules;
 using Combat.Characters;
+using Combat.Events.Turn;
 
 namespace Combat
 {
@@ -18,7 +19,7 @@ namespace Combat
     public class CombatSystem : MonoBehaviour
     {
         public GameObject AdventurerPrefab; // 角色预制体
-        public GameObject EnemyPrefab; 
+        public GameObject EnemyPrefab;
 
         public GameObject UI; // 战斗UI页面
 
@@ -62,6 +63,12 @@ namespace Combat
             cardManager.drewCard(); // 抽卡
         }
 
+        void Start()
+        {
+            this.eventManager.Subscribe<TurnEndEvent>((e) => { if (e.Character == this.PlayerCharacter) cardManager.discardAll(); });
+            this.eventManager.Subscribe<TurnStartEvent>((e) => { if (e.Character == this.PlayerCharacter) { cardManager.drewCard(); Debug.Log("抽卡"); } });
+        }
+
         public void Initialize(EventManager eventManager, Character systemCharacter, CardManager cardManager)
         {
             this.eventManager = eventManager;
@@ -72,7 +79,6 @@ namespace Combat
             targetProcessors = new();
             triggers = new();
             RegisterTrigger(new DamageDealtTrigger());
-
             RegisterProcessorForCharacter(this.playerCharacter); // 注册玩家角色的处理器
             foreach (var character in this.monsterCharacter) // 注册怪物角色的处理器
             {
@@ -80,7 +86,8 @@ namespace Combat
             }
         }
 
-        private void CreateCharacters() {
+        private void CreateCharacters()
+        {
             // 指定角色位置
             Vector3 playerPosition = new Vector3(-300, 20, 0); // 玩家位置
             Vector3 monsterPosition = new Vector3(300, 20, 0); // 敌人位置
@@ -89,7 +96,7 @@ namespace Combat
             int curHp = 100; // TODO: 接入背包系统, 获取当前血量
             // 创建玩家角色
             playerCharacter = CreateCharacter(playerPosition);
-            playerCharacter.SetHP(Setting.PlayerHp,curHp);
+            playerCharacter.SetHP(Setting.PlayerHp, curHp);
             // 创建怪物角色
             // TODO: 接入关卡管理, 获取敌人数据
             monsterCharacter = new List<Enemy>();
