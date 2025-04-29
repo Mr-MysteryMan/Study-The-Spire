@@ -2,91 +2,103 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-// 单例模式的事件管理器类
-public class EventManager : MonoBehaviour
+namespace Combat
 {
-    public static EventManager instance;
+    // 单例模式的事件管理器类
+    public class EventManager : MonoBehaviour
+    {
+        // 事件委托类型，用于定义事件的回调方法
+        public delegate void EventDelegate<T>(T eventData);
 
-    private void Awake() {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject); // 阻止销毁
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
+        // 事件表，存储不同类型的事件和对应的回调方法
+        private Dictionary<Type, Delegate> eventTable;
 
-    public delegate void EventDelegate<T>(T eventData);
-    private Dictionary<Type, Delegate> eventTable = new ();
+        // string版本的事件表，使用名称索引事件
+        public Dictionary<string, Delegate> stringEventTable;
 
-    public Dictionary<string, Delegate> stringEventTable = new ();
+        private void Initialize()
+        {
+            eventTable = new Dictionary<Type, Delegate>();
+            stringEventTable = new Dictionary<string, Delegate>();
+        }
 
-    // 订阅事件
-    public void Subscribe<T>(EventDelegate<T> eventDelegate) {
-        Type eventType = typeof(T);
-        if (eventTable.ContainsKey(eventType))
-        {
-            eventTable[eventType] = Delegate.Combine(eventTable[eventType], eventDelegate);
+        private void Awake() {
+            Initialize();
         }
-        else
-        {
-            eventTable.Add(eventType, eventDelegate);
-        }
-    }
 
-    public void Subscribe<T>(string eventName, EventDelegate<T> eventDelegate) {
-        if (stringEventTable.ContainsKey(eventName))
+        // 订阅事件
+        public void Subscribe<T>(EventDelegate<T> eventDelegate)
         {
-            stringEventTable[eventName] = Delegate.Combine(stringEventTable[eventName], eventDelegate);
-        }
-        else
-        {
-            stringEventTable.Add(eventName, eventDelegate);
-        }
-    }
-
-    // 取消订阅事件
-    public void Unsubscribe<T>(EventDelegate<T> eventDelegate) {
-        Type eventType = typeof(T);
-        if (eventTable.ContainsKey(eventType))
-        {
-            eventTable[eventType] = Delegate.Remove(eventTable[eventType], eventDelegate);
-            if (eventTable[eventType] == null)
+            Type eventType = typeof(T);
+            if (eventTable.ContainsKey(eventType))
             {
-                eventTable.Remove(eventType);
+                eventTable[eventType] = Delegate.Combine(eventTable[eventType], eventDelegate);
+            }
+            else
+            {
+                eventTable.Add(eventType, eventDelegate);
             }
         }
-    }
 
-    public void Unsubscribe<T>(string eventName, EventDelegate<T> eventDelegate) {
-        if (stringEventTable.ContainsKey(eventName))
+        // 订阅事件，string版本的是用于类型相同的不同事件，请保证相同名称类型一致
+        public void Subscribe<T>(string eventName, EventDelegate<T> eventDelegate)
         {
-            stringEventTable[eventName] = Delegate.Remove(stringEventTable[eventName], eventDelegate);
-            if (stringEventTable[eventName] == null)
+            if (stringEventTable.ContainsKey(eventName))
             {
-                stringEventTable.Remove(eventName);
+                stringEventTable[eventName] = Delegate.Combine(stringEventTable[eventName], eventDelegate);
+            }
+            else
+            {
+                stringEventTable.Add(eventName, eventDelegate);
             }
         }
-    }
 
-    // 发布事件
-    public void Publish<T>(T eventData) {
-        Type eventType = typeof(T);
-        if (eventTable.TryGetValue(eventType, out Delegate eventDelegate))
+        // 取消订阅事件
+        public void Unsubscribe<T>(EventDelegate<T> eventDelegate)
         {
-            EventDelegate<T> callback = eventDelegate as EventDelegate<T>;
-            callback?.Invoke(eventData);
+            Type eventType = typeof(T);
+            if (eventTable.ContainsKey(eventType))
+            {
+                eventTable[eventType] = Delegate.Remove(eventTable[eventType], eventDelegate);
+                if (eventTable[eventType] == null)
+                {
+                    eventTable.Remove(eventType);
+                }
+            }
         }
-    }
 
-    public void Publish<T>(string eventName, T eventData) {
-        if (stringEventTable.TryGetValue(eventName, out Delegate eventDelegate))
+        // 取消订阅事件
+        public void Unsubscribe<T>(string eventName, EventDelegate<T> eventDelegate)
         {
-            EventDelegate<T> callback = eventDelegate as EventDelegate<T>;
-            callback?.Invoke(eventData);
+            if (stringEventTable.ContainsKey(eventName))
+            {
+                stringEventTable[eventName] = Delegate.Remove(stringEventTable[eventName], eventDelegate);
+                if (stringEventTable[eventName] == null)
+                {
+                    stringEventTable.Remove(eventName);
+                }
+            }
+        }
+
+        // 发布事件
+        public void Publish<T>(T eventData)
+        {
+            Type eventType = typeof(T);
+            if (eventTable.TryGetValue(eventType, out Delegate eventDelegate))
+            {
+                EventDelegate<T> callback = eventDelegate as EventDelegate<T>;
+                callback?.Invoke(eventData);
+            }
+        }
+
+        // 发布事件，string版本的是用于类型相同的不同事件
+        public void Publish<T>(string eventName, T eventData)
+        {
+            if (stringEventTable.TryGetValue(eventName, out Delegate eventDelegate))
+            {
+                EventDelegate<T> callback = eventDelegate as EventDelegate<T>;
+                callback?.Invoke(eventData);
+            }
         }
     }
 }

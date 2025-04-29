@@ -24,7 +24,7 @@ public class CardData
         isDiscarded = false; // 创建时不是弃牌
 
         // 生成唯一的卡牌ID 使用系统时间戳
-        cardId = (int)(System.DateTime.Now.Ticks % int.MaxValue);
+        cardId = (int)((System.DateTime.Now.Ticks + Random.Range(99, 99999)) % int.MaxValue);
     }
 
     public void Discard()
