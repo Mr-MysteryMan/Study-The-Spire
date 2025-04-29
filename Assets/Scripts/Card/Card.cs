@@ -3,6 +3,7 @@ using Combat;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+
 public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler, IPointerClickHandler
 {
     [Header("卡片游戏组件")]
@@ -25,7 +26,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler, IPo
 
     public CardEffect effect; // 卡牌效果接口
     public bool isDiscarded => cardData.isDiscarded; // 是否是弃牌
-    private CardManager manager; // 卡片管理器
+    private Combat.CardManager manager; // 卡片管理器
 
     //----------------------更新方法---------------------//
 
@@ -73,7 +74,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler, IPo
         animationCoroutine = StartCoroutine(AnimateTransform(originalScale));
     }
 
-    public void addManager(CardManager manager) {
+    public void addManager(Combat.CardManager manager) {
         this.manager = manager; // 设置卡片管理器
     }
 
