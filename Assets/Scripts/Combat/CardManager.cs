@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Combat;
 using Combat.Characters;
 using UnityEngine;
+using GlobalCardManager = CardManager;
 
 namespace Combat
 {
@@ -11,20 +11,28 @@ namespace Combat
         public GameObject CardPrefab; // 卡片预制件
         public GameObject CardDeck; // 手牌区
 
+        public List<CardData> NewCardData; // 新卡片数据列表
+        public List<CardData> HandCardData; // 手牌数据列表
+        public List<CardData> DiscardCardData; // 弃牌数据列表
+
+        private GlobalCardManager globalCardManager = GlobalCardManager.Instance; // 全局卡片管理器
+
         private List<GameObject> cards = new List<GameObject>(); // 卡片列表
 
         private Character player; // 玩家角色
         private List<Enemy> enemy; // 敌人角色
 
-        public List<CardData> NewCardData = new List<CardData>(); // 新卡片数据列表
-        public List<CardData> HandCardData = new List<CardData>(); // 手牌数据列表
-        public List<CardData> DiscardCardData = new List<CardData>(); // 弃牌数据列表
 
         public void init()
         {
             // TODO: 接入背包系统, 暂用随机生成的卡片
-            this.NewCardData = ViewCards.randomCardData(30);
-            // 所有卡片置为非弃置
+            this.NewCardData = ViewCards.randomCardData(); // 获取所有卡片数据
+            ResetNewCards();
+            HandCardData = new List<CardData>(); // 初始化手牌数据列表
+            DiscardCardData = new List<CardData>(); // 初始化弃牌数据列表
+        }
+
+        public void ResetNewCards () {
             foreach (var cardData in NewCardData)
             {
                 cardData.Reset();
@@ -45,6 +53,7 @@ namespace Combat
                     {
                         NewCardData.AddRange(DiscardCardData); // 将弃牌添加到新卡片列表
                         DiscardCardData.Clear(); // 清空弃牌列表
+                        ResetNewCards();
                     }
                     else
                     {

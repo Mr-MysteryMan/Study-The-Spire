@@ -17,10 +17,13 @@ public class CardData
 
     public int cardId; // 卡牌ID
 
-    public CardData(CardType cardType, int cardValue)
+    public int cost; // 卡牌费用
+
+    public CardData(CardType cardType, int cardValue, int CardCost)
     {
         this.cardType = cardType;
         this.cardValue = cardValue;
+        this.cost = CardCost; 
         isDiscarded = false; // 创建时不是弃牌
 
         // 生成唯一的卡牌ID 使用系统时间戳
