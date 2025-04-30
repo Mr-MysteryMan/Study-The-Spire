@@ -13,7 +13,7 @@ public class ViewCards : MonoBehaviour
         CardOverview obj = cardOverview.GetComponent<CardOverview>();
 
         if (CardManager) {
-            CardManager cardManager = CardManager.GetComponent<CardManager>();
+            Combat.CardManager cardManager = CardManager.GetComponent<Combat.CardManager>();
             obj.CreateCards(cardManager.NewCardData, 0); // 根据卡片管理器生成卡片
             obj.CreateCards(cardManager.HandCardData, 1); // 根据卡片管理器生成卡片
             obj.CreateCards(cardManager.DiscardCardData, 2); // 根据卡片管理器生成卡片
