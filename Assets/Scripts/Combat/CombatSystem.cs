@@ -66,8 +66,30 @@ namespace Combat
 
         void Start()
         {
-            this.eventManager.Subscribe<TurnEndEvent>((e) => { if (e.Character == this.PlayerCharacter) cardManager.discardAll(); });
-            this.eventManager.Subscribe<TurnStartEvent>((e) => { if (e.Character == this.PlayerCharacter) { cardManager.drewCard(); Debug.Log("抽卡"); } });
+            this.eventManager.Subscribe<TurnEndEvent>((e) => { 
+                if (e.Character == this.PlayerCharacter) {
+                    cardManager.discardAll();
+                    checkGameOver(); // 检查游戏结束条件
+                }
+            });
+            this.eventManager.Subscribe<TurnStartEvent>((e) => { 
+                if (e.Character == this.PlayerCharacter) {
+                    cardManager.setEnergy(Setting.RoundEnergy); // 更新能量点
+                    cardManager.drewCard(); Debug.Log("抽卡"); 
+                } 
+            });
+        }
+
+
+        // 游戏结束条件判断
+        private void checkGameOver() {
+            if (!(this.PlayerCharacter.CurHp > 0)) {
+                // TODO : 游戏结束
+                Debug.Log("游戏结束");
+            } else if (this.MonsterCharacter.All(x => x.CurHp <= 0)) {
+                // TODO : 胜利
+                Debug.Log("胜利");
+            }
         }
 
         public void Initialize(EventManager eventManager, Character systemCharacter, CardManager cardManager)
