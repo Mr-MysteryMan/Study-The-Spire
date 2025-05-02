@@ -1,5 +1,6 @@
 using System;
 using Combat.Command;
+using Combat.EventVariable;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -10,34 +11,45 @@ namespace Combat
     public class Character : MonoBehaviour
     {
         public GameObject HPbar;
-        [SerializeField] private int maxHp = 100;
-        [SerializeField] private int curHp = 100;
-        [SerializeField] private int ammor = 0;
+        [SerializeField] private ReactiveIntVariable maxHp;
+        [SerializeField] private ReactiveIntVariable curHp;
+        [SerializeField] private ReactiveIntVariable ammor;
+
+        [SerializeField] private int initMaxHp = 10; // 初始最大生命值
+        [SerializeField] private int initCurHp = 10; // 初始当前生命值
+        [SerializeField] private int initAmmor = 0; // 初始护甲值
 
         // 角色的最大生命值
-        public int MaxHp => maxHp;
+        public int MaxHp => maxHp.Value;
 
         // 角色的当前生命值
-        public int CurHp => curHp;
+        public int CurHp => curHp.Value;
 
         // 角色的护甲值
-        public int Ammor => ammor;
+        public int Ammor => ammor.Value;
 
         public CombatSystem combatSystem;
 
-        public void SetHP(int maxHp, int curHp) // 设置当前生命值数据
+        public void SetInitHP(int maxHp, int curHp) // 设置初始化生命值数据
         {
-            this.curHp = curHp;
-            this.maxHp = maxHp;
+            initCurHp = curHp;
+            initMaxHp = maxHp;
+        }
+
+        protected virtual void Init(EventManager eventManager) {
+            maxHp = new ReactiveIntVariable("MaxHp", initMaxHp, eventManager, this);
+            curHp = new ReactiveIntVariable("CurHp", initCurHp, eventManager, this);
+            ammor = new ReactiveIntVariable("Ammor", initAmmor, eventManager, this);
         }
 
         public void Start()
         {
+            Init(combatSystem.EventManager);
             if (HPbar != null) // 存在血条时(非系统对象), 启动血条
             {
                 HPController hPController = HPbar.GetComponent<HPController>();
                 hPController.eventManager = this.combatSystem.GetComponent<EventManager>();
-                hPController.launch();
+                hPController.launch(this);
             }
         }
         // 攻击target,造成damage点伤害，会触发相应事件
@@ -75,10 +87,10 @@ namespace Combat
         internal void _TakeHpDamage(int damage)
         {
             Assert.IsTrue(damage >= 0, "Damage cannot be negative.");
-            curHp -= damage;
-            if (curHp < 0)
+            curHp.Value -= damage;
+            if (curHp.Value < 0)
             {
-                curHp = 0;
+                curHp.Value = 0;
             }
         }
 
@@ -87,10 +99,10 @@ namespace Combat
         internal void _TakeAmmorDamage(int damage)
         {
             Assert.IsTrue(damage >= 0, "Damage cannot be negative.");
-            ammor -= damage;
-            if (ammor < 0)
+            ammor.Value -= damage;
+            if (ammor.Value < 0)
             {
-                ammor = 0;
+                ammor.Value = 0;
             }
         }
 
@@ -99,10 +111,10 @@ namespace Combat
         internal void _Heal(int heal)
         {
             Assert.IsTrue(heal >= 0, "Heal cannot be negative.");
-            curHp += heal;
-            if (curHp > maxHp)
+            curHp.Value += heal;
+            if (curHp.Value > maxHp.Value)
             {
-                curHp = maxHp;
+                curHp.Value = maxHp.Value;
             }
         }
 
@@ -111,7 +123,7 @@ namespace Combat
         internal void _AddAmmor(int ammor)
         {
             Assert.IsTrue(ammor >= 0, "Ammor cannot be negative.");
-            this.ammor += ammor;
+            this.ammor.Value += ammor;
         }
 
         // 最大生命值修改，不会同时回血，不会触发事件
@@ -119,7 +131,7 @@ namespace Combat
         internal void _AddMaxHp(int maxHp)
         {
             Assert.IsTrue(maxHp >= 0, "MaxHp cannot be negative.");
-            this.maxHp += maxHp;
+            this.maxHp.Value += maxHp;
         }
 
         // 最大生命值较少，修改后血量不会超过上限，不会触发事件
@@ -127,14 +139,14 @@ namespace Combat
         internal void _MinusMaxHp(int maxHp)
         {
             Assert.IsTrue(maxHp >= 0, "MaxHp cannot be negative.");
-            this.maxHp -= maxHp;
-            if (this.maxHp < 0)
+            this.maxHp.Value -= maxHp;
+            if (this.maxHp.Value < 0)
             {
-                this.maxHp = 0;
+                this.maxHp.Value = 0;
             }
-            if (curHp > this.maxHp)
+            if (curHp.Value > this.maxHp.Value)
             {
-                curHp = this.maxHp;
+                curHp.Value = this.maxHp.Value;
             }
         }
 
@@ -143,10 +155,10 @@ namespace Combat
         internal void _SetMaxHp(int maxHp)
         {
             Assert.IsTrue(maxHp >= 0, "MaxHp cannot be negative.");
-            this.maxHp = maxHp;
-            if (curHp > this.maxHp)
+            this.maxHp.Value = maxHp;
+            if (curHp.Value > this.maxHp.Value)
             {
-                curHp = this.maxHp;
+                curHp.Value = this.maxHp.Value;
             }
         }
 

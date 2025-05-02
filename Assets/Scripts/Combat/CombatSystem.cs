@@ -10,6 +10,7 @@ using ITrigger = Combat.Trigger.ITrigger;
 using Combat.Processor.Rules;
 using Combat.Characters;
 using Combat.Events.Turn;
+using NUnit.Framework;
 
 namespace Combat
 {
@@ -96,7 +97,9 @@ namespace Combat
             int curHp = 100; // TODO: 接入背包系统, 获取当前血量
             // 创建玩家角色
             playerCharacter = CreateCharacter(playerPosition);
-            playerCharacter.SetHP(Setting.PlayerHp, curHp);
+            playerCharacter.SetInitHP(Setting.PlayerHp, curHp);
+            Assert.IsTrue(playerCharacter != null && playerCharacter is Adventurer, "玩家角色创建失败！"); // 确保玩家角色创建成功
+            (playerCharacter as Adventurer).SetInitMana(Setting.PlayerTurnMana); // 设置玩家角色的初始法力值
             // 创建怪物角色
             // TODO: 接入关卡管理, 获取敌人数据
             monsterCharacter = new List<Enemy>();

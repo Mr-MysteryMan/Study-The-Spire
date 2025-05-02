@@ -47,7 +47,7 @@ namespace Combat
             StartCombat();
         }
 
-        private void StartCombat()
+        public void StartCombat()
         {
             // 开始战斗
             Debug.Log("战斗开始");
