@@ -36,8 +36,6 @@ public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler, IPo
 
     public void updateCardStatus(CardData data) {
         cardData = data;
-        Debug.Log(cardData.cost);
-        Debug.Log(cardData.cardValue);
         // 生成卡片效果
         this.effect = getCardEffect(); // 生成卡片效果
         // 更新UI
@@ -89,9 +87,10 @@ public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler, IPo
         
         var from = manager.getUser(this); // 获取使用者
         var to = manager.getTarget(this); // 获取目标
-        if (from && to) { // 如果有使用者和目标
+        if (from && to && manager.EnergyPoint >= this.cardCost) { // 如果有使用者和目标 且 能量足够
             this.effect.work(from, to); // 执行卡牌效果
             manager.reportUse(this); // 向卡片管理器报告使用
+            manager.setEnergy(manager.EnergyPoint - this.cardCost); // 扣除能量
         }
     }
 
