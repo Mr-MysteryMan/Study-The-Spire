@@ -14,9 +14,8 @@ namespace Combat.Trigger {
 
         public void PostCheck(EventManager manager, AttackCommand Command)
         {
-            Debug.Log("DamageDealtTrigger PreCheck: " + Command.Source.name + " dealt " + Command.HPDamage + " HP damage and " + Command.AmmorDamage + " Ammor damage to " + Command.Target.name);
+            Debug.Log("DamageDealtTrigger PostCheck: " + Command.Source.name + " dealt " + Command.HPDamage + " HP damage and " + Command.AmmorDamage + " Ammor damage to " + Command.Target.name);
             if (Command.HPDamage > 0 || Command.AmmorDamage > 0) {
-                Debug.Log("DamageDealtTrigger PreCheck: " + Command.Source.name + " dealt " + Command.HPDamage + " HP damage and " + Command.AmmorDamage + " Ammor damage to " + Command.Target.name);
                 var Event = new Events.DamageDealtEvent(Command.AmmorDamage, Command.HPDamage, Command.Type, Command.Source, Command.Target);
                 manager.Publish(Event);
             }

@@ -57,7 +57,6 @@ namespace Combat
             {
                 monster.OnCombatStart(); // 敌人角色开始战斗
             }
-
             StartPlayerTurn();
         }
 

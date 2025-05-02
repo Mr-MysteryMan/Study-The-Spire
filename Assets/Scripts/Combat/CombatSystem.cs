@@ -11,6 +11,10 @@ using Combat.Processor.Rules;
 using Combat.Characters;
 using Combat.Events.Turn;
 using NUnit.Framework;
+using Combat.Events;
+using UnityEngine.UIElements;
+using Unity.VisualScripting;
+using System.Collections;
 
 namespace Combat
 {
@@ -38,6 +42,8 @@ namespace Combat
 
         private CardManager cardManager; // 卡片管理器
 
+        public CardManager CardManager => cardManager; // 卡片管理器
+
         // 系统角色，用于一些没有直接来源的命令，暂时没用
         private Character systemCharacter;
 
@@ -51,6 +57,8 @@ namespace Combat
 
         [SerializeField] private BasicRulesLibSO rulesLibSO;
 
+        private EventListener.BasicRuleLib eventRulesLib;
+
         void Awake()
         {
             CreateCharacters(); // 获取角色
@@ -60,36 +68,50 @@ namespace Combat
             var cardManager = GetComponent<CardManager>();
             Initialize(eventManager, character, cardManager);
 
+            eventRulesLib = new EventListener.BasicRuleLib(this);
+
             cardManager.init(); // 初始化卡片管理器
-            cardManager.drewCard(); // 抽卡
+        }
+
+
+        /// <summary>
+        /// 延后至这一帧结束后摧毁各种gameobject，否则会导致正在遍历敌人的时候，游戏结束被销毁，导致报错。
+        /// 临时的解决方法，后续需要优化
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator DestoryAfterDelay() {
+            yield return new WaitForEndOfFrame();
+            Destroy(this.playerCharacter.gameObject);
+            foreach (var monster in this.monsterCharacter) {
+                Destroy(monster.gameObject); // 销毁怪物角色
+            }
+            this.monsterCharacter.Clear(); // 清空怪物角色列表
+            Destroy(this.gameObject); // 销毁战斗系统
         }
 
         void Start()
         {
+            eventRulesLib.AddListen();
+            this.eventManager.Subscribe<CombatLoseEvent>((e) => {
+                Debug.Log("游戏结束"); // TODO: 游戏结束
+                StartCoroutine(DestoryAfterDelay());
+            });
+            this.eventManager.Subscribe<CombatWinningEvent>((e) => {
+                Debug.Log("游戏胜利"); // TODO: 游戏胜利
+                StartCoroutine(DestoryAfterDelay());
+            });
             this.eventManager.Subscribe<TurnEndEvent>((e) => { 
                 if (e.Character == this.PlayerCharacter) {
                     cardManager.discardAll();
-                    checkGameOver(); // 检查游戏结束条件
                 }
             });
             this.eventManager.Subscribe<TurnStartEvent>((e) => { 
                 if (e.Character == this.PlayerCharacter) {
                     cardManager.setEnergy(Setting.RoundEnergy); // 更新能量点
-                    cardManager.drewCard(); Debug.Log("抽卡"); 
+                    cardManager.drewCard();
+                    Debug.Log("抽卡"); 
                 } 
             });
-        }
-
-
-        // 游戏结束条件判断
-        private void checkGameOver() {
-            if (!(this.PlayerCharacter.CurHp > 0)) {
-                // TODO : 游戏结束
-                Debug.Log("游戏结束");
-            } else if (this.MonsterCharacter.All(x => x.CurHp <= 0)) {
-                // TODO : 胜利
-                Debug.Log("胜利");
-            }
         }
 
         public void Initialize(EventManager eventManager, Character systemCharacter, CardManager cardManager)
@@ -121,7 +143,7 @@ namespace Combat
             playerCharacter = CreateCharacter(playerPosition);
             playerCharacter.SetInitHP(Setting.PlayerHp, curHp);
             Assert.IsTrue(playerCharacter != null && playerCharacter is Adventurer, "玩家角色创建失败！"); // 确保玩家角色创建成功
-            (playerCharacter as Adventurer).SetInitMana(Setting.PlayerTurnMana); // 设置玩家角色的初始法力值
+            (playerCharacter as Adventurer).SetInitMana(Setting.RoundEnergy); // 设置玩家角色的初始法力值
             // 创建怪物角色
             // TODO: 接入关卡管理, 获取敌人数据
             monsterCharacter = new List<Enemy>();

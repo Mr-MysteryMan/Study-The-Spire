@@ -1,5 +1,6 @@
 using System;
 using Combat.Command;
+using Combat.Events.Turn;
 using Combat.EventVariable;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -167,5 +168,11 @@ namespace Combat
         public virtual void OnCombatEnd() {}
         public virtual void OnTurnStart() {}
         public virtual void OnTurnEnd() {}
+
+        /// <summary>
+        /// 角色死亡前要调用的方法，主要是用作亡语效果的触发。
+        /// 清理工作请在OnDestroy中完成。
+        /// </summary>
+        public virtual void BeforeDeath() {}
     }
 }

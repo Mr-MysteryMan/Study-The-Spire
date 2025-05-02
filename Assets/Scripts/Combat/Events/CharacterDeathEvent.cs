@@ -2,19 +2,19 @@ namespace Combat.Events
 {
     public class CharacterDeathEvent
     {
-        public Character Target { get; } // 角色数据
-        public Character Source { get; }
+        public Character Murderer { get; } // 角色数据
+        public Character Victim { get; }
 
-        public CharacterDeathEvent(Character target)
+        public CharacterDeathEvent(Character victim)
         {
-            Target = target;
-            Source = null;
+            Victim = victim;
+            Murderer = null;
         }
 
-        public CharacterDeathEvent(Character target, Character source)
+        public CharacterDeathEvent(Character victim, Character muderer)
         {
-            Target = target;
-            Source = source;
+            Victim = victim;
+            Murderer = muderer;
         }
     }
 }
