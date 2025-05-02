@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Scence
+  m_EditorClassIdentifier: 
+  m_GroupName: Scence
+  m_GUID: 2ff5319586490144c9054684a1a3a399
+  m_SerializeEntries:
+  - m_GUID: 3c1faa7164435974799ed9ca9e6b55fa
+    m_Address: Map
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a6850fcbb120e6045826ed00386e3fdd
+    m_Address: Assets/Scenes/MinorEnemy.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8c9cfa26abfee488c85f1582747f6a02
+    m_Address: Assets/Scenes/Scene.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 856aa4ca56028b34e8ffcaba9a8d5f65
+    m_Address: Assets/Scenes/Shop.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f3ef4cc62c84e5f4c804722ed2b3b5dd
+    m_Address: Assets/Scenes/Menu.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 8112e8a6a14283c40bbea58a84045f04, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 6e452d0df6dc42f45991d7de89e9f59f, type: 2}
+    - {fileID: 11400000, guid: 9ce0b4fff2f3e6244b440081201aa399, type: 2}
