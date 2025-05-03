@@ -12,6 +12,8 @@ public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler, IPo
     public Image background; // 卡片背景
     public Text cardValueText; // 卡片数值文本
 
+    public Text cardCostText; // 卡片费用文本
+
     [Header("卡片基本信息")]
     //----------------------基本信息---------------------//
     private CardData cardData;
@@ -21,6 +23,8 @@ public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler, IPo
     public CardType cardType => cardData.cardType; // 卡牌类型
 
     public int cardValue => cardData.cardValue; // 卡牌数值
+
+    public int cardCost => cardData.cost; // 卡牌费用
 
     public int cardId => cardData.cardId; // 卡牌ID
 
@@ -83,9 +87,10 @@ public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler, IPo
         
         var from = manager.getUser(this); // 获取使用者
         var to = manager.getTarget(this); // 获取目标
-        if (from && to) { // 如果有使用者和目标
+        if (from && to && manager.EnergyPoint >= this.cardCost) { // 如果有使用者和目标 且 能量足够
             this.effect.work(from, to); // 执行卡牌效果
             manager.reportUse(this); // 向卡片管理器报告使用
+            manager.setEnergy(manager.EnergyPoint - this.cardCost); // 扣除能量
         }
     }
 
@@ -114,6 +119,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler, IPo
         this.background.sprite = CardUI.GetCardBackground(cardType); // 设置卡片背景
         // 数字
         this.cardValueText.text = cardValue.ToString(); // 设置卡片数值文本
+        this.cardCostText.text = cardCost.ToString(); // 设置卡片数值颜色
         // 弃牌
         if (isDiscarded) { //弃置时背景半透明
             Color color = this.background.color;

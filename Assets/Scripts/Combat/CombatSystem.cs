@@ -10,6 +10,11 @@ using ITrigger = Combat.Trigger.ITrigger;
 using Combat.Processor.Rules;
 using Combat.Characters;
 using Combat.Events.Turn;
+using NUnit.Framework;
+using Combat.Events;
+using UnityEngine.UIElements;
+using Unity.VisualScripting;
+using System.Collections;
 
 namespace Combat
 {
@@ -37,6 +42,8 @@ namespace Combat
 
         private CardManager cardManager; // 卡片管理器
 
+        public CardManager CardManager => cardManager; // 卡片管理器
+
         // 系统角色，用于一些没有直接来源的命令，暂时没用
         private Character systemCharacter;
 
@@ -50,6 +57,8 @@ namespace Combat
 
         [SerializeField] private BasicRulesLibSO rulesLibSO;
 
+        private EventListener.BasicRuleLib eventRulesLib;
+
         void Awake()
         {
             CreateCharacters(); // 获取角色
@@ -59,14 +68,50 @@ namespace Combat
             var cardManager = GetComponent<CardManager>();
             Initialize(eventManager, character, cardManager);
 
+            eventRulesLib = new EventListener.BasicRuleLib(this);
+
             cardManager.init(); // 初始化卡片管理器
-            cardManager.drewCard(); // 抽卡
+        }
+
+
+        /// <summary>
+        /// 延后至这一帧结束后摧毁各种gameobject，否则会导致正在遍历敌人的时候，游戏结束被销毁，导致报错。
+        /// 临时的解决方法，后续需要优化
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator DestoryAfterDelay() {
+            yield return new WaitForEndOfFrame();
+            Destroy(this.playerCharacter.gameObject);
+            foreach (var monster in this.monsterCharacter) {
+                Destroy(monster.gameObject); // 销毁怪物角色
+            }
+            this.monsterCharacter.Clear(); // 清空怪物角色列表
+            Destroy(this.gameObject); // 销毁战斗系统
         }
 
         void Start()
         {
-            this.eventManager.Subscribe<TurnEndEvent>((e) => { if (e.Character == this.PlayerCharacter) cardManager.discardAll(); });
-            this.eventManager.Subscribe<TurnStartEvent>((e) => { if (e.Character == this.PlayerCharacter) { cardManager.drewCard(); Debug.Log("抽卡"); } });
+            eventRulesLib.AddListen();
+            this.eventManager.Subscribe<CombatLoseEvent>((e) => {
+                Debug.Log("游戏结束"); // TODO: 游戏结束
+                StartCoroutine(DestoryAfterDelay());
+            });
+            this.eventManager.Subscribe<CombatWinningEvent>((e) => {
+                Debug.Log("游戏胜利"); // TODO: 游戏胜利
+                StartCoroutine(DestoryAfterDelay());
+            });
+            this.eventManager.Subscribe<TurnEndEvent>((e) => { 
+                if (e.Character == this.PlayerCharacter) {
+                    cardManager.discardAll();
+                }
+            });
+            this.eventManager.Subscribe<TurnStartEvent>((e) => { 
+                if (e.Character == this.PlayerCharacter) {
+                    cardManager.setEnergy(Setting.RoundEnergy); // 更新能量点
+                    cardManager.drewCard();
+                    Debug.Log("抽卡"); 
+                } 
+            });
         }
 
         public void Initialize(EventManager eventManager, Character systemCharacter, CardManager cardManager)
@@ -96,7 +141,9 @@ namespace Combat
             int curHp = 100; // TODO: 接入背包系统, 获取当前血量
             // 创建玩家角色
             playerCharacter = CreateCharacter(playerPosition);
-            playerCharacter.SetHP(Setting.PlayerHp, curHp);
+            playerCharacter.SetInitHP(Setting.PlayerHp, curHp);
+            Assert.IsTrue(playerCharacter != null && playerCharacter is Adventurer, "玩家角色创建失败！"); // 确保玩家角色创建成功
+            (playerCharacter as Adventurer).SetInitMana(Setting.RoundEnergy); // 设置玩家角色的初始法力值
             // 创建怪物角色
             // TODO: 接入关卡管理, 获取敌人数据
             monsterCharacter = new List<Enemy>();
@@ -107,6 +154,7 @@ namespace Combat
             }
         }
 
+        /* 处理角色的部分函数 */
         private enum CharacterType
         {
             Player,
@@ -124,6 +172,20 @@ namespace Combat
             return character;
         }
 
+        public void KillCharacter(Character character)
+        {
+            if (character is Adventurer adventurer) // 如果是玩家角色
+            {
+                playerCharacter = null; // 玩家角色为空
+            }
+            else if (character is Enemy enemy) // 如果是怪物角色
+            {
+                monsterCharacter.Remove(enemy); // 从怪物列表中移除
+            }
+            Destroy(character.gameObject); // 销毁角色对象
+        }
+
+        /* 命令处理管道和触发器部分 */
         private void RegisterProcessorForCharacter(Character character)
         {
             foreach (var rule in rulesLibSO.Rules)

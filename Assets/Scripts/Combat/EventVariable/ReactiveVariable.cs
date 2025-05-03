@@ -32,11 +32,12 @@ namespace Combat.EventVariable
             this.parent = parent;
         }
 
-        public ReactiveVariable(string name, T initialValue, EventManager eventManager)
+        public ReactiveVariable(string name, T initialValue, EventManager eventManager, object parent)
         {
             this.name = name;
             _value = initialValue;
             this.eventManager = eventManager;
+            this.parent = parent;
         }
     }
 }

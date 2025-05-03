@@ -1,7 +1,8 @@
 using System.Collections.Generic;
-using Combat;
 using Combat.Characters;
 using UnityEngine;
+using UnityEngine.UI;
+using GlobalCardManager = CardManager;
 
 namespace Combat
 {
@@ -11,20 +12,36 @@ namespace Combat
         public GameObject CardPrefab; // 卡片预制件
         public GameObject CardDeck; // 手牌区
 
+        public Text EnergySpotText; // 能量点
+
+        private int Energy = 0;
+
+        public int EnergyPoint => Energy; // 能量点属性
+
+        public List<CardData> NewCardData; // 新卡片数据列表
+        public List<CardData> HandCardData; // 手牌数据列表
+        public List<CardData> DiscardCardData; // 弃牌数据列表
+
+        private GlobalCardManager globalCardManager = GlobalCardManager.Instance; // 全局卡片管理器
+
         private List<GameObject> cards = new List<GameObject>(); // 卡片列表
 
         private Character player; // 玩家角色
         private List<Enemy> enemy; // 敌人角色
 
-        public List<CardData> NewCardData = new List<CardData>(); // 新卡片数据列表
-        public List<CardData> HandCardData = new List<CardData>(); // 手牌数据列表
-        public List<CardData> DiscardCardData = new List<CardData>(); // 弃牌数据列表
 
         public void init()
         {
             // TODO: 接入背包系统, 暂用随机生成的卡片
-            this.NewCardData = ViewCards.randomCardData(30);
-            // 所有卡片置为非弃置
+            this.NewCardData = ViewCards.randomCardData(); // 获取所有卡片数据
+
+            setEnergy(Setting.RoundEnergy); // 设置能量点
+            ResetNewCards();
+            HandCardData = new List<CardData>(); // 初始化手牌数据列表
+            DiscardCardData = new List<CardData>(); // 初始化弃牌数据列表
+        }
+
+        public void ResetNewCards () {
             foreach (var cardData in NewCardData)
             {
                 cardData.Reset();
@@ -45,6 +62,7 @@ namespace Combat
                     {
                         NewCardData.AddRange(DiscardCardData); // 将弃牌添加到新卡片列表
                         DiscardCardData.Clear(); // 清空弃牌列表
+                        ResetNewCards();
                     }
                     else
                     {
@@ -78,6 +96,10 @@ namespace Combat
         public void discardAll()
         {
             // 将所有手牌添加到弃牌数据列表
+            foreach (var cardData in HandCardData)
+            {
+                cardData.Discard(); // 弃掉卡片
+            }
             DiscardCardData.AddRange(HandCardData);
             HandCardData.Clear(); // 清空手牌数据列表
                                   // 清空卡片列表
@@ -138,6 +160,15 @@ namespace Combat
             {
                 float x = (i - (cards.Count - 1f) / 2) * offset;
                 cards[i].GetComponent<RectTransform>().anchoredPosition = new Vector2(x, 0);
+            }
+        }
+
+        public void setEnergy(int energy)
+        {
+            Energy = energy;
+            if (EnergySpotText != null)
+            {
+                EnergySpotText.text = Energy.ToString(); // 更新能量点文本
             }
         }
     }

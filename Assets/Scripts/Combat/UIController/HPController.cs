@@ -1,5 +1,6 @@
 using Combat;
 using Combat.Events;
+using Combat.EventVariable;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,22 +8,23 @@ public class HPController : MonoBehaviour
 {
     [SerializeField] private Slider slider;
     public EventManager eventManager;
-    [SerializeField] private Combat.Character character;
+    private Character character;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     // 由Character启动
-    public void launch()
+    public void launch(Character character)
     {
-        eventManager.Subscribe<DamageDealtEvent>(OnHpChange);
+        this.character = character;
+        eventManager.Subscribe<ValueChangedEvent<int>>(OnHpChange);
     }
 
-    void OnHpChange(DamageDealtEvent e) {
-        if (e.Target == character) {
-            slider.value = (float)e.Target.CurHp / e.Target.MaxHp;
+    void OnHpChange(ValueChangedEvent<int> e) {
+        if ((object)e.Parent == character && e.Parent is Character target) {
+            slider.value = (float)target.CurHp / target.MaxHp;
         }
     }
 
     void OnDestroy()
     {
-        eventManager.Unsubscribe<DamageDealtEvent>(OnHpChange);
+        eventManager.Unsubscribe<ValueChangedEvent<int>>(OnHpChange);
     }
 }
