@@ -12,6 +12,8 @@ namespace Combat
     public class Character : MonoBehaviour
     {
         public GameObject HPbar;
+
+        // 注意使用了ReactiveIntVariable之后，一次函数尽量只有一次赋值，避免触发多次事件。
         [SerializeField] private ReactiveIntVariable maxHp;
         [SerializeField] private ReactiveIntVariable curHp;
         [SerializeField] private ReactiveIntVariable ammor;
@@ -83,43 +85,31 @@ namespace Combat
             combatSystem.ProcessCommand(new AddAmmorCommand(this, this, ammor));
         }
 
-        // 当前生命值减少，只有简单的数值保证(damage>=0)，不会触发事件
+        // 当前生命值减少，只有简单的数值保证(damage>=0)
         // internal修饰，以防止外部调用，请只在command的execute中调用
         internal void _TakeHpDamage(int damage)
         {
             Assert.IsTrue(damage >= 0, "Damage cannot be negative.");
-            curHp.Value -= damage;
-            if (curHp.Value < 0)
-            {
-                curHp.Value = 0;
-            }
+            curHp.Value = Math.Max(curHp.Value - damage, 0);
         }
 
-        // 当前护甲值减少，只有简单的数值保证，不会触发事件
+        // 当前护甲值减少，只有简单的数值保证
         // internal修饰，以防止外部调用，请只在command的execute中调用
         internal void _TakeAmmorDamage(int damage)
         {
             Assert.IsTrue(damage >= 0, "Damage cannot be negative.");
-            ammor.Value -= damage;
-            if (ammor.Value < 0)
-            {
-                ammor.Value = 0;
-            }
+            ammor.Value = Math.Max(ammor.Value - damage, 0);
         }
 
-        // 当前生命值增加，只有简单的数值保证(<maxHp)，不会触发事件
+        // 当前生命值增加，只有简单的数值保证(<maxHp)
         // internal修饰，以防止外部调用，请只在command的execute中调用
         internal void _Heal(int heal)
         {
             Assert.IsTrue(heal >= 0, "Heal cannot be negative.");
-            curHp.Value += heal;
-            if (curHp.Value > maxHp.Value)
-            {
-                curHp.Value = maxHp.Value;
-            }
+            curHp.Value = Math.Min(curHp.Value + heal, maxHp.Value);
         }
 
-        // 当前护甲值增加，只有简单的数值保证(>0)，不会触发事件
+        // 当前护甲值增加，只有简单的数值保证(>0)
         // internal修饰，以防止外部调用，请只在command的execute中调用
         internal void _AddAmmor(int ammor)
         {
@@ -127,7 +117,7 @@ namespace Combat
             this.ammor.Value += ammor;
         }
 
-        // 最大生命值修改，不会同时回血，不会触发事件
+        // 最大生命值修改，不会同时回血
         // internal修饰，以防止外部调用，请只在command的execute中调用
         internal void _AddMaxHp(int maxHp)
         {
@@ -135,23 +125,19 @@ namespace Combat
             this.maxHp.Value += maxHp;
         }
 
-        // 最大生命值较少，修改后血量不会超过上限，不会触发事件
+        // 最大生命值较少，修改后血量不会超过上限
         // internal修饰，以防止外部调用，请只在command的execute中调用
         internal void _MinusMaxHp(int maxHp)
         {
             Assert.IsTrue(maxHp >= 0, "MaxHp cannot be negative.");
-            this.maxHp.Value -= maxHp;
-            if (this.maxHp.Value < 0)
-            {
-                this.maxHp.Value = 0;
-            }
+            this.maxHp.Value = Math.Max(this.maxHp.Value - maxHp, 0);
             if (curHp.Value > this.maxHp.Value)
             {
                 curHp.Value = this.maxHp.Value;
             }
         }
 
-        // 最大生命值修改，修改后血量不会超过上限，不会触发事件
+        // 最大生命值修改，修改后血量不会超过上限
         // internal修饰，以防止外部调用，请只在command的execute中调用
         internal void _SetMaxHp(int maxHp)
         {

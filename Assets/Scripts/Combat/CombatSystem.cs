@@ -154,6 +154,7 @@ namespace Combat
             }
         }
 
+        /* 处理角色的部分函数 */
         private enum CharacterType
         {
             Player,
@@ -171,6 +172,20 @@ namespace Combat
             return character;
         }
 
+        public void KillCharacter(Character character)
+        {
+            if (character is Adventurer adventurer) // 如果是玩家角色
+            {
+                playerCharacter = null; // 玩家角色为空
+            }
+            else if (character is Enemy enemy) // 如果是怪物角色
+            {
+                monsterCharacter.Remove(enemy); // 从怪物列表中移除
+            }
+            Destroy(character.gameObject); // 销毁角色对象
+        }
+
+        /* 命令处理管道和触发器部分 */
         private void RegisterProcessorForCharacter(Character character)
         {
             foreach (var rule in rulesLibSO.Rules)

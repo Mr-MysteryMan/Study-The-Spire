@@ -605,7 +605,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &8854411703700379425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -636,9 +636,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HPbar: {fileID: 1346142233314231824}
-  maxHp: 100
-  curHp: 100
-  ammor: 0
+  initMaxHp: 100
+  initCurHp: 100
+  initAmmor: 0
   combatSystem: {fileID: 0}
   stateMachine: {fileID: 286206233503564372}
   effectStateMakerSO: {fileID: 11400000, guid: 7b942edaec4e8a545933e32c6b17f43f, type: 2}

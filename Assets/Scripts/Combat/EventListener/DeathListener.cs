@@ -5,11 +5,14 @@ namespace Combat.EventListener
 {
     public class DeathListener : IEventListener
     {
-        private EventManager eventManager;
+        private CombatSystem combatSystem;
+
+        public DeathListener(CombatSystem combatSystem) {
+            this.combatSystem = combatSystem;
+        }
 
         public void AddListen(EventManager eventManager)
         {
-            this.eventManager = eventManager;
             eventManager.Subscribe<ValueChangedEvent<int>>(OnHpChanged);
         }
 
@@ -23,7 +26,8 @@ namespace Combat.EventListener
             if (eventData.ValueName != "CurHp") return; // 只监听CurHp的变化
             if (eventData.Parent is Character character && character.CurHp <= 0) {
                 character.BeforeDeath();
-                eventManager.Publish(new CharacterDeathEvent(eventData.Parent as Character)); // 发布角色死亡事件
+                combatSystem.KillCharacter(character); 
+                combatSystem.EventManager.Publish(new CharacterDeathEvent(eventData.Parent as Character)); // 发布角色死亡事件
             }
         }
     }

@@ -8,7 +8,7 @@ namespace Combat.EventListener {
 
         public BasicRuleLib(CombatSystem combatSystem) {
             this.eventManager = combatSystem.EventManager;
-            EventListeners.Add(new DeathListener());
+            EventListeners.Add(new DeathListener(combatSystem));
             EventListeners.Add(new GameoverListener(combatSystem));
         } 
 
