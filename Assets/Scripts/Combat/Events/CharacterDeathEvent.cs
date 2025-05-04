@@ -1,17 +1,20 @@
-public class CharacterDeathEvent
+namespace Combat.Events
 {
-    public CharacterData Target { get; } // 角色数据
-    public CharacterData Source { get; }
-
-    public CharacterDeathEvent(CharacterData target)
+    public class CharacterDeathEvent
     {
-        Target = target;
-        Source = null;
-    }
+        public Character Murderer { get; } // 角色数据
+        public Character Victim { get; }
 
-    public CharacterDeathEvent(CharacterData target, CharacterData source)
-    {
-        Target = target;
-        Source = source;
+        public CharacterDeathEvent(Character victim)
+        {
+            Victim = victim;
+            Murderer = null;
+        }
+
+        public CharacterDeathEvent(Character victim, Character muderer)
+        {
+            Victim = victim;
+            Murderer = muderer;
+        }
     }
 }
