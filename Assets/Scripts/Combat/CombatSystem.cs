@@ -25,8 +25,10 @@ namespace Combat
     {
         public GameObject AdventurerPrefab; // 角色预制体
         public GameObject EnemyPrefab;
+        public ObjectEventSO backToMenuEvent;
 
         public GameObject UI; // 战斗UI页面
+        public GameObject uiPanel;
 
         // 来源角色的处理器列表
         private Dictionary<(Type, Character), SortedList<(int, long), IProcessor>> sourceProcessors;
@@ -62,7 +64,7 @@ namespace Combat
         void Awake()
         {
             CreateCharacters(); // 获取角色
-
+            uiPanel.SetActive(false);
             var eventManager = GetComponent<EventManager>();
             var character = GetComponent<Character>();
             var cardManager = GetComponent<CardManager>();
@@ -79,7 +81,7 @@ namespace Combat
         /// 临时的解决方法，后续需要优化
         /// </summary>
         /// <returns></returns>
-        private IEnumerator DestoryAfterDelay() {
+        private IEnumerator DestoryAfterDelay(int a) {
             yield return new WaitForEndOfFrame();
             Destroy(this.playerCharacter.gameObject);
             foreach (var monster in this.monsterCharacter) {
@@ -87,6 +89,14 @@ namespace Combat
             }
             this.monsterCharacter.Clear(); // 清空怪物角色列表
             Destroy(this.gameObject); // 销毁战斗系统
+            if (a == 1)
+            {
+                backToMenuEvent.RaiseEvent(null, this);
+            }
+            else
+            {
+                uiPanel.SetActive(true);
+            }
         }
 
         void Start()
@@ -94,11 +104,11 @@ namespace Combat
             eventRulesLib.AddListen();
             this.eventManager.Subscribe<CombatLoseEvent>((e) => {
                 Debug.Log("游戏结束"); // TODO: 游戏结束
-                StartCoroutine(DestoryAfterDelay());
+                StartCoroutine(DestoryAfterDelay(0));
             });
             this.eventManager.Subscribe<CombatWinningEvent>((e) => {
                 Debug.Log("游戏胜利"); // TODO: 游戏胜利
-                StartCoroutine(DestoryAfterDelay());
+                StartCoroutine(DestoryAfterDelay(1));
             });
             this.eventManager.Subscribe<TurnEndEvent>((e) => { 
                 if (e.Character == this.PlayerCharacter) {
