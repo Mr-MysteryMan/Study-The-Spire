@@ -33,7 +33,8 @@ namespace Combat
         public void init()
         {
             // TODO: 接入背包系统, 暂用随机生成的卡片
-            this.NewCardData = ViewCards.randomCardData(); // 获取所有卡片数据
+            this.NewCardData = globalCardManager.GetAllCards();
+            // this.NewCardData = ViewCards.randomCardData(); // 获取所有卡片数据
 
             setEnergy(Setting.RoundEnergy); // 设置能量点
             ResetNewCards();
