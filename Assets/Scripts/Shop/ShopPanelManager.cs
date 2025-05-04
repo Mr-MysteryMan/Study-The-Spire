@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using Unity.VisualScripting;
 
 public enum ShopMode {
     normal,
@@ -43,6 +44,10 @@ public class ShopPanelManager : MonoBehaviour {
 
     void Start() {
         cardManager = CardManager.Instance;
+        if (!cardManager) {
+            Debug.Log("cardManager为空");
+        }
+        GenerateRandomShopItems();
         CacheUI();
         InitClick();
         RefreshUI();
@@ -138,19 +143,23 @@ public class ShopPanelManager : MonoBehaviour {
     }
 
     private void DoBuyItem() {
-        cardManager.SpendGold(selectedItemData.gold);
-        cardManager.AddCard(selectedItemData);
+        Debug.Log("从 shopItems 中移除该商品");
+        Debug.Log(cardManager.Gold);
+        if (cardManager.SpendGold(selectedItemData.gold)) {
+            cardManager.AddCard(new CardData(selectedItemData.cardType, selectedItemData.cardValue));
 
-        // 从 shopItems 中移除该商品
-        shopItems.Remove(selectedItemData);
-        // SaveItemDataToJson("ItemData/shop_items", shopItems);
+            shopItems.Remove(selectedItemData);
+            // SaveItemDataToJson("ItemData/shop_items", shopItems);
 
-        Destroy(selectedItemGO);
-        selectedItemGO = null;
-        selectedItemData = null;
+            Destroy(selectedItemGO);
+            selectedItemGO = null;
+            selectedItemData = null;
+        }
 
         confirmPopup.gameObject.SetActive(false);
         detailPanel.gameObject.SetActive(false);
+
+        cardManager.PrintAllCards();
     }
 
     private void DoDeleteItem() {
@@ -357,4 +366,15 @@ public class ShopPanelManager : MonoBehaviour {
         Sprite icon = CardUI.GetCardBackground(item.cardType);
         if (icon) iconImage.sprite = icon;
     }
+
+    private void GenerateRandomShopItems(int count = 5) {
+        shopItems.Clear();
+        for (int i = 0; i < count; i++) {
+            CardType type = (CardType)Random.Range(0, 3); // Attack, Defence, Heal
+            int value = Random.Range(1, 10);
+            int gold = Random.Range(50, 200);
+            shopItems.Add(new ItemData(type, value, gold));
+        }
+    }
+
 }

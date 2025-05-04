@@ -5,26 +5,26 @@ using System.Linq;
 // 卡牌管理器：负责管理玩家所有卡牌数据，包括增删查与金币管理功能
 public class CardManager : MonoBehaviour
 {
-    public static CardManager Instance;
+    public static CardManager Instance { get; private set; }
 
     // 存储所有卡牌数据
-    // private List<CardData> allCards = new List<CardData>();
     private List<CardData> allCards;
 
     // 玩家金币
-    public int Gold { get; private set; } = 0;
+    public int Gold { get; private set; } = 100;
+
+    public int health { get; set; } = 0;
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject); // 防止切换场景丢失
-        }
-        else
-        {
+        if (Instance != null && Instance != this) {
             Destroy(gameObject);
+            return;
         }
+       
+        Instance = this;
+        DontDestroyOnLoad(gameObject); // 防止切换场景丢失
+        
         allCards =randomCardData(); 
     }
 
