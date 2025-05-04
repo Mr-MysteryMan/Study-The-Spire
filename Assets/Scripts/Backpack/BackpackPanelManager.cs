@@ -24,7 +24,7 @@ public class BackpackPanelManager : MonoBehaviour
     void Start()
     {
         cardManager = CardManager.Instance;
-        Debug.Log(cardManager == null ? "CardManager 为 null!" : "CardManager 初始化成功");
+        // Debug.Log(cardManager == null ? "CardManager 为 null!" : "CardManager 初始化成功");
         CacheUI();
         InitClick();
         ShowCardsByType(CardType.Attack);
@@ -192,13 +192,13 @@ public class BackpackPanelManager : MonoBehaviour
         if (icon) iconImage.sprite = icon;
         if (card.cardType == CardType.Attack) {
             nameText.text = "攻击卡牌";
-            descText.text = $"该卡牌攻击属性为{card.cardValue}";
+            descText.text = $"该卡牌攻击属性为{card.cardValue},cost为{card.cost}";
         } else if (card.cardType == CardType.Defense) {
             nameText.text = "防御卡牌";
-            descText.text = $"该卡牌防御属性为{card.cardValue}";
+            descText.text = $"该卡牌防御属性为{card.cardValue},cost为{card.cost}";
         } else if (card.cardType == CardType.Heal)  {
             nameText.text = "治愈卡牌";
-            descText.text = $"该卡牌治愈属性为{card.cardValue}";
+            descText.text = $"该卡牌治愈属性为{card.cardValue},cost为{card.cost}";
         }
     }
 }

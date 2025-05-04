@@ -28,21 +28,20 @@ public class CardManager : MonoBehaviour
         allCards =randomCardData(); 
     }
 
-    private List<CardData> randomCardData() { // 测试用随机卡片数据
-        const int cardCount = 20; // 卡片数量
-        List<CardData> cardDatas = new List<CardData>();
+    public static List<CardData> randomCardData(int cardCount = 20) { // 测试用随机卡片数据
+            List<CardData> cardData = new List<CardData>();
 
-        for (int i = 0; i < cardCount; i++)
-        {
-            // 随机生成卡片数据
-            int cardType = Random.Range(0, 3); // 随机卡片类型
-            CardType type = (CardType)cardType; // 转换为枚举类型
-            int value = Random.Range(0, 100); // 随机卡片内容
-            int cost = Random.Range(1, 5); // 随机卡片费用
-            cardDatas.Add(new CardData(type,value,cost)); // 随机生成卡片数据
-        }
+            for (int i = 0; i < cardCount; i++)
+            {
+                // 随机生成卡片数据
+                int cardType = Random.Range(0, 3); // 随机卡片类型
+                CardType type = (CardType)cardType; // 转换为枚举类型
+                int value = Random.Range(0, 100); // 随机卡片内容
+                int cost = Random.Range(1, 5); // 随机卡片费用
+                cardData.Add(new CardData(type,value,cost)); // 随机生成卡片数据
+            }
 
-        return cardDatas;
+            return cardData;
     }
 
     // 设置金币数

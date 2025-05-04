@@ -44,9 +44,6 @@ public class ShopPanelManager : MonoBehaviour {
 
     void Start() {
         cardManager = CardManager.Instance;
-        if (!cardManager) {
-            Debug.Log("cardManager为空");
-        }
         GenerateRandomShopItems();
         CacheUI();
         InitClick();
@@ -143,10 +140,8 @@ public class ShopPanelManager : MonoBehaviour {
     }
 
     private void DoBuyItem() {
-        Debug.Log("从 shopItems 中移除该商品");
-        Debug.Log(cardManager.Gold);
         if (cardManager.SpendGold(selectedItemData.gold)) {
-            cardManager.AddCard(new CardData(selectedItemData.cardType, selectedItemData.cardValue));
+            cardManager.AddCard(new CardData(selectedItemData.cardType, selectedItemData.cardValue, selectedItemData.cost));
 
             shopItems.Remove(selectedItemData);
             // SaveItemDataToJson("ItemData/shop_items", shopItems);
@@ -360,8 +355,16 @@ public class ShopPanelManager : MonoBehaviour {
         Image iconImage = detailPanel.Find("Center/Icon").GetComponent<Image>();
         Text descText = detailPanel.Find("Bottom/Description").GetComponent<Text>();
 
-        // nameText.text = item.name;
-        // descText.text = item.description;
+        if (item.cardType == CardType.Attack) {
+            nameText.text = "攻击卡牌";
+            descText.text = $"该卡牌攻击属性为{item.cardValue},cost为{item.cost}";
+        } else if (item.cardType == CardType.Defense) {
+            nameText.text = "防御卡牌";
+            descText.text = $"该卡牌防御属性为{item.cardValue},cost为{item.cost}";
+        } else if (item.cardType == CardType.Heal)  {
+            nameText.text = "治愈卡牌";
+            descText.text = $"该卡牌治愈属性为{item.cardValue},cost为{item.cost}";
+        }
 
         Sprite icon = CardUI.GetCardBackground(item.cardType);
         if (icon) iconImage.sprite = icon;
