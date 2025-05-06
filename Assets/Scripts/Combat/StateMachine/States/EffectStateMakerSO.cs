@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Combat.CardEffect;
+using Cards.CardEffect;
 using System;
 using Combat.Characters.EnemyEffect;
 namespace Combat.StateMachine.States

@@ -1,6 +1,7 @@
 using UnityEngine;
+using Combat;
 
-namespace Combat.CardEffect.EffectSO
+namespace Cards.CardEffect.EffectSO
 {
     [CreateAssetMenu(fileName = "Heal", menuName = "Combat/Effect/Heal")]
     public class Heal : EffectSOBase

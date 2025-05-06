@@ -1,4 +1,5 @@
-namespace Combat.CardEffect
+using Combat;
+namespace Cards.CardEffect
 {
     public interface IEffect
     {

@@ -1,6 +1,7 @@
 using UnityEngine;
+using Combat;
 
-namespace Combat.CardEffect.EffectSO
+namespace Cards.CardEffect.EffectSO
 {
     [CreateAssetMenu(fileName = "Attack", menuName = "Combat/Effect/Attack")]
     public class Attact : EffectSOBase

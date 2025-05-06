@@ -1,14 +1,22 @@
+using Cards.CardDatas;
 using UnityEngine;
 
 [System.Serializable]
-public class ItemData : CardData
+public class ItemData
 {
     public int gold;
 
-    // TODO: 卡片费用
-    public ItemData(CardType cardType, int cardValue, int gold)
-        : base(cardType, cardValue, Random.Range(2, 5)) // 随机生成费用
+    public ICardData cardData;
+
+    public ItemData(int gold, ICardData cardData)
     {
+        this.cardData = cardData;
+        this.gold = gold;
+    }
+
+    public ItemData(int gold, int cardValue, int cost, CardType cardType)
+    {
+        this.cardData = new TypedCardData(cardType, cardValue, cost);
         this.gold = gold;
     }
 }

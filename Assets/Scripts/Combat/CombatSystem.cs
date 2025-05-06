@@ -27,6 +27,8 @@ namespace Combat
         public GameObject EnemyPrefab;
         public ObjectEventSO backToMenuEvent;
 
+        public Camera combatCamera; // 战斗摄像机
+
         public GameObject UI; // 战斗UI页面
         public GameObject uiPanel;
 
@@ -72,7 +74,7 @@ namespace Combat
 
             eventRulesLib = new EventListener.BasicRuleLib(this);
 
-            cardManager.init(); // 初始化卡片管理器
+            cardManager.init(this); // 初始化卡片管理器
         }
 
 
