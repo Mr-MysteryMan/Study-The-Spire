@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using Unity.VisualScripting;
+using Cards.CardDatas;
 
 public enum ShopMode {
     normal,
@@ -141,7 +142,7 @@ public class ShopPanelManager : MonoBehaviour {
 
     private void DoBuyItem() {
         if (cardManager.SpendGold(selectedItemData.gold)) {
-            cardManager.AddCard(new CardData(selectedItemData.cardType, selectedItemData.cardValue, selectedItemData.cost));
+            cardManager.AddCard(selectedItemData.cardData);
 
             shopItems.Remove(selectedItemData);
             // SaveItemDataToJson("ItemData/shop_items", shopItems);
@@ -161,7 +162,7 @@ public class ShopPanelManager : MonoBehaviour {
         // 与CardManager交互
         const int deleteCost = 100;
         if (cardManager.SpendGold(deleteCost)) {
-            cardManager.RemoveCard(selectedItemData.cardId);
+            cardManager.RemoveCard(selectedItemData.cardData);
             Destroy(selectedItemGO);
             selectedItemGO = null;
             selectedItemData = null;
@@ -260,13 +261,13 @@ public class ShopPanelManager : MonoBehaviour {
 
             // 设置图标
             Image icon = itemGO.transform.Find("Top/Icon").GetComponent<Image>();
-            Sprite sprite = CardUI.GetCardBackground(item.cardType);
+            Sprite sprite = CardUI.GetCardBackground(item.cardData.CardType);
             if (sprite) icon.sprite = sprite;
 
             // 设置名称
             Text nameText = itemGO.transform.Find("Bottom/NameText").GetComponent<Text>();
             if (curMode != ShopMode.buy) {
-                nameText.text = item.cardValue.ToString();
+                nameText.text = item.cardData.CardValue.ToString();
             }
             // Debug.Log("加载了：" + item.name);
 
@@ -289,23 +290,23 @@ public class ShopPanelManager : MonoBehaviour {
         }
     }
 
-    private List<CardData> backItems = new List<CardData>();
+    private List<ICardData> backItems = new List<ICardData>();
     private void LoadBackItems() {
         Debug.Log("加载背包中的物品...");
         backItems = cardManager.GetAllCards();
 
-        foreach (CardData item in backItems) {
+        foreach (ICardData item in backItems) {
             GameObject itemGO = Instantiate(ShopUIItemPrefab, scrollViewContent);
 
             // 设置图标
             Image icon = itemGO.transform.Find("Top/Icon").GetComponent<Image>();
-            Sprite sprite = CardUI.GetCardBackground(item.cardType);
+            Sprite sprite = CardUI.GetCardBackground(item.CardType);
             if (sprite) icon.sprite = sprite;
 
             // 设置名称
             Text nameText = itemGO.transform.Find("Bottom/NameText").GetComponent<Text>();
             if (curMode != ShopMode.buy) {
-                nameText.text = item.cardValue.ToString();
+                nameText.text = item.CardValue.ToString();
             }
             // Debug.Log("加载了：" + item.name);
 
@@ -320,7 +321,7 @@ public class ShopPanelManager : MonoBehaviour {
             Button btn = itemGO.GetComponent<Button>();
             if (btn != null) {
                 btn.onClick.AddListener(() => {
-                    OnItemClicked(itemGO, new ItemData(item.cardType, item.cardValue, 0));
+                    OnItemClicked(itemGO, new ItemData(0, item.CardValue, item.Cost, item.CardType));
                 });
             }
         }
@@ -355,18 +356,18 @@ public class ShopPanelManager : MonoBehaviour {
         Image iconImage = detailPanel.Find("Center/Icon").GetComponent<Image>();
         Text descText = detailPanel.Find("Bottom/Description").GetComponent<Text>();
 
-        if (item.cardType == CardType.Attack) {
+        if (item.cardData.CardType == CardType.Attack) {
             nameText.text = "攻击卡牌";
-            descText.text = $"该卡牌攻击属性为{item.cardValue},cost为{item.cost}";
-        } else if (item.cardType == CardType.Defense) {
+            descText.text = $"该卡牌攻击属性为{item.cardData.CardValue},cost为{item.cardData.Cost}";
+        } else if (item.cardData.CardType == CardType.Defense) {
             nameText.text = "防御卡牌";
-            descText.text = $"该卡牌防御属性为{item.cardValue},cost为{item.cost}";
-        } else if (item.cardType == CardType.Heal)  {
+            descText.text = $"该卡牌防御属性为{item.cardData.CardValue},cost为{item.cardData.Cost}";
+        } else if (item.cardData.CardType == CardType.Heal)  {
             nameText.text = "治愈卡牌";
-            descText.text = $"该卡牌治愈属性为{item.cardValue},cost为{item.cost}";
+            descText.text = $"该卡牌治愈属性为{item.cardData.CardValue},cost为{item.cardData.Cost}";
         }
 
-        Sprite icon = CardUI.GetCardBackground(item.cardType);
+        Sprite icon = CardUI.GetCardBackground(item.cardData.CardType);
         if (icon) iconImage.sprite = icon;
     }
 
@@ -376,7 +377,8 @@ public class ShopPanelManager : MonoBehaviour {
             CardType type = (CardType)Random.Range(0, 3); // Attack, Defence, Heal
             int value = Random.Range(1, 10);
             int gold = Random.Range(50, 200);
-            shopItems.Add(new ItemData(type, value, gold));
+            int cost = Random.Range(1, 5);
+            shopItems.Add(new ItemData(gold, value, cost, type));
         }
     }
 

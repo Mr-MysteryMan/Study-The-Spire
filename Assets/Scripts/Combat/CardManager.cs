@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Cards;
 using Combat.Characters;
+using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.UI;
 using GlobalCardManager = CardManager;
@@ -14,32 +16,49 @@ namespace Combat
 
         public Text EnergySpotText; // 能量点
 
-        private int Energy = 0;
+        private int energy = 0;
 
-        public int EnergyPoint => Energy; // 能量点属性
+        public int EnergyPoint => energy; // 能量点属性
 
-        public List<CardData> NewCardData; // 新卡片数据列表
-        public List<CardData> HandCardData; // 手牌数据列表
-        public List<CardData> DiscardCardData; // 弃牌数据列表
+        public List<ICardData> NewCardData; // 新卡片数据列表
+        public List<ICardData> HandCardData; // 手牌数据列表
+        public List<ICardData> DiscardCardData; // 弃牌数据列表
 
         private GlobalCardManager globalCardManager = GlobalCardManager.Instance; // 全局卡片管理器
 
         private List<GameObject> cards = new List<GameObject>(); // 卡片列表
 
+        private CombatSystem combatSystem;
+
         private Character player; // 玩家角色
         private List<Enemy> enemy; // 敌人角色
 
+        [SerializeField] private RectTransform uiRectTransform;
 
-        public void init()
+        enum CardSource {
+            GlobalCardManager, 
+            RandomCardData,
+            LocalCardLib
+        }
+
+        [SerializeField] private CardSource cardSource = CardSource.GlobalCardManager;
+
+        public void init(CombatSystem combatSystem)
         {
-            // TODO: 接入背包系统, 暂用随机生成的卡片
-            this.NewCardData = globalCardManager.GetAllCards();
-            // this.NewCardData = ViewCards.randomCardData(); // 获取所有卡片数据
+            this.NewCardData = cardSource switch
+            {
+                CardSource.GlobalCardManager => globalCardManager.GetAllCards(), // 从全局卡片管理器获取随机卡片数据
+                CardSource.RandomCardData => ViewCards.randomCardData(),
+                CardSource.LocalCardLib => LocalCards.GetCards(),
+                _ => globalCardManager.GetAllCards()
+            };
 
             setEnergy(Setting.RoundEnergy); // 设置能量点
             ResetNewCards();
-            HandCardData = new List<CardData>(); // 初始化手牌数据列表
-            DiscardCardData = new List<CardData>(); // 初始化弃牌数据列表
+            HandCardData = new List<ICardData>(); // 初始化手牌数据列表
+            DiscardCardData = new List<ICardData>(); // 初始化弃牌数据列表
+
+            this.combatSystem = combatSystem; // 设置战斗系统
         }
 
         public void ResetNewCards () {
@@ -72,7 +91,7 @@ namespace Combat
                 }
                 // 从新卡片数据列表中随机抽取一张卡片
                 var index = Random.Range(0, NewCardData.Count);
-                CardData cardData = NewCardData[index];
+                ICardData cardData = NewCardData[index];
                 NewCardData.RemoveAt(index);
 
                 CreateCard(cardData); // 创建卡片
@@ -127,16 +146,26 @@ namespace Combat
             return this.enemy[0];
         }
 
+        public void UseHandCard(Card card, Character source, Character target) {
+            Assert.IsTrue(this.HandCardData.Contains(card.CardData));
+            if (this.EnergyPoint < card.CardCost) return;
+            this.setEnergy(this.EnergyPoint - card.CardCost);
+            card.Effect.Work(source, target);
+            reportUse(card);
+        }
+
         public void reportUse(Card card)
         {
             discardCard(card); // 弃掉使用的卡片
             updateCardPosition(); // 更新卡片位置
         }
 
-        private void CreateCard(CardData cardData)
+        private void CreateCard(ICardData cardData)
         {
             GameObject CardObj = Instantiate(CardPrefab, CardDeck.transform);
             Card card = CardObj.GetComponent<Card>();
+            CardDragController dragController = CardObj.GetComponent<CardDragController>();
+            dragController.Init(combatSystem, uiRectTransform); // 初始化拖拽控制器
             card.updateCardStatus(cardData); // 更新卡片状态
             card.addManager(this); // 添加卡片管理器
             cards.Add(CardObj); // 添加卡片到列表
@@ -166,10 +195,10 @@ namespace Combat
 
         public void setEnergy(int energy)
         {
-            Energy = energy;
+            this.energy = energy;
             if (EnergySpotText != null)
             {
-                EnergySpotText.text = Energy.ToString(); // 更新能量点文本
+                EnergySpotText.text = this.energy.ToString(); // 更新能量点文本
             }
         }
     }

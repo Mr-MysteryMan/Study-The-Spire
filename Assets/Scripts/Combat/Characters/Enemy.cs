@@ -1,4 +1,4 @@
-using Combat.CardEffect;
+using Cards.CardEffect;
 using Combat.Characters.EnemyEffect;
 using UnityEngine;
 

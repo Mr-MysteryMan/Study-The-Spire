@@ -145,7 +145,7 @@ public class BackpackPanelManager : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        List<CardData> cards = cardManager.GetCardsByType(type);
+        List<ICardData> cards = cardManager.GetCardsByType(type);
 
         foreach (var card in cards)
         {
@@ -155,7 +155,7 @@ public class BackpackPanelManager : MonoBehaviour
             Sprite sprite = CardUI.GetCardBackground(type);
             if (sprite) icon.sprite = sprite;
             Text text = itemGO.transform.Find("Bottom/Text").GetComponent<Text>();
-            text.text = card.cardValue.ToString();
+            text.text = card.CardValue.ToString();
 
             itemGO.transform.Find("Select").gameObject.SetActive(false);
 
@@ -170,9 +170,9 @@ public class BackpackPanelManager : MonoBehaviour
     }
 
     private GameObject selectedCardGO = null;
-    private CardData selectedCard = null;
+    private ICardData selectedCard = null;
 
-    private void OnCardClicked(GameObject itemGO, CardData card) {
+    private void OnCardClicked(GameObject itemGO, ICardData card) {
         if (selectedCardGO != null) {
             selectedCardGO.transform.Find("Select").gameObject.SetActive(false);
         }
@@ -182,23 +182,23 @@ public class BackpackPanelManager : MonoBehaviour
         selectedCardGO.transform.Find("Select").gameObject.SetActive(true);
     }
 
-    private void ShowCardDetail(CardData card) {
+    private void ShowCardDetail(ICardData card) {
         detailPanel.gameObject.SetActive(true);
 
         Text nameText = detailPanel.Find("Top/Title").GetComponent<Text>();
         Image iconImage = detailPanel.Find("Center/Icon").GetComponent<Image>();
         Text descText = detailPanel.Find("Bottom/Description").GetComponent<Text>();
-        Sprite icon = CardUI.GetCardBackground(card.cardType);
+        Sprite icon = CardUI.GetCardBackground(card.CardType);
         if (icon) iconImage.sprite = icon;
-        if (card.cardType == CardType.Attack) {
+        if (card.CardType == CardType.Attack) {
             nameText.text = "攻击卡牌";
-            descText.text = $"该卡牌攻击属性为{card.cardValue},cost为{card.cost}";
-        } else if (card.cardType == CardType.Defense) {
+            descText.text = $"该卡牌攻击属性为{card.CardValue},cost为{card.Cost}";
+        } else if (card.CardType == CardType.Defense) {
             nameText.text = "防御卡牌";
-            descText.text = $"该卡牌防御属性为{card.cardValue},cost为{card.cost}";
-        } else if (card.cardType == CardType.Heal)  {
+            descText.text = $"该卡牌防御属性为{card.CardValue},cost为{card.Cost}";
+        } else if (card.CardType == CardType.Heal)  {
             nameText.text = "治愈卡牌";
-            descText.text = $"该卡牌治愈属性为{card.cardValue},cost为{card.cost}";
+            descText.text = $"该卡牌治愈属性为{card.CardValue},cost为{card.Cost}";
         }
     }
 }

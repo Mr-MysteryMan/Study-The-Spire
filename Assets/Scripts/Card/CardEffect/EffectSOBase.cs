@@ -1,6 +1,7 @@
 using UnityEngine;
+using Combat;
 
-namespace Combat.CardEffect
+namespace Cards.CardEffect
 {
     public abstract class EffectSOBase : ScriptableObject, IEffect
     {

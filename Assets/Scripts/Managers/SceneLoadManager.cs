@@ -8,20 +8,22 @@ using UnityEngine.SceneManagement;
 public class SceneLoadManager : MonoBehaviour
 {
     private AssetReference currentScene;
-    
+
     public AssetReference map;
-    public AssetReference menu;  
-    
+    public AssetReference menu;
+
     private Vector2Int currentRoomVector;
     private Room currentRoom;
     public ObjectEventSO updateRoomEvent;
     public ObjectEventSO afterRoomLoadedEvent;
-    
+
+    public Camera mainCamera;
+
     private void Awake()
     {
         currentRoomVector = Vector2Int.one * -1;
-         LoadMenu();
-      //   LoadMap();
+        LoadMenu();
+        //   LoadMap();
     }
     public async void OnLoadRoomEvent(object data)
     {
@@ -32,10 +34,13 @@ public class SceneLoadManager : MonoBehaviour
             currentRoomVector = new Vector2Int(currentRoom.col, currentRoom.row);
             // 设置当前场景
             currentScene = currentData.sceneToLoad;
-
+            if (currentData.roomType.IsCombatRoom())
+            {
+                Camera.main.gameObject.SetActive(false);
+            }
         }
         await UnloadSceneTask();
-        await LoadSceneTask();   
+        await LoadSceneTask();
         afterRoomLoadedEvent.RaiseEvent(currentRoomVector, this);
     }
 
@@ -63,7 +68,7 @@ public class SceneLoadManager : MonoBehaviour
             await UnloadSceneTask();
         }
 
-//        await UnloadSceneTask();
+        //        await UnloadSceneTask();
 
         if (currentRoomVector != Vector2.one * -1)
         {
@@ -72,9 +77,17 @@ public class SceneLoadManager : MonoBehaviour
         currentScene = map;
         await LoadSceneTask();
     }
-    
+
     public async void LoadMenu()
     {
+        if (Camera.main == null || Camera.main != mainCamera)
+        {
+            if (Camera.main)
+            {
+                Camera.main.gameObject.SetActive(false);
+            }
+            mainCamera.gameObject.SetActive(true);
+        }
         if (currentScene != null)
             await UnloadSceneTask();
 

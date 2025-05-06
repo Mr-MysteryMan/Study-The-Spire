@@ -1,7 +1,8 @@
 using System;
 using UnityEngine;
+using Combat;
 
-namespace Combat.CardEffect.EffectSO
+namespace Cards.CardEffect.EffectSO
 {
     [CreateAssetMenu(fileName = "Defend", menuName = "Combat/Effect/Defend")]
     public class Defend : EffectSOBase
