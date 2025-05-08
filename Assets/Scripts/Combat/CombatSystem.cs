@@ -83,10 +83,12 @@ namespace Combat
         /// 临时的解决方法，后续需要优化
         /// </summary>
         /// <returns></returns>
-        private IEnumerator DestoryAfterDelay(int a) {
+        private IEnumerator DestoryAfterDelay(int a)
+        {
             yield return new WaitForEndOfFrame();
             Destroy(this.playerCharacter.gameObject);
-            foreach (var monster in this.monsterCharacter) {
+            foreach (var monster in this.monsterCharacter)
+            {
                 Destroy(monster.gameObject); // 销毁怪物角色
             }
             this.monsterCharacter.Clear(); // 清空怪物角色列表
@@ -104,25 +106,31 @@ namespace Combat
         void Start()
         {
             eventRulesLib.AddListen();
-            this.eventManager.Subscribe<CombatLoseEvent>((e) => {
+            this.eventManager.Subscribe<CombatLoseEvent>((e) =>
+            {
                 Debug.Log("游戏结束"); // TODO: 游戏结束
                 StartCoroutine(DestoryAfterDelay(0));
             });
-            this.eventManager.Subscribe<CombatWinningEvent>((e) => {
+            this.eventManager.Subscribe<CombatWinningEvent>((e) =>
+            {
                 Debug.Log("游戏胜利"); // TODO: 游戏胜利
                 StartCoroutine(DestoryAfterDelay(1));
             });
-            this.eventManager.Subscribe<TurnEndEvent>((e) => { 
-                if (e.Character == this.PlayerCharacter) {
+            this.eventManager.Subscribe<TurnEndEvent>((e) =>
+            {
+                if (e.Character == this.PlayerCharacter)
+                {
                     cardManager.discardAll();
                 }
             });
-            this.eventManager.Subscribe<TurnStartEvent>((e) => { 
-                if (e.Character == this.PlayerCharacter) {
+            this.eventManager.Subscribe<TurnStartEvent>((e) =>
+            {
+                if (e.Character == this.PlayerCharacter)
+                {
                     cardManager.setEnergy(Setting.RoundEnergy); // 更新能量点
                     cardManager.drewCard();
-                    Debug.Log("抽卡"); 
-                } 
+                    Debug.Log("抽卡");
+                }
             });
         }
 
@@ -200,7 +208,7 @@ namespace Combat
         /* 命令处理管道和触发器部分 */
         private void RegisterProcessorForCharacter(Character character)
         {
-            foreach (var rule in rulesLibSO.Rules)
+            foreach (var rule in rulesLibSO.GetRules())
             {
                 if (rule is IProcessor processor)
                 {
@@ -249,6 +257,11 @@ namespace Combat
                 list = new SortedList<(int, long), IProcessor>();
                 processors[(type, character)] = list;
             }
+            if (list.ContainsKey((processor.Priority, processor.TimeStamp)))
+            {
+                Debug.LogError($"Processor {processor} already registered for {type} on {character}.");
+                return;
+            }
             list.Add((processor.Priority, processor.TimeStamp), processor);
         }
 
@@ -260,6 +273,11 @@ namespace Combat
             {
                 list = new SortedList<(int, long), IProcessor>();
                 processors[(type, character)] = list;
+            }
+            if (list.ContainsKey((processor.Priority, processor.TimeStamp)))
+            {
+                Debug.LogError($"Processor {processor} already registered for {type} on {character}.");
+                return;
             }
             list.Add((processor.Priority, processor.TimeStamp), processor);
         }

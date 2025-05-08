@@ -80,7 +80,7 @@ namespace Combat
                 // 到达屏幕上方区域即可执行
                 canExecute = Input.mousePosition.y > Screen.height * 0.6f;
 
-                Debug.Log(Input.mousePosition.y + " " + Screen.height * 0.6f);
+                // Debug.Log(Input.mousePosition.y + " " + Screen.height * 0.6f);
             }
             // 攻击牌指针的情况
             else

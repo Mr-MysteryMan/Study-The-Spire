@@ -861,6 +861,7 @@ MonoBehaviour:
   initCurHp: 10
   initAmmor: 0
   combatSystem: {fileID: 1160243196}
+  buffManager: {fileID: 0}
 --- !u!114 &1160243200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -877,7 +878,7 @@ MonoBehaviour:
   CardDeck: {fileID: 273858339}
   EnergySpotText: {fileID: 1478292857}
   uiRectTransform: {fileID: 518319095}
-  cardSource: 1
+  cardSource: 2
 --- !u!114 &1160243201
 MonoBehaviour:
   m_ObjectHideFlags: 0

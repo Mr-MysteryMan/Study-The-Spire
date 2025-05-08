@@ -9,7 +9,7 @@ namespace Combat.Processor.Rules
     [CreateAssetMenu(fileName = "AmmorDamageRule", menuName = "Combat/Processor/Rules/AmmorDamageRule")]
     public class AmmorDamageRule : ScriptableProcessor<AttackCommand>
     {
-        [SerializeField] private int _priority = 0;
+        [SerializeField] private int _priority = 50;
         [SerializeField] private int _timeStamp = 0;
 
         public override int Priority => _priority;
@@ -25,6 +25,10 @@ namespace Combat.Processor.Rules
                 int ammorDamage = Math.Min(context.BaseDamage, context.Target.Ammor);
                 context.AmmorDamage = ammorDamage; // 计算护甲伤害
                 context.HPDamage = context.BaseDamage - ammorDamage; // 计算生命值伤害
+                context.FinalDamage = context.HPDamage; // 最终伤害等于生命值伤害
+            } else if (context.BaseDamage > 0 && context.Type == DamageType.Actual || context.Type == DamageType.Poison) {
+                context.AmmorDamage = 0; // 实际伤害不计算护甲伤害
+                context.HPDamage = context.BaseDamage; // 实际伤害直接计算生命值伤害
                 context.FinalDamage = context.HPDamage; // 最终伤害等于生命值伤害
             }
         }
