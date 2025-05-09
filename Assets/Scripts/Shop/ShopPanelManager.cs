@@ -40,8 +40,18 @@ public class ShopPanelManager : MonoBehaviour {
     private Transform popupConfirmBtn;
     private Transform popupCancelBtn;
     private Transform goldInsufficientPopup;
+    private Transform goldTextParent;
+    
 
     public ShopMode curMode = ShopMode.normal;
+    public GameObject ShopUIItemPrefab;
+    public GameObject goldFloatTextPrefab;
+
+
+    private GameObject selectedItemGO = null;
+    private ItemData selectedItemData = null;
+    private List<ICardData> backItems = new List<ICardData>();
+    private List<ItemData> shopItems = new List<ItemData>();
 
     void Start() {
         cardManager = CardManager.Instance;
@@ -75,6 +85,7 @@ public class ShopPanelManager : MonoBehaviour {
         bottomPanel = root.Find("Bottom");
         bottomMenus = bottomPanel.Find("BottomMenus");
         bottomMenus.Find("ShowGold/Text").GetComponent<Text>().text = $"Gold {cardManager.Gold}";
+        goldTextParent = bottomMenus.Find("ShowGold");
         // detailBtn = bottomMenus.Find("DetailBtn");
 
         deletePanel = bottomPanel.Find("DeletePanel");
@@ -150,8 +161,21 @@ public class ShopPanelManager : MonoBehaviour {
         popup.gameObject.SetActive(false);
     }
 
+    private void UpdateGoldDisplayWithEffect(int amount) {
+        // 更新显示文本
+        bottomMenus.Find("ShowGold/Text").GetComponent<Text>().text = $"Gold {cardManager.Gold}";
+
+        // 创建浮动文字动画
+        if (goldFloatTextPrefab != null && goldTextParent != null) {
+            GameObject go = Instantiate(goldFloatTextPrefab, goldTextParent);
+            go.transform.localPosition = Vector3.zero; // 居中显示
+            go.GetComponent<GoldFloatText>().SetAmount(amount);
+        }
+    }
+
     private void DoBuyItem() {
         if (cardManager.SpendGold(selectedItemData.gold)) {
+            UpdateGoldDisplayWithEffect(selectedItemData.gold);
             cardManager.AddCard(selectedItemData.cardData);
 
             shopItems.Remove(selectedItemData);
@@ -170,9 +194,10 @@ public class ShopPanelManager : MonoBehaviour {
     }
 
     private void DoDeleteItem() {
-        // 与CardManager交互
+        // TODO 设置删除金币
         const int deleteCost = 100;
         if (cardManager.SpendGold(deleteCost)) {
+            UpdateGoldDisplayWithEffect(selectedItemData.gold);
             cardManager.RemoveCard(selectedItemData.cardData);
             Destroy(selectedItemGO);
             selectedItemGO = null;
@@ -221,7 +246,7 @@ public class ShopPanelManager : MonoBehaviour {
             deleteSelect.gameObject.SetActive(false);
 
             deletePanel.gameObject.SetActive(true);
-            bottomMenus.gameObject.SetActive(false);
+            bottomMenus.gameObject.SetActive(true);
         } else if (curMode == ShopMode.delete) {
             buyIcon1.gameObject.SetActive(true);
             buyIcon2.gameObject.SetActive(false);
@@ -232,7 +257,7 @@ public class ShopPanelManager : MonoBehaviour {
             deleteSelect.gameObject.SetActive(true);
 
             deletePanel.gameObject.SetActive(true);
-            bottomMenus.gameObject.SetActive(false);
+            bottomMenus.gameObject.SetActive(true);
         }
 
         // 清空 Scroll View 内容
@@ -252,10 +277,6 @@ public class ShopPanelManager : MonoBehaviour {
         }
     }
 
-    public GameObject ShopUIItemPrefab;
-
-    private List<ItemData> shopItems = new List<ItemData>();
-
     private List<ItemData> LoadItemDataFromJson(string resourcePath) {
         TextAsset jsonFile = Resources.Load<TextAsset>(resourcePath);
         if (jsonFile == null) {
@@ -265,9 +286,6 @@ public class ShopPanelManager : MonoBehaviour {
 
         return JsonConvert.DeserializeObject<List<ItemData>>(jsonFile.text);
     }
-    
-    private GameObject selectedItemGO = null;
-    private ItemData selectedItemData = null;
 
     private void LoadShopItems() {
         Debug.Log("加载商店中的商品...");
@@ -307,7 +325,6 @@ public class ShopPanelManager : MonoBehaviour {
         }
     }
 
-    private List<ICardData> backItems = new List<ICardData>();
     private void LoadBackItems() {
         Debug.Log("加载背包中的物品...");
         backItems = cardManager.GetAllCards();
