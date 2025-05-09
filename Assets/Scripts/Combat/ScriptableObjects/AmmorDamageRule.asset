@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 696e1950a17bd6c468d0242224160c64, type: 3}
   m_Name: AmmorDamageRule
   m_EditorClassIdentifier: 
-  _priority: 0
+  _priority: 50
   _timeStamp: 0

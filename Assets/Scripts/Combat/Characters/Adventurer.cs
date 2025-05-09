@@ -18,9 +18,10 @@ namespace Combat.Characters
         public int Mana => combatSystem.CardManager.EnergyPoint; // 目前直接以CardManager的法力值作为角色的法力值。
         public int TurnMana => turnMana.Value;
 
-        protected override void Init(EventManager eventManager)
+        protected override void Init(CombatSystem combatSystem)
         {
-            base.Init(eventManager);
+            base.Init(combatSystem);
+            var eventManager = combatSystem.EventManager;
             turnMana = new ReactiveIntVariable("TurnMana", initTurnMana, eventManager, this);
             mana = new ReactiveIntVariable("Mana", 0, eventManager, this);
         }
@@ -30,19 +31,23 @@ namespace Combat.Characters
             initTurnMana = mana;
         }
 
-        internal void SetMana(int mana) {
+        internal void SetMana(int mana)
+        {
             this.mana.Value = mana;
         }
 
-        internal void UseMana(int mana) {
-            if (this.mana.Value < mana) {
+        internal void UseMana(int mana)
+        {
+            if (this.mana.Value < mana)
+            {
                 // 也许法力值可以透支，Debug显示一下
                 Debug.LogError("法力值不足！");
             }
             this.mana.Value -= mana;
         }
 
-        public override void OnTurnStart() {
+        public override void OnTurnStart()
+        {
             base.OnTurnStart();
             this.mana.Value = turnMana.Value; // 回合开始时恢复法力值
         }

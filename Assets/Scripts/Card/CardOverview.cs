@@ -19,13 +19,13 @@ public class CardOverview : MonoBehaviour
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     //生成卡片
-    public void CreateCards(List<CardData> cardDatas, int line = 1)
+    public void CreateCards(List<ICardData> cardDatas, int line = 1)
     {
         int cardCount = cardDatas.Count; // 卡片数量
         int verticalOffset = verticalOffsets[line]; // 竖直偏移量
 
         for (int i = 0; i < cardCount;i++) {
-            CardData cardData = cardDatas[i]; // 获取卡片数据
+            ICardData cardData = cardDatas[i]; // 获取卡片数据
             // 在Dialog中实例化卡片
             GameObject cardObject = Instantiate(CardPrefab, Dialog.transform);
             cardObject.transform.localPosition = GetCardPosition(i, cardCount, verticalOffset); // 设置卡片位置

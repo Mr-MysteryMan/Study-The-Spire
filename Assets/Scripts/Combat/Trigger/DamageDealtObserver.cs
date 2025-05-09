@@ -14,7 +14,11 @@ namespace Combat.Trigger {
 
         public void PostCheck(EventManager manager, AttackCommand Command)
         {
-            Debug.Log("DamageDealtTrigger PostCheck: " + Command.Source.name + " dealt " + Command.HPDamage + " HP damage and " + Command.AmmorDamage + " Ammor damage to " + Command.Target.name);
+            if (Command.Source == null) {
+                Debug.Log("[DamageDealtTrigger PostCheck] " + Command.Target.name + " 受到了" + Command.HPDamage + "点伤害，" + Command.AmmorDamage + "点护甲伤害。(无来源)");
+            } else {
+                Debug.Log("[DamageDealtTrigger PostCheck] " + Command.Source.name + " 对 " + Command.Target.name + " 造成了" + Command.HPDamage + "点伤害，" + Command.AmmorDamage + "点护甲伤害。");
+            }
             if (Command.HPDamage > 0 || Command.AmmorDamage > 0) {
                 var Event = new Events.DamageDealtEvent(Command.AmmorDamage, Command.HPDamage, Command.Type, Command.Source, Command.Target);
                 manager.Publish(Event);

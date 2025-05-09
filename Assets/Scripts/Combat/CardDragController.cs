@@ -1,0 +1,146 @@
+using Combat.Characters;
+using UnityEngine;
+using UnityEngine.EventSystems;
+
+namespace Combat
+{
+    public class CardDragController : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+    {
+        public GameObject arrowPrefab;
+        private GameObject currentArrow;
+
+        private CombatSystem combatSystem;
+
+        private Card currentCard;
+
+        private (int width, int height) cardSize;
+        private bool canMove;           // 能否移动
+        private bool canExecute;        // 能否执行效果
+        private Character target;
+
+        private RectTransform uiRectTransform; // UI的RectTransform
+
+        private void Awake()
+        {
+            currentCard = GetComponent<Card>();
+            var rt = currentCard.GetComponent<RectTransform>();
+            cardSize = (width: (int)rt.rect.width, height: (int)rt.rect.height);
+        }
+
+        private void OnDisable()
+        {
+            canMove = false;
+            canExecute = false;
+        }
+
+        public void Init(CombatSystem combatSystem, RectTransform uiRectTransform)
+        {
+            this.combatSystem = combatSystem;
+            this.uiRectTransform = uiRectTransform;
+        }
+
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            // 卡牌不可用
+            if (combatSystem.CardManager.EnergyPoint <= 0 || currentCard.CardCost > combatSystem.CardManager.EnergyPoint)
+            {
+                Debug.Log("能量不足，无法使用卡牌！");
+                return;
+            }
+
+            switch (currentCard.CardData.CardType)
+            {
+                case CardType.Attack:
+                    currentArrow = Instantiate(arrowPrefab, transform.position, Quaternion.identity);
+                    currentArrow.GetComponent<DragArrow>().Init(uiRectTransform);
+                    canMove = false;
+                    break;
+                case CardType.Heal:
+                case CardType.Defense:
+                    canMove = true;
+                    break;
+            }
+        }
+
+        public void OnDrag(PointerEventData eventData)
+        {
+            // 卡牌不可用
+            if (combatSystem.CardManager.EnergyPoint <= 0 || currentCard.CardCost > combatSystem.CardManager.EnergyPoint)
+            {
+                Debug.Log("能量不足，无法使用卡牌！");
+                return;
+            }
+
+            // 跟随鼠标移动
+            if (canMove)
+            {
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(currentCard.GetComponent<RectTransform>().transform.parent.GetComponent<RectTransform>(), Input.mousePosition, Camera.main, out Vector2 localPoint);
+                currentCard.GetComponent<RectTransform>().anchoredPosition = localPoint;
+
+                // 到达屏幕上方区域即可执行
+                canExecute = Input.mousePosition.y > Screen.height * 0.6f;
+
+                // Debug.Log(Input.mousePosition.y + " " + Screen.height * 0.6f);
+            }
+            // 攻击牌指针的情况
+            else
+            {
+                if (eventData.pointerEnter == null) return;
+                // Debug.Log(eventData.pointerEnter.name + " " + eventData.pointerEnter.tag);
+                // 指向敌人
+                if (eventData.pointerEnter.CompareTag("Character"))
+                {
+                    target = eventData.pointerEnter.GetComponentInParent<Character>();
+                    if (target is Adventurer adventurer)
+                    {
+                        canExecute = false; // 不能攻击自己
+                    }
+                    else if (target is Enemy enemy)
+                    {
+                        canExecute = true; // 可以攻击敌人
+                    }
+                    return;
+                }
+                canExecute = false;
+                target = null;
+            }
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            // 卡牌不可用
+            if (combatSystem.CardManager.EnergyPoint <= 0 || currentCard.CardCost > combatSystem.CardManager.EnergyPoint)
+            {
+                Debug.Log("能量不足，无法使用卡牌！");
+                return;
+            }
+
+            if (currentArrow != null)
+            {
+                Destroy(currentArrow);
+            }
+            if (canExecute)
+            {
+                Debug.Log("使用卡牌");
+                if (canMove)
+                {
+                    combatSystem.CardManager.UseHandCard(currentCard, combatSystem.PlayerCharacter, combatSystem.PlayerCharacter);
+                }
+                else
+                {
+                    combatSystem.CardManager.UseHandCard(currentCard, combatSystem.PlayerCharacter, target);
+                }
+            }
+            else
+            {
+                // 还原卡牌位置
+                if (canMove)
+                {
+                    combatSystem.CardManager.updateCardPosition();
+                }
+            }
+        }
+
+
+    }
+}

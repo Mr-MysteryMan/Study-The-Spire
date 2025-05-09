@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
+using Combat.Buffs;
 using Combat.Command;
+using Combat.Command.Buff;
 using Combat.Events.Turn;
 using Combat.EventVariable;
 using UnityEngine;
@@ -33,13 +36,20 @@ namespace Combat
 
         public CombatSystem combatSystem;
 
+        [SerializeField] public BuffManager buffManager;
+
         public void SetInitHP(int maxHp, int curHp) // 设置初始化生命值数据
         {
             initCurHp = curHp;
             initMaxHp = maxHp;
         }
 
-        protected virtual void Init(EventManager eventManager) {
+        protected virtual void Init(CombatSystem combatSystem)
+        {
+            var eventManager = combatSystem.EventManager;
+            if (buffManager == null) return ;
+            buffManager.Init(combatSystem);
+
             maxHp = new ReactiveIntVariable("MaxHp", initMaxHp, eventManager, this);
             curHp = new ReactiveIntVariable("CurHp", initCurHp, eventManager, this);
             ammor = new ReactiveIntVariable("Ammor", initAmmor, eventManager, this);
@@ -47,7 +57,7 @@ namespace Combat
 
         public void Start()
         {
-            Init(combatSystem.EventManager);
+            Init(combatSystem);
             if (HPbar != null) // 存在血条时(非系统对象), 启动血条
             {
                 HPController hPController = HPbar.GetComponent<HPController>();
@@ -83,6 +93,21 @@ namespace Combat
         public void AddAmmor(int ammor)
         {
             combatSystem.ProcessCommand(new AddAmmorCommand(this, this, ammor));
+        }
+
+        public void AddBuff<T>(Character target, T buff, int count = 1) where T : IBuff
+        {
+            combatSystem.ProcessCommand(new ApplyBuffCommand<T>(this, target, buff, count));
+        }
+
+        public void DecreaseBuff<T>(Character target, T buff, int count = 1) where T : IBuff
+        {
+            combatSystem.ProcessCommand(new ApplyBuffCommand<T>(this, target, buff, -count));
+        }
+
+        public void RemoveBuff<T>(Character target) where T : IBuff
+        {
+            combatSystem.ProcessCommand(new RemoveBuffCommand<T>(this, target));
         }
 
         // 当前生命值减少，只有简单的数值保证(damage>=0)
@@ -149,16 +174,61 @@ namespace Combat
             }
         }
 
+        internal void _ApplyBuff<T>(T buff, int count) where T : IBuff
+        {
+            var _buff = buffManager.GetBuff<T>();
+            if (_buff != null)
+            {
+                buff.OnUpdate(buff, count);
+                return;
+            }
+            buff.OnApply(this, count);
+            buffManager.AddBuff(buff);
+        }
+
+        internal void _UpdateBuffCount<T>(int count) where T : IBuff
+        {
+            var _buff = buffManager.GetBuff<T>();
+            if (_buff != null)
+            {
+                _buff.OnUpdate(_buff.Count + count);
+            }
+            else
+            {
+                Debug.LogError("Buff not found, cannot update count.");
+            }
+        }
+
+        internal void _RemoveBuff<T>() where T : IBuff
+        {
+            var _buff = buffManager.GetBuff<T>();
+            if (_buff != null)
+            {
+                _buff.OnRemove();
+                buffManager.RemoveBuff(_buff);
+            }
+        }
+
+        public bool HasBuff<T>() where T : IBuff
+        {
+            return buffManager.HasBuff<T>();
+        }
+
+        public T GetBuff<T>() where T : IBuff
+        {
+            return buffManager.GetBuff<T>();
+        }
+
         /* 战斗内触发函数 */
-        public virtual void OnCombatStart() {}
-        public virtual void OnCombatEnd() {}
-        public virtual void OnTurnStart() {}
-        public virtual void OnTurnEnd() {}
+        public virtual void OnCombatStart() { }
+        public virtual void OnCombatEnd() { }
+        public virtual void OnTurnStart() { }
+        public virtual void OnTurnEnd() { }
 
         /// <summary>
         /// 角色死亡前要调用的方法，主要是用作亡语效果的触发。
         /// 清理工作请在OnDestroy中完成。
         /// </summary>
-        public virtual void BeforeDeath() {}
+        public virtual void BeforeDeath() { }
     }
 }

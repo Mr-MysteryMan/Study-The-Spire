@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Combat.CardEffect;
+using Cards.CardEffect;
 using Combat.Characters.EnemyEffect;
 using Unity.VisualScripting;
 using UnityEngine;

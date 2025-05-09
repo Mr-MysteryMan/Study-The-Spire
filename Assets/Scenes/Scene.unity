@@ -725,6 +725,7 @@ MonoBehaviour:
     m_EditorAssetChanged: 0
   updateRoomEvent: {fileID: 11400000, guid: b7b569aa7e8c3c3479306903064ddf61, type: 2}
   afterRoomLoadedEvent: {fileID: 11400000, guid: b6053c9baa42c204492e5b15b7dc7078, type: 2}
+  mainCamera: {fileID: 685595755}
 --- !u!4 &1874029907
 Transform:
   m_ObjectHideFlags: 0
