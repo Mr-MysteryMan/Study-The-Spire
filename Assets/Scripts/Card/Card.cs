@@ -21,10 +21,6 @@ public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler, IPo
 
     public ICardData CardData => cardData; // 卡片数据
 
-    public CardType CardType => cardData.CardType; // 卡牌类型
-
-    public int CardValue => cardData.CardValue; // 卡牌数值
-
     public int CardCost => cardData.Cost; // 卡牌费用
 
     public int CardId => cardData.CardId; // 卡牌ID
@@ -116,10 +112,10 @@ public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler, IPo
     //----------------------更新UI---------------------//
     public void UpdateCardUI() {
         // 背景
-        this.background.sprite = CardUI.GetCardBackground(CardType); // 设置卡片背景
+        this.background.sprite = CardUI.GetCardBackground(cardData); // 设置卡片背景
         // 数字
-        this.cardValueText.text = CardValue.ToString(); // 设置卡片数值文本
-        this.cardCostText.text = CardCost.ToString(); // 设置卡片数值颜色
+        this.cardValueText.text = cardData.Desc.ToString(); // 设置卡片数值文本
+        this.cardCostText.text = cardData.CardName.ToString(); // 设置卡片数值颜色
         // 弃牌
         if (IsDiscarded) { //弃置时背景半透明
             Color color = this.background.color;

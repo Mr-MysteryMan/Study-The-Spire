@@ -10,11 +10,9 @@ using ITrigger = Combat.Trigger.ITrigger;
 using Combat.Processor.Rules;
 using Combat.Characters;
 using Combat.Events.Turn;
-using NUnit.Framework;
 using Combat.Events;
-using UnityEngine.UIElements;
-using Unity.VisualScripting;
 using System.Collections;
+using UnityEngine.Assertions;
 
 namespace Combat
 {
@@ -103,12 +101,14 @@ namespace Combat
             }
         }
 
-        private void Success() {
-                backToMenuEvent.RaiseEvent(null, this);
+        private void Success()
+        {
+            backToMenuEvent.RaiseEvent(null, this);
         }
 
-        private void Fail() {
-                uiPanel.SetActive(true);
+        private void Fail()
+        {
+            uiPanel.SetActive(true);
         }
 
         void Start()

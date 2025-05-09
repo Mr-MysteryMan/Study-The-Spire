@@ -18,31 +18,33 @@ public class CardManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this) {
+        if (Instance != null && Instance != this)
+        {
             Destroy(gameObject);
             return;
         }
-       
+
         Instance = this;
         DontDestroyOnLoad(gameObject); // 防止切换场景丢失
-        
-        allCards = randomCardData(); 
+
+        allCards = randomCardData();
     }
 
-    public static List<ICardData> randomCardData(int cardCount = 20) { // 测试用随机卡片数据
-            List<ICardData> cardData = new List<ICardData>();
+    public static List<ICardData> randomCardData(int cardCount = 20)
+    { // 测试用随机卡片数据
+        List<ICardData> cardData = new List<ICardData>();
 
-            for (int i = 0; i < cardCount; i++)
-            {
-                // 随机生成卡片数据
-                int cardType = Random.Range(0, 3); // 随机卡片类型
-                CardType type = (CardType)cardType; // 转换为枚举类型
-                int value = Random.Range(0, 100); // 随机卡片内容
-                int cost = Random.Range(1, 5); // 随机卡片费用
-                cardData.Add(new TypedCardData(type,value,cost)); // 随机生成卡片数据
-            }
+        for (int i = 0; i < cardCount; i++)
+        {
+            // 随机生成卡片数据
+            int cardType = Random.Range(0, 3); // 随机卡片类型
+            CardType type = (CardType)cardType; // 转换为枚举类型
+            int value = Random.Range(0, 100); // 随机卡片内容
+            int cost = Random.Range(1, 5); // 随机卡片费用
+            cardData.Add(new TypedCardData(type, value, cost)); // 随机生成卡片数据
+        }
 
-            return cardData;
+        return cardData;
     }
 
     // 设置金币数
@@ -79,7 +81,7 @@ public class CardManager : MonoBehaviour
     public void AddCard(ICardData card)
     {
         allCards.Add(card);
-        Debug.Log($"添加卡牌：{card.CardType} {card.CardValue}");
+        Debug.Log($"添加卡牌：{card.GetShortInfo()}");
     }
 
     // 根据卡牌 ID 移除卡牌
@@ -104,10 +106,14 @@ public class CardManager : MonoBehaviour
     }
 
     // 根据类型获取卡牌（攻击、防御、治疗）
-    public List<ICardData> GetCardsByType(CardType type)
+    public IEnumerable<ICardData> GetCardsByCardCategory(CardCategory type)
     {
         PrintAllCards();
-        return allCards.Where(c => c.CardType == type).ToList();
+        return allCards.Where(c => c.CardCategory == type);
+    }
+
+    public IEnumerable<ICardData> GetCards(System.Func<ICardData, bool> predicate) {
+        return allCards.Where(predicate);
     }
 
     // 清空所有卡牌（仅用于调试或重置）
@@ -123,7 +129,7 @@ public class CardManager : MonoBehaviour
         Debug.Log($"当前卡牌总数：{allCards.Count}");
         foreach (var card in allCards)
         {
-            Debug.Log($"ID: {card.CardId} 类型: {card.CardType} 数值: {card.CardValue} 弃牌: {card.IsDiscarded}");
+            Debug.Log(card.GetDebugInfo());
         }
     }
 }

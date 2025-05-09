@@ -19,6 +19,9 @@ namespace Combat.Buffs
 
         Character Parent { get; }
 
+
+        // TODO: 添加几个对Apply和Update的Trigger，检测变化后的IsAvaliable，如果不满足条件，则执行RemoveCommand。
+
         /// <summary>
         /// 判断是否可用，在OnApply之前调用（此时内部的Count可能不可用（如ReactiveIntVariable，需要在apply的时候初始化））
         /// 可用于命令传递中，在管道中修改buff的属性或命令的Count, 使之无效。

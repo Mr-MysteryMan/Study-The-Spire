@@ -48,15 +48,19 @@ namespace Combat
                 return;
             }
 
-            switch (currentCard.CardData.CardType)
+            switch (currentCard.CardData.CardEffectTarget)
             {
-                case CardType.Attack:
+                case CardEffectTarget.EnemyOne:
+                case CardEffectTarget.AdventurerOne:
+                case CardEffectTarget.CharacterOne:
                     currentArrow = Instantiate(arrowPrefab, transform.position, Quaternion.identity);
                     currentArrow.GetComponent<DragArrow>().Init(uiRectTransform);
                     canMove = false;
                     break;
-                case CardType.Heal:
-                case CardType.Defense:
+                case CardEffectTarget.EnemyAll:
+                case CardEffectTarget.AdventurerAll:
+                case CardEffectTarget.CharacterAll:
+                case CardEffectTarget.AdventurerSelf:
                     canMove = true;
                     break;
             }
