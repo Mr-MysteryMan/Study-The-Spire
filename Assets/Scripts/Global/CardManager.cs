@@ -12,7 +12,7 @@ public class CardManager : MonoBehaviour
     private List<ICardData> allCards;
 
     // 玩家金币
-    public int Gold { get; private set; } = 100;
+    public int Gold { get; private set; } = 200;
 
     // 玩家血量
     public int health { get; set; } = 0;
