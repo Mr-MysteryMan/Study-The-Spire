@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -40,6 +39,7 @@ public class ShopPanelManager : MonoBehaviour {
     private Transform confirmPopup;
     private Transform popupConfirmBtn;
     private Transform popupCancelBtn;
+    private Transform goldInsufficientPopup;
 
     public ShopMode curMode = ShopMode.normal;
 
@@ -74,6 +74,7 @@ public class ShopPanelManager : MonoBehaviour {
 
         bottomPanel = root.Find("Bottom");
         bottomMenus = bottomPanel.Find("BottomMenus");
+        bottomMenus.Find("ShowGold/Text").GetComponent<Text>().text = $"Gold {cardManager.Gold}";
         // detailBtn = bottomMenus.Find("DetailBtn");
 
         deletePanel = bottomPanel.Find("DeletePanel");
@@ -85,10 +86,13 @@ public class ShopPanelManager : MonoBehaviour {
         popupConfirmBtn = confirmPopup.Find("ConfirmBtn");
         popupCancelBtn = confirmPopup.Find("CancelBtn");
 
-        // 默认隐藏Bottom,Detail,ConfirmPopup面板
-        bottomPanel.gameObject.SetActive(false);
+        goldInsufficientPopup = root.Find("GoldInsufficientPopup");
+
+        // 默认隐藏deletePanel,Detail,ConfirmPopup,GoldInsufficientPopup面板
+        deletePanel.gameObject.SetActive(false);
         detailPanel.gameObject.SetActive(false);
         confirmPopup.gameObject.SetActive(false);
+        goldInsufficientPopup.gameObject.SetActive(false);
     }
 
     private void InitClick() {
@@ -140,6 +144,12 @@ public class ShopPanelManager : MonoBehaviour {
         });
     }
 
+    // 自动关闭弹窗的协程
+    private IEnumerator AutoHidePopup(Transform popup, float delay) {
+        yield return new WaitForSeconds(delay);
+        popup.gameObject.SetActive(false);
+    }
+
     private void DoBuyItem() {
         if (cardManager.SpendGold(selectedItemData.gold)) {
             cardManager.AddCard(selectedItemData.cardData);
@@ -150,12 +160,13 @@ public class ShopPanelManager : MonoBehaviour {
             Destroy(selectedItemGO);
             selectedItemGO = null;
             selectedItemData = null;
+        } else {
+            goldInsufficientPopup.gameObject.SetActive(true);
+            StartCoroutine(AutoHidePopup(goldInsufficientPopup, 1f)); // 1秒后自动关闭
         }
 
         confirmPopup.gameObject.SetActive(false);
         detailPanel.gameObject.SetActive(false);
-
-        cardManager.PrintAllCards();
     }
 
     private void DoDeleteItem() {
@@ -166,6 +177,9 @@ public class ShopPanelManager : MonoBehaviour {
             Destroy(selectedItemGO);
             selectedItemGO = null;
             selectedItemData = null;
+        } else {
+            goldInsufficientPopup.gameObject.SetActive(true);
+            StartCoroutine(AutoHidePopup(goldInsufficientPopup, 1f));
         }
 
         confirmPopup.gameObject.SetActive(false);
@@ -194,7 +208,8 @@ public class ShopPanelManager : MonoBehaviour {
             deleteIcon2.gameObject.SetActive(false);
             deleteSelect.gameObject.SetActive(false);
 
-            bottomPanel.gameObject.SetActive(false);
+            deletePanel.gameObject.SetActive(false);
+            bottomMenus.gameObject.SetActive(true);
 
         } else if (curMode == ShopMode.buy) {
             buyIcon1.gameObject.SetActive(false);
@@ -205,7 +220,8 @@ public class ShopPanelManager : MonoBehaviour {
             deleteIcon2.gameObject.SetActive(false);
             deleteSelect.gameObject.SetActive(false);
 
-            bottomPanel.gameObject.SetActive(true);
+            deletePanel.gameObject.SetActive(true);
+            bottomMenus.gameObject.SetActive(false);
         } else if (curMode == ShopMode.delete) {
             buyIcon1.gameObject.SetActive(true);
             buyIcon2.gameObject.SetActive(false);
@@ -215,7 +231,8 @@ public class ShopPanelManager : MonoBehaviour {
             deleteIcon2.gameObject.SetActive(true);
             deleteSelect.gameObject.SetActive(true);
 
-            bottomPanel.gameObject.SetActive(true);
+            deletePanel.gameObject.SetActive(true);
+            bottomMenus.gameObject.SetActive(false);
         }
 
         // 清空 Scroll View 内容
@@ -267,7 +284,7 @@ public class ShopPanelManager : MonoBehaviour {
             // 设置名称
             Text nameText = itemGO.transform.Find("Bottom/NameText").GetComponent<Text>();
             if (curMode != ShopMode.buy) {
-                nameText.text = item.cardData.CardValue.ToString();
+                nameText.text = $"{item.cardData.CardValue}";
             }
             // Debug.Log("加载了：" + item.name);
 
@@ -358,13 +375,13 @@ public class ShopPanelManager : MonoBehaviour {
 
         if (item.cardData.CardType == CardType.Attack) {
             nameText.text = "攻击卡牌";
-            descText.text = $"该卡牌攻击属性为{item.cardData.CardValue},cost为{item.cardData.Cost}";
+            descText.text = $"该卡牌攻击属性为{item.cardData.CardValue},消耗能量点{item.cardData.Cost}";
         } else if (item.cardData.CardType == CardType.Defense) {
             nameText.text = "防御卡牌";
-            descText.text = $"该卡牌防御属性为{item.cardData.CardValue},cost为{item.cardData.Cost}";
+            descText.text = $"该卡牌防御属性为{item.cardData.CardValue},消耗能量点{item.cardData.Cost}";
         } else if (item.cardData.CardType == CardType.Heal)  {
             nameText.text = "治愈卡牌";
-            descText.text = $"该卡牌治愈属性为{item.cardData.CardValue},cost为{item.cardData.Cost}";
+            descText.text = $"该卡牌治愈属性为{item.cardData.CardValue},消耗能量点{item.cardData.Cost}";
         }
 
         Sprite icon = CardUI.GetCardBackground(item.cardData.CardType);
