@@ -95,12 +95,20 @@ namespace Combat
             Destroy(this.gameObject); // 销毁战斗系统
             if (a == 1)
             {
-                backToMenuEvent.RaiseEvent(null, this);
+                Success();
             }
             else
             {
-                uiPanel.SetActive(true);
+                Fail();
             }
+        }
+
+        private void Success() {
+                backToMenuEvent.RaiseEvent(null, this);
+        }
+
+        private void Fail() {
+                uiPanel.SetActive(true);
         }
 
         void Start()
