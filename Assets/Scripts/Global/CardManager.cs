@@ -19,28 +19,16 @@ public class CardManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this) {
+        if (Instance != null && Instance != this)
+        {
             Destroy(gameObject);
             return;
         }
-       
+
         Instance = this;
         DontDestroyOnLoad(gameObject); // 防止切换场景丢失
-        
-        allCards = randomCardData(); 
-    }
 
-    // 获取所有卡牌
-    public List<ICardData> GetAllCards()
-    {
-        return new List<ICardData>(allCards);
-    }
-
-    // 根据类型获取卡牌（攻击、防御、治疗）
-    public List<ICardData> GetCardsByType(CardType type)
-    {
-        PrintAllCards();
-        return allCards.Where(c => c.CardType == type).ToList();
+        allCards = randomCardData();
     }
 
     // 设置金币数
@@ -93,7 +81,7 @@ public class CardManager : MonoBehaviour
     public void AddCard(ICardData card)
     {
         allCards.Add(card);
-        Debug.Log($"添加卡牌：{card.CardType} {card.CardValue}");
+        Debug.Log($"添加卡牌：{card.GetShortInfo()}");
     }
 
     // 根据卡牌 ID 移除卡牌
@@ -110,8 +98,25 @@ public class CardManager : MonoBehaviour
             Debug.LogWarning($"未找到要移除的卡牌 ID：{cardData.CardId}");
         }
     }
-    
-    // 清空所有卡牌
+
+    // 获取所有卡牌
+    public List<ICardData> GetAllCards()
+    {
+        return new List<ICardData>(allCards);
+    }
+
+    // 根据类型获取卡牌（攻击、防御、治疗）
+    public IEnumerable<ICardData> GetCardsByCardCategory(CardCategory type)
+    {
+        PrintAllCards();
+        return allCards.Where(c => c.CardCategory == type);
+    }
+
+    public IEnumerable<ICardData> GetCards(System.Func<ICardData, bool> predicate) {
+        return allCards.Where(predicate);
+    }
+
+    // 清空所有卡牌（仅用于调试或重置）
     public void ClearAllCards()
     {
         allCards.Clear();
@@ -124,7 +129,7 @@ public class CardManager : MonoBehaviour
         Debug.Log($"当前卡牌总数：{allCards.Count}");
         foreach (var card in allCards)
         {
-            Debug.Log($"ID: {card.CardId} 类型: {card.CardType} 数值: {card.CardValue} 弃牌: {card.IsDiscarded}");
+            Debug.Log(card.GetDebugInfo());
         }
     }
 

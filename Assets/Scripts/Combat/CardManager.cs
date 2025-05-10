@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Cards;
 using Combat.Characters;
-using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.UI;
 using GlobalCardManager = CardManager;
 

@@ -7,18 +7,20 @@ namespace Cards
     [CreateAssetMenu(fileName = "CardDataSO", menuName = "ScriptableObjects/CardDataSO", order = 1)]
     public class CardDataSO : ScriptableObject
     {
-        public CardType CardType; // 卡牌类型
+        public int cardCost; // 卡牌费用
+        public string cardName; // 卡牌名称
+        public string cardDesc; // 卡牌描述
+        public EffectSOBase effect; // 卡牌效果
 
-        public int CardValue; // 卡牌数值
+        public CardCategory cardCategory; // 卡牌分类
 
-        public int CardId; // 卡牌ID
+        public CardEffectTarget cardEffectTarget; // 卡牌效果目标
 
-        public int Cost; // 卡牌费用
+        public Sprite sprite; // 卡牌图片
 
-        public EffectSOBase effect;
-
-        public ICardData ToCardData() {
-            return new CardData(CardType, CardValue, Cost, effect); // 创建新的卡牌数据对象
+        public ICardData ToCardData()
+        {
+            return new BasicCardData(cardName, cardDesc, cardCost, cardCategory, cardEffectTarget, sprite, effect);
         }
     }
 }

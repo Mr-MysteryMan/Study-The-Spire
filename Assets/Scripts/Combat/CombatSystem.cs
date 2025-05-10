@@ -10,11 +10,9 @@ using ITrigger = Combat.Trigger.ITrigger;
 using Combat.Processor.Rules;
 using Combat.Characters;
 using Combat.Events.Turn;
-using NUnit.Framework;
 using Combat.Events;
-using UnityEngine.UIElements;
-using Unity.VisualScripting;
 using System.Collections;
+using UnityEngine.Assertions;
 
 namespace Combat
 {
@@ -95,12 +93,22 @@ namespace Combat
             Destroy(this.gameObject); // 销毁战斗系统
             if (a == 1)
             {
-                backToMenuEvent.RaiseEvent(null, this);
+                Success();
             }
             else
             {
-                uiPanel.SetActive(true);
+                Fail();
             }
+        }
+
+        private void Success()
+        {
+            backToMenuEvent.RaiseEvent(null, this);
+        }
+
+        private void Fail()
+        {
+            uiPanel.SetActive(true);
         }
 
         void Start()
