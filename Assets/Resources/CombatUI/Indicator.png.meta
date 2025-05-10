@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 76845b00d8e3ac840a210307eb69d16d
+guid: 32923e261e5bf02489fb61077e054da6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8533606670350889490
-    second: Treasure_0
+      213: -980095317097466160
+    second: Indicator_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -84,45 +84,6 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: Win
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: Win64
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -139,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Treasure_0
+      name: Indicator_0
       rect:
         serializedVersion: 2
-        x: 6
-        y: 8
-        width: 3743
-        height: 1734
+        x: 0
+        y: 0
+        width: 1024
+        height: 1024
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: eedc4d042f9829980800000000000000
-      internalID: -8533606670350889490
+      spriteID: 0d6b16a70800662f0800000000000000
+      internalID: -980095317097466160
       vertices: []
       indices: 
       edges: []
@@ -172,7 +133,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Treasure_0: -8533606670350889490
+      Indicator_0: -980095317097466160
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,4 +1,5 @@
 using Combat.Characters;
+using Combat.VFX;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -75,38 +76,67 @@ namespace Combat
                 return;
             }
 
-            // 跟随鼠标移动
-            if (canMove)
+            do
             {
-                RectTransformUtility.ScreenPointToLocalPointInRectangle(currentCard.GetComponent<RectTransform>().transform.parent.GetComponent<RectTransform>(), Input.mousePosition, Camera.main, out Vector2 localPoint);
-                currentCard.GetComponent<RectTransform>().anchoredPosition = localPoint;
-
-                // 到达屏幕上方区域即可执行
-                canExecute = Input.mousePosition.y > Screen.height * 0.6f;
-
-                // Debug.Log(Input.mousePosition.y + " " + Screen.height * 0.6f);
-            }
-            // 攻击牌指针的情况
-            else
-            {
-                if (eventData.pointerEnter == null) return;
-                // Debug.Log(eventData.pointerEnter.name + " " + eventData.pointerEnter.tag);
-                // 指向敌人
-                if (eventData.pointerEnter.CompareTag("Character"))
+                // 跟随鼠标移动
+                if (canMove)
                 {
-                    target = eventData.pointerEnter.GetComponentInParent<Character>();
-                    if (target is Adventurer adventurer)
+                    RectTransformUtility.ScreenPointToLocalPointInRectangle(currentCard.GetComponent<RectTransform>().transform.parent.GetComponent<RectTransform>(), Input.mousePosition, Camera.main, out Vector2 localPoint);
+                    currentCard.GetComponent<RectTransform>().anchoredPosition = localPoint;
+
+                    // 到达屏幕上方区域即可执行
+                    canExecute = Input.mousePosition.y > Screen.height * 0.6f;
+                    if (!canExecute && target != null)
                     {
-                        canExecute = false; // 不能攻击自己
+                        target.GetComponentInChildren<VfxManager>().SetIndicator(false);
                     }
-                    else if (target is Enemy enemy)
-                    {
-                        canExecute = true; // 可以攻击敌人
-                    }
-                    return;
+                    target = canExecute ? combatSystem.PlayerCharacter : null;
+
+                    // Debug.Log(Input.mousePosition.y + " " + Screen.height * 0.6f);
                 }
-                canExecute = false;
-                target = null;
+                // 攻击牌指针的情况
+                else
+                {
+                    if (eventData.pointerEnter == null || eventData.pointerEnter != target)
+                    {
+                        if (target != null)
+                        {
+                            target.GetComponentInChildren<VfxManager>().SetIndicator(false);
+                        }
+                        if (eventData.pointerEnter == null)
+                        {
+                            canExecute = false;
+                            target = null;
+                            break;
+                        }
+                    }
+                    // Debug.Log(eventData.pointerEnter.name + " " + eventData.pointerEnter.tag);
+                    // 指向敌人
+                    if (eventData.pointerEnter.CompareTag("Character"))
+                    {
+                        target = eventData.pointerEnter.GetComponentInParent<Character>();
+                        if (target is Adventurer adventurer)
+                        {
+                            canExecute = false; // 不能攻击自己
+                        }
+                        else if (target is Enemy enemy)
+                        {
+                            canExecute = true; // 可以攻击敌人
+                        }
+                        break;
+                    }
+                    canExecute = false;
+                    target = null;
+                }
+            }
+            while (false);
+            if (canExecute && target != null)
+            {
+                target.GetComponentInChildren<VfxManager>().SetIndicator(true);
+            }
+            else if (target != null)
+            {
+                target.GetComponentInChildren<VfxManager>().SetIndicator(false);
             }
         }
 
@@ -142,6 +172,11 @@ namespace Combat
                 {
                     combatSystem.CardManager.updateCardPosition();
                 }
+            }
+            canExecute = canMove = false;
+            if (target != null)
+            {
+                target.GetComponentInChildren<VfxManager>().SetIndicator(false);
             }
         }
 

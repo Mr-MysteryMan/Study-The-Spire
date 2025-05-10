@@ -812,6 +812,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AdventurerPrefab: {fileID: 8887891203348593607, guid: bff855922a8903b43a7d26229b53d669, type: 3}
   EnemyPrefab: {fileID: 8887891203348593607, guid: 64b40806dfa432542b20bb0941f929fe, type: 3}
+  TreasurePrefab: {fileID: 0}
   backToMenuEvent: {fileID: 11400000, guid: 4d600f6a59870944bae4e08ce67e7823, type: 2}
   DamageTextPrefab: {fileID: 5700190467429854540, guid: d71aac6c1fcd3a44298bb244eda2f9e0, type: 3}
   combatCamera: {fileID: 1939627477}
@@ -862,6 +863,7 @@ MonoBehaviour:
   initCurHp: 10
   initAmmor: 0
   combatSystem: {fileID: 1160243196}
+  PostiveDirection: {x: 0, y: 1}
   buffManager: {fileID: 0}
 --- !u!114 &1160243200
 MonoBehaviour:
@@ -1277,7 +1279,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 1200
   field of view: 60
   orthographic: 0
   orthographic size: 5

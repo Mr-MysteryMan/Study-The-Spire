@@ -15,8 +15,11 @@ namespace Combat.VFX
         [SerializeField] private GameObject AmmorDamageTextPrefab;
 
         [SerializeField] private GameObject HealTextPrefab;
+        [SerializeField] private GameObject BasicTextPrefab;
 
         [SerializeField] private RectTransform textRectTransform;
+
+        [SerializeField] private GameObject indicator;
 
         public void Init(Character character)
         {
@@ -88,6 +91,7 @@ namespace Combat.VFX
             HP,
             Ammor,
             Heal,
+            Basic,
         }
 
         private void PlayAttack()
@@ -105,18 +109,23 @@ namespace Combat.VFX
 
         private void PlayDamageText(DamageType type, int damage)
         {
+            DisplayText(damage.ToString(), type);
+        }
+
+        private void DisplayText(string text, DamageType type = DamageType.Basic)
+        {
             TMP_Text txt = Instantiate(
             original: type switch
             {
                 DamageType.HP => HPDamageTextPrefab,
                 DamageType.Ammor => AmmorDamageTextPrefab,
                 DamageType.Heal => HealTextPrefab,
-                _ => HPDamageTextPrefab
+                _ => BasicTextPrefab,
             },
             parent: textRectTransform)
             .GetComponent<TMP_Text>();
 
-            txt.text = damage.ToString();
+            txt.text = text;
 
             var pos = textRectTransform.position;
             pos.x += Random.Range(-7f, 7f); // 在X轴上随机偏移
@@ -157,6 +166,14 @@ namespace Combat.VFX
             if (hp > 0)
             {
                 PlayDamageText(DamageType.HP, hp);
+            }
+        }
+
+        public void SetIndicator(bool isActive)
+        {
+            if (indicator != null)
+            {
+                indicator.SetActive(isActive);
             }
         }
     }
