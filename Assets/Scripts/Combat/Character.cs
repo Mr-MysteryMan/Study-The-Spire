@@ -5,6 +5,7 @@ using Combat.Command;
 using Combat.Command.Buff;
 using Combat.Events.Turn;
 using Combat.EventVariable;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -47,7 +48,7 @@ namespace Combat
         protected virtual void Init(CombatSystem combatSystem)
         {
             var eventManager = combatSystem.EventManager;
-            if (buffManager == null) return ;
+            if (buffManager == null) return;
             buffManager.Init(combatSystem);
 
             maxHp = new ReactiveIntVariable("MaxHp", initMaxHp, eventManager, this);
@@ -65,9 +66,21 @@ namespace Combat
                 hPController.launch(this);
             }
         }
+
+        public void PlayAttack()
+        {
+            var targetPos = transform.position;
+            var seq = DOTween.Sequence();
+            seq.Append(transform.DOMoveX(targetPos.x, 0.3f));
+            seq.Append(transform.DOMoveX(transform.position.x, 0.2f));
+            seq.SetAutoKill(true); // 设置自动销毁
+            seq.Play(); // 播放动画
+        }
+
         // 攻击target,造成damage点伤害，会触发相应事件
         public void Attack(Character target, int damage)
         {
+            PlayAttack();
             combatSystem.ProcessCommand(new AttackCommand(this, target, damage, DamageType.Normal));
         }
 

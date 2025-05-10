@@ -25,6 +25,8 @@ namespace Combat
         public GameObject EnemyPrefab;
         public ObjectEventSO backToMenuEvent;
 
+        public GameObject DamageTextPrefab; // 伤害文本预制体
+
         public Camera combatCamera; // 战斗摄像机
 
         public GameObject UI; // 战斗UI页面

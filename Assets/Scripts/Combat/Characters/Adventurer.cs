@@ -1,5 +1,8 @@
 using Combat;
+using Combat.Events;
 using Combat.EventVariable;
+using DG.Tweening;
+using TMPro;
 using UnityEngine;
 namespace Combat.Characters
 {
@@ -24,6 +27,7 @@ namespace Combat.Characters
             var eventManager = combatSystem.EventManager;
             turnMana = new ReactiveIntVariable("TurnMana", initTurnMana, eventManager, this);
             mana = new ReactiveIntVariable("Mana", 0, eventManager, this);
+            eventManager.Subscribe<DamageDealtEvent>(GetAttacked); // 监听被攻击事件
         }
 
         public void SetInitMana(int mana) // 设置初始化法力值数据
@@ -50,6 +54,28 @@ namespace Combat.Characters
         {
             base.OnTurnStart();
             this.mana.Value = turnMana.Value; // 回合开始时恢复法力值
+        }
+
+        private void GetAttacked(DamageDealtEvent e) {
+            if (e.Target == this) {
+                GetComponent<Punch>().PunchEffect();
+                ShowDamage(e.HPDamage, e.Target.transform.position);
+            }
+        }
+
+        public void ShowDamage(int value, Vector3 worldPos)
+        {
+            TMP_Text txt = Instantiate(combatSystem.DamageTextPrefab, transform).GetComponent<TMP_Text>();
+            txt.text = value.ToString();
+            worldPos.y += 25f;
+            txt.transform.position = worldPos;
+
+            var seq = DOTween.Sequence();
+            seq.Append(txt.transform.DOMoveY(worldPos.y + 1f, 0.6f))
+            .Join(txt.DOFade(0, 1.4f))
+            .OnComplete(() => Destroy(txt.gameObject)); // 动画完成后销毁文本对象
+            seq.SetAutoKill(true); // 设置自动销毁
+            seq.Play(); // 播放动画
         }
     }
 }
