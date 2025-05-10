@@ -10,6 +10,7 @@ public class BackpackPanelManager : MonoBehaviour
     private Transform attackSelect, defenceSelect, healSelect;
     private Transform scrollViewContent, detailPanel;
     private CardCategory currentCategory;
+    public ObjectEventSO loadMapEvent;
 
     public GameObject BackpackUIItem;
 
@@ -51,7 +52,7 @@ public class BackpackPanelManager : MonoBehaviour
         attackBtn.GetComponent<Button>().onClick.AddListener(() => ShowCardsByCategory(CardCategory.Attack));
         defenceBtn.GetComponent<Button>().onClick.AddListener(() => ShowCardsByCategory(CardCategory.Skill));
         healBtn.GetComponent<Button>().onClick.AddListener(() => ShowCardsByCategory(CardCategory.Status));
-        closeBtn.GetComponent<Button>().onClick.AddListener(() => gameObject.SetActive(false));
+        closeBtn.GetComponent<Button>().onClick.AddListener(() => loadMapEvent.RaiseEvent(null, this));
         detailBtn.GetComponent<Button>().onClick.AddListener(OnDetail);
     }
 

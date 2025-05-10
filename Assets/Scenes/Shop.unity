@@ -1266,7 +1266,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1048192531}
   m_HandleRect: {fileID: 1048192530}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -4049,6 +4049,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0d769f1df601fe4f8c4af0f06738062, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadMapEvent: {fileID: 11400000, guid: 4ac504bad1ee2e74dbebadd6dcf3852d, type: 2}
   curMode: 1
   ShopUIItemPrefab: {fileID: 4319913097664614628, guid: a1609b6712634fd499087112a45ad7a2, type: 3}
   goldFloatTextPrefab: {fileID: 4253685485180353183, guid: d87ed9ab01305ad4cb0408ec558c65c4, type: 3}

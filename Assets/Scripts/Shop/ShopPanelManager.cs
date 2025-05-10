@@ -44,6 +44,8 @@ public class ShopPanelManager : MonoBehaviour
     private Transform goldInsufficientPopup;
     private Transform goldTextParent;
     
+    public ObjectEventSO loadMapEvent;
+    
 
     public ShopMode curMode = ShopMode.normal;
     public GameObject ShopUIItemPrefab;
@@ -134,8 +136,9 @@ public class ShopPanelManager : MonoBehaviour
 
     private void OnClickClose()
     {
-        gameObject.SetActive(false);
+//        gameObject.SetActive(false);
         curMode = ShopMode.normal;
+        loadMapEvent.RaiseEvent(null, this);
     }
 
     private void OnConfirm()
