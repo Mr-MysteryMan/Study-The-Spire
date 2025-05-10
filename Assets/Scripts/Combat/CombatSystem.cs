@@ -64,6 +64,8 @@ namespace Combat
 
         private EventListener.BasicRuleLib eventRulesLib;
 
+        private TriggerLib triggerLib;
+
         void Awake()
         {
             CreateCharacters(); // 获取角色
@@ -155,10 +157,16 @@ namespace Combat
             this.systemCharacter = systemCharacter;
             this.cardManager = cardManager;
             this.cardManager.addCharacter(this.playerCharacter, this.monsterCharacter); // 添加角色到卡片管理器
+            this.triggerLib = new TriggerLib();
             sourceProcessors = new();
             targetProcessors = new();
+
             triggers = new();
-            RegisterTrigger(new DamageDealtTrigger());
+            foreach (var trigger in this.triggerLib.GetTriggers())
+            {
+                RegisterTrigger(trigger);
+            }
+
             RegisterProcessorForCharacter(this.playerCharacter); // 注册玩家角色的处理器
             foreach (var character in this.monsterCharacter) // 注册怪物角色的处理器
             {
@@ -319,6 +327,22 @@ namespace Combat
             list.Remove((processor.Priority, processor.TimeStamp));
         }
 
+        public void RegisterTrigger(ITrigger trigger)
+        {
+            var type = trigger.CommandType;
+            if (!triggers.TryGetValue(type, out var list))
+            {
+                list = new SortedList<(int, long), ITrigger>();
+                triggers[type] = list;
+            }
+            if (list.ContainsKey((trigger.Priority, trigger.TimeStamp)))
+            {
+                Debug.LogError($"Trigger {trigger} already registered for {type}.");
+                return;
+            }
+            list.Add((trigger.Priority, trigger.TimeStamp), trigger);
+        }
+
         public void RegisterTrigger<T>(ITrigger<T> trigger) where T : ICommand
         {
             var type = typeof(T);
@@ -326,6 +350,11 @@ namespace Combat
             {
                 list = new();
                 triggers[type] = list;
+            }
+            if (list.ContainsKey((trigger.Priority, trigger.TimeStamp)))
+            {
+                Debug.LogError($"Trigger {trigger} already registered for {type}.");
+                return;
             }
             list.Add((trigger.Priority, trigger.TimeStamp), trigger);
         }

@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4284497372401680258}
   - component: {fileID: 8854411703700379425}
   - component: {fileID: -8629974245159876961}
-  - component: {fileID: 5015892119767919169}
   m_Layer: 5
   m_Name: Adventurer
   m_TagString: Character
@@ -117,24 +116,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HPbar: {fileID: 1346142233314231824}
-  initMaxHp: 10
-  initCurHp: 10
+  initMaxHp: 100
+  initCurHp: 100
   initAmmor: 0
   combatSystem: {fileID: 0}
+  PostiveDirection: {x: 1, y: 0}
   buffManager: {fileID: 7756846100509015122}
-  initTurnMana: 0
---- !u!114 &5015892119767919169
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8887891203348593607}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b2d8a4023d2a1347bfa8f5e8271d2ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  initTurnMana: 6
 --- !u!1001 &6169157656566501167
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -143,6 +131,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6828191006110395520}
     m_Modifications:
+    - target: {fileID: 252119510298386119, guid: 04e98999699eef446a1931fbbaae82f1, type: 3}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: -8629974245159876961}
     - target: {fileID: 2280233093116617456, guid: 04e98999699eef446a1931fbbaae82f1, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -231,6 +223,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7584582464045498770, guid: 04e98999699eef446a1931fbbaae82f1, type: 3}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: -8629974245159876961}
     - target: {fileID: 8780125417047320614, guid: 04e98999699eef446a1931fbbaae82f1, type: 3}
       propertyPath: m_Name
       value: Character
