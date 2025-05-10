@@ -9,7 +9,7 @@ namespace Cards.CardDatas
     public class GainStrength : BasicCardData
     {
         public GainStrength(int cardValue, int CardCost) : base("强壮", $"获得{cardValue}层力量", CardCost, CardCategory.Skill, CardEffectTarget.AdventurerSelf,
-        sprite: Resources.Load<Sprite>("Sprites/Card/Strength"),
+        sprite: Resources.Load<Sprite>("Assets/Resources/CardUI/AttackCard"),
         effect: new AddBuffEffect<Strength>(new Strength(), cardValue))
         { }
     }
@@ -17,7 +17,7 @@ namespace Cards.CardDatas
     public class ApplyWeak : BasicCardData
     {
         public ApplyWeak(int cardValue, int CardCost) : base("威吓", $"给予一名敌人{cardValue}层虚弱", CardCost, CardCategory.Skill, CardEffectTarget.EnemyOne,
-        sprite: Resources.Load<Sprite>("Sprites/Card/Weak"),
+        sprite: Resources.Load<Sprite>("Assets/Resources/CardUI/AttackCard"),
         effect: new AddBuffEffect<Weak>(new Weak(), cardValue))
         { }
     }
@@ -25,7 +25,7 @@ namespace Cards.CardDatas
     public class ApplyVulnerable : BasicCardData
     {
         public ApplyVulnerable(int cardValue, int CardCost) : base("易伤", $"给予一名敌人{cardValue}层易伤", CardCost, CardCategory.Skill, CardEffectTarget.EnemyOne,
-        sprite: Resources.Load<Sprite>("Sprites/Card/Vulnerable"),
+        sprite: Resources.Load<Sprite>("Assets/Resources/CardUI/AttackCard"),
         effect: new AddBuffEffect<Vulnerable>(new Vulnerable(), cardValue))
         { }
     }
@@ -33,7 +33,7 @@ namespace Cards.CardDatas
     public class ApplyFragil : BasicCardData
     {
         public ApplyFragil(int cardValue, int CardCost) : base("脆弱", $"给予一名敌人{cardValue}层脆弱", CardCost, CardCategory.Skill, CardEffectTarget.EnemyOne,
-        sprite: Resources.Load<Sprite>("Sprites/Card/Fragil"),
+        sprite: Resources.Load<Sprite>("Assets/Resources/CardUI/AttackCard"),
         effect: new AddBuffEffect<Fragil>(new Fragil(), cardValue))
         { }
     }
@@ -41,7 +41,7 @@ namespace Cards.CardDatas
     public class ApplyPoison : BasicCardData
     {
         public ApplyPoison(int cardValue, int CardCost) : base("中毒", $"给予一名敌人{cardValue}层中毒", CardCost, CardCategory.Skill, CardEffectTarget.EnemyOne,
-        sprite: Resources.Load<Sprite>("Sprites/Card/Poison"),
+        sprite: Resources.Load<Sprite>("Assets/Resources/CardUI/AttackCard"),
         effect: new AddBuffEffect<Poison>(new Poison(), cardValue))
         { }
     }

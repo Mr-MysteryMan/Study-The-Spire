@@ -369,8 +369,33 @@ namespace Combat
             list.Remove((trigger.Priority, trigger.TimeStamp));
         }
 
+        private bool isProcessing = false;
+        private Queue<ICommand> commandQueue = new();
+
         public void ProcessCommand<T>(T command) where T : ICommand
         {
+            ProcessOneCommand(command);
+            while (!isProcessing && commandQueue.Count > 0)
+            {
+                var nextCommand = commandQueue.Dequeue();
+                ProcessOneCommand(nextCommand);
+                if (commandQueue.Count > 1000) {
+                    Debug.LogError($"待处理命令过多，数量：{commandQueue.Count}, 可能陷入死循环，请检查命令的执行逻辑");
+                    commandQueue.Clear();
+                    isProcessing = false;
+                    Debug.LogError($"命令队列已清空");
+                    break;
+                }
+            }
+        }
+
+        private void ProcessOneCommand<T>(T command) where T : ICommand
+        {
+            if (isProcessing) {
+                commandQueue.Enqueue(command);
+                return;
+            }
+            isProcessing = true;
             foreach (var processor in GetProcessors<T>(command.Source, ProcessorEffectSideType.Source))
             {
                 processor.Process(ref command);
@@ -392,6 +417,7 @@ namespace Combat
             {
                 trigger.PostCheck(eventManager, command);
             }
+            isProcessing = false;
         }
     }
 }

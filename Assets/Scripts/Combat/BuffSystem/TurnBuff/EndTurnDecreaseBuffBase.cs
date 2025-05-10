@@ -18,7 +18,7 @@ namespace Combat.Buffs.TurnBuff
         protected override void OnTurnEnd(TurnEndEvent e)
         {
             if (e.Character != this.Parent) return;
-            _combatSystem.ProcessCommand(new UpdateBuffCountCommand<T>(null, Parent, -1));
+            _combatSystem.ProcessCommand(new UpdateBuffCountCommand(null, Parent, this.GetType(), -1));
         }
 
         protected override void OnCombatEnd(CombatWinningEvent e)

@@ -8,7 +8,7 @@ namespace Combat.Buffs.TurnBuff
     {
         public override string Name => "Fragil";
 
-        protected override string EffectDescription => $"受到脆弱的影响，获得的护甲减少{(int)(ArmorDecreaseRate * 100)}%。";
+        protected override string EffectDescription => $"获得的护甲减少{(int)(ArmorDecreaseRate * 100)}%。";
 
         public override BuffType BuffType => BuffType.Debuff;
 

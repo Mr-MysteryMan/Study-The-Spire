@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DefaultPrefab: {fileID: 2187094996593306050, guid: 2e7796a1e68bc0a4784cffcb9876f8f8, type: 3}
   DefaultBuffPrefab: {fileID: 2187094996593306050, guid: 2e7796a1e68bc0a4784cffcb9876f8f8, type: 3}
-  DefaultDebuffPrefab: {fileID: 2187094996593306050, guid: 3f113154e07e1884cbecc7c634b05bab, type: 3}
+  DefaultDebuffPrefab: {fileID: 4734952451108878410, guid: 3f113154e07e1884cbecc7c634b05bab, type: 3}
   BuffPrefabMapEntries: []

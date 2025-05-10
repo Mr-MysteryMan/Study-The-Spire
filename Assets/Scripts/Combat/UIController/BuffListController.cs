@@ -70,6 +70,7 @@ public class BuffListController : MonoBehaviour
     {
         var buffPrefab = buffPrefabMap.GetBuffPrefab(buff);
         var buffObject = Instantiate(buffPrefab, transform);
+        buffs.Add(buffObject); // 添加到列表中
         var buffController = buffObject.GetComponent<BuffController>();
         buffController.Init(buff, combatSystem); // 初始化 BuffController
         return buffController;
@@ -78,5 +79,8 @@ public class BuffListController : MonoBehaviour
     public void Init(CombatSystem combatSystem)
     {
         this.combatSystem = combatSystem;
+    }
+
+    private void UpdatePosition() {
     }
 }

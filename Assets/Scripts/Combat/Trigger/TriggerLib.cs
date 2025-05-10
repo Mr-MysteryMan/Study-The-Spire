@@ -20,6 +20,8 @@ namespace Combat.Trigger
                 new CharacterDeathTrigger(),
                 new DamageDealtTrigger(),
                 new HealDealtTrigger(),
+                new UpdateBuffTrigger(),
+                new ApplyBuffTrigger(),
             };
         }
     }

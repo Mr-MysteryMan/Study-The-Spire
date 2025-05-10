@@ -85,7 +85,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &8854411703700379425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,7 +121,7 @@ MonoBehaviour:
   initAmmor: 0
   combatSystem: {fileID: 0}
   PostiveDirection: {x: 1, y: 0}
-  buffManager: {fileID: 7756846100509015122}
+  buffManager: {fileID: 254633356626319124}
   initTurnMana: 6
 --- !u!1001 &6169157656566501167
 PrefabInstance:
@@ -236,6 +236,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 04e98999699eef446a1931fbbaae82f1, type: 3}
+--- !u!114 &254633356626319124 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6203114216416237627, guid: 04e98999699eef446a1931fbbaae82f1, type: 3}
+  m_PrefabInstance: {fileID: 6169157656566501167}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2c0ce29d005b394cb915a63612a9a10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1346142233314231824 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5130502714800703807, guid: 04e98999699eef446a1931fbbaae82f1, type: 3}
@@ -246,14 +257,3 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2280233093116617456, guid: 04e98999699eef446a1931fbbaae82f1, type: 3}
   m_PrefabInstance: {fileID: 6169157656566501167}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7756846100509015122 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4483503156309898109, guid: 04e98999699eef446a1931fbbaae82f1, type: 3}
-  m_PrefabInstance: {fileID: 6169157656566501167}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2c0ce29d005b394cb915a63612a9a10, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
