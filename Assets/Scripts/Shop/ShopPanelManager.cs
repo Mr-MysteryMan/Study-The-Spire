@@ -291,7 +291,7 @@ public class ShopPanelManager : MonoBehaviour
         confirmPopup.gameObject.SetActive(false);
 
         // 加载内容
-        if (curMode == ShopMode.buy || curMode == ShopMode.normal)
+        if (curMode == ShopMode.buy)
         {
             LoadShopItems();
         }
