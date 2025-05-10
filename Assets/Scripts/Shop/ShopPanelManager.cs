@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -42,8 +41,19 @@ public class ShopPanelManager : MonoBehaviour
     private Transform confirmPopup;
     private Transform popupConfirmBtn;
     private Transform popupCancelBtn;
+    private Transform goldInsufficientPopup;
+    private Transform goldTextParent;
+    
 
     public ShopMode curMode = ShopMode.normal;
+    public GameObject ShopUIItemPrefab;
+    public GameObject goldFloatTextPrefab;
+
+
+    private GameObject selectedItemGO = null;
+    private ItemData selectedItemData = null;
+    private List<ICardData> backItems = new List<ICardData>();
+    private List<ItemData> shopItems = new List<ItemData>();
 
     void Start()
     {
@@ -78,6 +88,8 @@ public class ShopPanelManager : MonoBehaviour
 
         bottomPanel = root.Find("Bottom");
         bottomMenus = bottomPanel.Find("BottomMenus");
+        bottomMenus.Find("ShowGold/Text").GetComponent<Text>().text = $"Gold {cardManager.Gold}";
+        goldTextParent = bottomMenus.Find("ShowGold");
         // detailBtn = bottomMenus.Find("DetailBtn");
 
         deletePanel = bottomPanel.Find("DeletePanel");
@@ -89,10 +101,13 @@ public class ShopPanelManager : MonoBehaviour
         popupConfirmBtn = confirmPopup.Find("ConfirmBtn");
         popupCancelBtn = confirmPopup.Find("CancelBtn");
 
-        // 默认隐藏Bottom,Detail,ConfirmPopup面板
-        bottomPanel.gameObject.SetActive(false);
+        goldInsufficientPopup = root.Find("GoldInsufficientPopup");
+
+        // 默认隐藏deletePanel,Detail,ConfirmPopup,GoldInsufficientPopup面板
+        deletePanel.gameObject.SetActive(false);
         detailPanel.gameObject.SetActive(false);
         confirmPopup.gameObject.SetActive(false);
+        goldInsufficientPopup.gameObject.SetActive(false);
     }
 
     private void InitClick()
@@ -154,10 +169,27 @@ public class ShopPanelManager : MonoBehaviour
         });
     }
 
-    private void DoBuyItem()
-    {
-        if (cardManager.SpendGold(selectedItemData.gold))
-        {
+    // 自动关闭弹窗的协程
+    private IEnumerator AutoHidePopup(Transform popup, float delay) {
+        yield return new WaitForSeconds(delay);
+        popup.gameObject.SetActive(false);
+    }
+
+    private void UpdateGoldDisplayWithEffect(int amount) {
+        // 更新显示文本
+        bottomMenus.Find("ShowGold/Text").GetComponent<Text>().text = $"Gold {cardManager.Gold}";
+
+        // 创建浮动文字动画
+        if (goldFloatTextPrefab != null && goldTextParent != null) {
+            GameObject go = Instantiate(goldFloatTextPrefab, goldTextParent);
+            go.transform.localPosition = Vector3.zero; // 居中显示
+            go.GetComponent<GoldFloatText>().SetAmount(amount);
+        }
+    }
+
+    private void DoBuyItem() {
+        if (cardManager.SpendGold(selectedItemData.gold)) {
+            UpdateGoldDisplayWithEffect(selectedItemData.gold);
             cardManager.AddCard(selectedItemData.cardData);
 
             shopItems.Remove(selectedItemData);
@@ -166,24 +198,27 @@ public class ShopPanelManager : MonoBehaviour
             Destroy(selectedItemGO);
             selectedItemGO = null;
             selectedItemData = null;
+        } else {
+            goldInsufficientPopup.gameObject.SetActive(true);
+            StartCoroutine(AutoHidePopup(goldInsufficientPopup, 1f)); // 1秒后自动关闭
         }
 
         confirmPopup.gameObject.SetActive(false);
         detailPanel.gameObject.SetActive(false);
-
-        cardManager.PrintAllCards();
     }
 
-    private void DoDeleteItem()
-    {
-        // 与CardManager交互
+    private void DoDeleteItem() {
+        // TODO 设置删除金币
         const int deleteCost = 100;
-        if (cardManager.SpendGold(deleteCost))
-        {
+        if (cardManager.SpendGold(deleteCost)) {
+            UpdateGoldDisplayWithEffect(selectedItemData.gold);
             cardManager.RemoveCard(selectedItemData.cardData);
             Destroy(selectedItemGO);
             selectedItemGO = null;
             selectedItemData = null;
+        } else {
+            goldInsufficientPopup.gameObject.SetActive(true);
+            StartCoroutine(AutoHidePopup(goldInsufficientPopup, 1f));
         }
 
         confirmPopup.gameObject.SetActive(false);
@@ -216,7 +251,8 @@ public class ShopPanelManager : MonoBehaviour
             deleteIcon2.gameObject.SetActive(false);
             deleteSelect.gameObject.SetActive(false);
 
-            bottomPanel.gameObject.SetActive(false);
+            deletePanel.gameObject.SetActive(false);
+            bottomMenus.gameObject.SetActive(true);
 
         }
         else if (curMode == ShopMode.buy)
@@ -229,10 +265,9 @@ public class ShopPanelManager : MonoBehaviour
             deleteIcon2.gameObject.SetActive(false);
             deleteSelect.gameObject.SetActive(false);
 
-            bottomPanel.gameObject.SetActive(true);
-        }
-        else if (curMode == ShopMode.delete)
-        {
+            deletePanel.gameObject.SetActive(true);
+            bottomMenus.gameObject.SetActive(true);
+        } else if (curMode == ShopMode.delete) {
             buyIcon1.gameObject.SetActive(true);
             buyIcon2.gameObject.SetActive(false);
             buySelect.gameObject.SetActive(false);
@@ -241,7 +276,8 @@ public class ShopPanelManager : MonoBehaviour
             deleteIcon2.gameObject.SetActive(true);
             deleteSelect.gameObject.SetActive(true);
 
-            bottomPanel.gameObject.SetActive(true);
+            deletePanel.gameObject.SetActive(true);
+            bottomMenus.gameObject.SetActive(true);
         }
 
         // 清空 Scroll View 内容
@@ -255,7 +291,7 @@ public class ShopPanelManager : MonoBehaviour
         confirmPopup.gameObject.SetActive(false);
 
         // 加载内容
-        if (curMode == ShopMode.buy)
+        if (curMode == ShopMode.buy || curMode == ShopMode.normal)
         {
             LoadShopItems();
         }
@@ -265,12 +301,7 @@ public class ShopPanelManager : MonoBehaviour
         }
     }
 
-    public GameObject ShopUIItemPrefab;
-
-    private List<ItemData> shopItems = new List<ItemData>();
-
-    private List<ItemData> LoadItemDataFromJson(string resourcePath)
-    {
+    private List<ItemData> LoadItemDataFromJson(string resourcePath) {
         TextAsset jsonFile = Resources.Load<TextAsset>(resourcePath);
         if (jsonFile == null)
         {
@@ -280,9 +311,6 @@ public class ShopPanelManager : MonoBehaviour
 
         return JsonConvert.DeserializeObject<List<ItemData>>(jsonFile.text);
     }
-
-    private GameObject selectedItemGO = null;
-    private ItemData selectedItemData = null;
 
     private void LoadShopItems()
     {
@@ -327,7 +355,6 @@ public class ShopPanelManager : MonoBehaviour
         }
     }
 
-    private List<ICardData> backItems = new List<ICardData>();
     private void LoadBackItems()
     {
         Debug.Log("加载背包中的物品...");

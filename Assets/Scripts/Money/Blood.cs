@@ -7,6 +7,6 @@ public class BloodPlay : MonoBehaviour
     public TextMeshProUGUI bloodText; // 拖拽 UI 文本组件到 Inspector
     void Update()
     {
-        bloodText.text = "Blood:" + GameManager.blood;
+        bloodText.text = "Blood:" + CardManager.Instance.health;
     }
 }
