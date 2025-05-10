@@ -8,7 +8,7 @@ namespace Combat.Buffs.TurnBuff
     {
         public override string Name => "Weak";
 
-        protected override string EffectDescription => $"受到虚弱的影响，受到的伤害减少{(int)(DamageDecreaseRate * 100)}%。";
+        protected override string EffectDescription => $"受到的伤害减少{(int)(DamageDecreaseRate * 100)}%。";
 
         public override BuffType BuffType => BuffType.Debuff;
 

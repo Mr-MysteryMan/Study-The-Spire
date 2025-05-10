@@ -41,8 +41,8 @@ namespace Combat.Buffs.PermanentBuff
 
         public void OnUpdate(int count)
         {
-            if (count == Count) return;
-            this.Count = count;
+            if (count == 0) return;
+            this.Count = count + this.Count;
         }
 
 

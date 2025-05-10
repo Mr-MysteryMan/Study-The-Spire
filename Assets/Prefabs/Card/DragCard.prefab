@@ -88,6 +88,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1890161393082704700, guid: 28c09280d8f34aa459625b979520d2be, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5134587200102065101, guid: 28c09280d8f34aa459625b979520d2be, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5134587200102065101, guid: 28c09280d8f34aa459625b979520d2be, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7943412886342294334, guid: 28c09280d8f34aa459625b979520d2be, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7943412886342294334, guid: 28c09280d8f34aa459625b979520d2be, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8322347904643196781, guid: 28c09280d8f34aa459625b979520d2be, type: 3}
       propertyPath: m_Name
       value: DragCard

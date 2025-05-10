@@ -50,5 +50,14 @@ namespace Combat.Buffs
         {
             this.buff = buff;
         }
+
+        public void SetImage(Sprite sprite)
+        {
+            var image = GetComponentInChildren<Image>();
+            if (image != null)
+            {
+                image.sprite = sprite;
+            }
+        }
     }
 }

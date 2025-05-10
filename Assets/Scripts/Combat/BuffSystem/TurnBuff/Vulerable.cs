@@ -8,7 +8,7 @@ namespace Combat.Buffs.TurnBuff
     {
         public override string Name => "Vulnerable";
 
-        protected override string EffectDescription => $"受到易伤的影响，受到的伤害增加{(int)(DamageIncreaseRate * 100)}%。";
+        protected override string EffectDescription => $"受到的伤害增加{(int)(DamageIncreaseRate * 100)}%。";
 
         public override BuffType BuffType => BuffType.Debuff;
 

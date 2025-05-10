@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Combat.Buffs;
 
@@ -8,9 +9,9 @@ namespace Combat.Command.Buff
     /// 施加buff的命令，需要指定目标和buff
     /// </summary>
     /// <typeparam name="T">要施加的buff的类型</typeparam>
-    public class ApplyBuffCommand<T> : ICommand where T : IBuff
+    public class ApplyBuffCommand : ICommand
     {
-        public ApplyBuffCommand(Character source, Character target, T buff, int count = 1)
+        public ApplyBuffCommand(Character source, Character target, IBuff buff, int count = 1)
         {
             Source = source;
             Target = target;
@@ -22,7 +23,7 @@ namespace Combat.Command.Buff
 
         public Character Target { get; set; }
 
-        public T Buff;
+        public IBuff Buff;
 
         public int Count;
 
@@ -37,7 +38,7 @@ namespace Combat.Command.Buff
             {
                 return;
             }
-            Target._ApplyBuff<T>(Buff, Count);
+            Target._ApplyBuff(Buff, Count);
         }
     }
 
@@ -45,47 +46,50 @@ namespace Combat.Command.Buff
     /// 更新buff的层数的命令，需要指定目标，不需要指定buff，但是目标需要有这个buff
     /// 因此只推荐buff本身更新自己的时候，使用该命令。
     /// </summary>
-    /// <typeparam name="T">要更新的buff类型</typeparam>
-    public class UpdateBuffCountCommand<T> : ICommand where T : IBuff
+    public class UpdateBuffCountCommand : ICommand
     {
-        public UpdateBuffCountCommand(Character source, Character target, int count = 1)
+        public UpdateBuffCountCommand(Character source, Character target, Type type, int count = 1)
         {
             Source = source;
             Target = target;
             Count = count;
+            BuffType = type;
         }
 
         public Character Source { get; set; }
 
         public Character Target { get; set; }
 
+        public Type BuffType { get; set; }
+
         public int Count { get; set; }
 
         public void Execute()
         {
-            Target._UpdateBuffCount<T>(Count);
+            Target._UpdateBuffCount(BuffType, Count);
         }
     }
 
     /// <summary>
     /// 移除buff的命令，需要指定目标，需要目标有这个buff
     /// </summary>
-    /// <typeparam name="T">要移除的buff类型</typeparam>
-    public class RemoveBuffCommand<T> : ICommand where T : IBuff
+    public class RemoveBuffCommand : ICommand
     {
-        public RemoveBuffCommand(Character source, Character target)
+        public RemoveBuffCommand(Character source, Character target, Type type)
         {
             Source = source;
             Target = target;
+            BuffType = type;
         }
-
         public Character Source { get; set; }
 
         public Character Target { get; set; }
 
+        public Type BuffType { get; set; }
+
         public void Execute()
         {
-            Target._RemoveBuff<T>();
+            Target._RemoveBuff(BuffType);
         }
     }
 }

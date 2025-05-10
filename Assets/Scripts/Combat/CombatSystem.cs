@@ -23,7 +23,10 @@ namespace Combat
     {
         public GameObject AdventurerPrefab; // 角色预制体
         public GameObject EnemyPrefab;
+        public GameObject TreasurePrefab; // 宝物预制体
         public ObjectEventSO backToMenuEvent;
+
+        public GameObject DamageTextPrefab; // 伤害文本预制体
 
         public Camera combatCamera; // 战斗摄像机
 
@@ -60,6 +63,8 @@ namespace Combat
         [SerializeField] private BasicRulesLibSO rulesLibSO;
 
         private EventListener.BasicRuleLib eventRulesLib;
+
+        private TriggerLib triggerLib;
 
         void Awake()
         {
@@ -103,6 +108,10 @@ namespace Combat
 
         private void Success()
         {
+            // 弹出宝藏窗口
+            var treasure = Instantiate(TreasurePrefab);
+            treasure.GetComponent<Treasure>().init(this.playerCharacter.CurHp); // 设置宝物的生命值
+
             backToMenuEvent.RaiseEvent(null, this);
         }
 
@@ -148,10 +157,16 @@ namespace Combat
             this.systemCharacter = systemCharacter;
             this.cardManager = cardManager;
             this.cardManager.addCharacter(this.playerCharacter, this.monsterCharacter); // 添加角色到卡片管理器
+            this.triggerLib = new TriggerLib();
             sourceProcessors = new();
             targetProcessors = new();
+
             triggers = new();
-            RegisterTrigger(new DamageDealtTrigger());
+            foreach (var trigger in this.triggerLib.GetTriggers())
+            {
+                RegisterTrigger(trigger);
+            }
+
             RegisterProcessorForCharacter(this.playerCharacter); // 注册玩家角色的处理器
             foreach (var character in this.monsterCharacter) // 注册怪物角色的处理器
             {
@@ -312,6 +327,22 @@ namespace Combat
             list.Remove((processor.Priority, processor.TimeStamp));
         }
 
+        public void RegisterTrigger(ITrigger trigger)
+        {
+            var type = trigger.CommandType;
+            if (!triggers.TryGetValue(type, out var list))
+            {
+                list = new SortedList<(int, long), ITrigger>();
+                triggers[type] = list;
+            }
+            if (list.ContainsKey((trigger.Priority, trigger.TimeStamp)))
+            {
+                Debug.LogError($"Trigger {trigger} already registered for {type}.");
+                return;
+            }
+            list.Add((trigger.Priority, trigger.TimeStamp), trigger);
+        }
+
         public void RegisterTrigger<T>(ITrigger<T> trigger) where T : ICommand
         {
             var type = typeof(T);
@@ -319,6 +350,11 @@ namespace Combat
             {
                 list = new();
                 triggers[type] = list;
+            }
+            if (list.ContainsKey((trigger.Priority, trigger.TimeStamp)))
+            {
+                Debug.LogError($"Trigger {trigger} already registered for {type}.");
+                return;
             }
             list.Add((trigger.Priority, trigger.TimeStamp), trigger);
         }
@@ -333,8 +369,33 @@ namespace Combat
             list.Remove((trigger.Priority, trigger.TimeStamp));
         }
 
+        private bool isProcessing = false;
+        private Queue<ICommand> commandQueue = new();
+
         public void ProcessCommand<T>(T command) where T : ICommand
         {
+            ProcessOneCommand(command);
+            while (!isProcessing && commandQueue.Count > 0)
+            {
+                var nextCommand = commandQueue.Dequeue();
+                ProcessOneCommand(nextCommand);
+                if (commandQueue.Count > 1000) {
+                    Debug.LogError($"待处理命令过多，数量：{commandQueue.Count}, 可能陷入死循环，请检查命令的执行逻辑");
+                    commandQueue.Clear();
+                    isProcessing = false;
+                    Debug.LogError($"命令队列已清空");
+                    break;
+                }
+            }
+        }
+
+        private void ProcessOneCommand<T>(T command) where T : ICommand
+        {
+            if (isProcessing) {
+                commandQueue.Enqueue(command);
+                return;
+            }
+            isProcessing = true;
             foreach (var processor in GetProcessors<T>(command.Source, ProcessorEffectSideType.Source))
             {
                 processor.Process(ref command);
@@ -356,6 +417,7 @@ namespace Combat
             {
                 trigger.PostCheck(eventManager, command);
             }
+            isProcessing = false;
         }
     }
 }
