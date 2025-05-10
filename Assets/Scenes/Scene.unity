@@ -664,6 +664,7 @@ GameObject:
   - component: {fileID: 1874029911}
   - component: {fileID: 1874029912}
   - component: {fileID: 1874029913}
+  - component: {fileID: 1874029914}
   m_Layer: 0
   m_Name: SceneLoadManager
   m_TagString: Untagged
@@ -719,6 +720,12 @@ MonoBehaviour:
     m_EditorAssetChanged: 0
   menu:
     m_AssetGUID: f3ef4cc62c84e5f4c804722ed2b3b5dd
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  backpack:
+    m_AssetGUID: 4f292071524bc524eb556bb80ba4e66c
     m_SubObjectName: 
     m_SubObjectGUID: 
     m_SubObjectType: 
@@ -900,6 +907,34 @@ MonoBehaviour:
       - m_Target: {fileID: 1874029906}
         m_TargetAssemblyTypeName: SceneLoadManager, Assembly-CSharp
         m_MethodName: LoadMap
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1874029914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1874029904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 631d00af76bf93f47b1a84f764b29c88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventSO: {fileID: 11400000, guid: 243ddde93301415469cb09476a94367a, type: 2}
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1874029906}
+        m_TargetAssemblyTypeName: SceneLoadManager, Assembly-CSharp
+        m_MethodName: LoadBackpack
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
