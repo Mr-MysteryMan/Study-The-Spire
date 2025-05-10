@@ -23,6 +23,7 @@ namespace Combat
     {
         public GameObject AdventurerPrefab; // 角色预制体
         public GameObject EnemyPrefab;
+        public GameObject TreasurePrefab; // 宝物预制体
         public ObjectEventSO backToMenuEvent;
 
         public GameObject DamageTextPrefab; // 伤害文本预制体
@@ -105,6 +106,10 @@ namespace Combat
 
         private void Success()
         {
+            // 弹出宝藏窗口
+            var treasure = Instantiate(TreasurePrefab);
+            treasure.GetComponent<Treasure>().init(this.playerCharacter.CurHp); // 设置宝物的生命值
+
             backToMenuEvent.RaiseEvent(null, this);
         }
 
