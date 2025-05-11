@@ -10,7 +10,7 @@ namespace Combat.Command
         }
 
         public void Execute() {
-            Target._TakeAmmorDamage(Source.Ammor);
+            Target._TakeAmmorDamage(Target.Ammor);
         }
     }
 }
