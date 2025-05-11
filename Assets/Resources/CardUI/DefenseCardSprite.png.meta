@@ -132,7 +132,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      DefenseCardSprite_0: 1553720011681333353
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
