@@ -182,7 +182,7 @@ namespace Combat
             var _buff = buffManager.GetBuff(buff.GetType());
             if (_buff != null)
             {
-                buff.OnUpdate(buff, count);
+                _buff.OnUpdate(buff, count);
                 return;
             }
             buff.OnApply(this, count);
