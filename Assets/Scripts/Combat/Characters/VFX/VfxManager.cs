@@ -33,8 +33,7 @@ namespace Combat.VFX
             eventManager.Subscribe<BeforeAttackEvent>(OnBeforeAttack);
         }
 
-        public void Oestroy()
-        {
+        private void OnDestroy() {
             if (eventManager != null)
             {
                 eventManager.Unsubscribe<DamageDealtEvent>(OnDamageDealt);
@@ -72,7 +71,7 @@ namespace Combat.VFX
         {
             if (e.Attacker == character)
             {
-                PlayAttack();
+                 PlayAttack();
             }
         }
 
