@@ -14,6 +14,7 @@ namespace Combat.EventListener
             EventListeners.Add(new DeathListener(combatSystem));
             EventListeners.Add(new GameoverListener(combatSystem));
             EventListeners.Add(new BuffUpdatedRemoveListener());
+            EventListeners.Add(new TurnstartAmmorListener(combatSystem));
         }
 
         public void AddListen()
