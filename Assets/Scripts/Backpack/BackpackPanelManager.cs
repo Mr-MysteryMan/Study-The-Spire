@@ -44,6 +44,8 @@ public class BackpackPanelManager : MonoBehaviour
         scrollViewContent = root.Find("Center/Scroll View/Viewport/Content");
         detailPanel = root.Find("Center/DetailPanel");
 
+        root.Find("Bottom/BottomMenus/Gold/amount").GetComponent<Text>().text = $"{cardManager.Gold}";
+
         detailPanel.gameObject.SetActive(false);
     }
 
