@@ -14,6 +14,7 @@ public class SceneLoadManager : MonoBehaviour
 
     private Vector2Int currentRoomVector;
     private Room currentRoom;
+    private Room currentRoomSelect111;
     public ObjectEventSO updateRoomEvent;
     public ObjectEventSO afterRoomLoadedEvent;
 
