@@ -5,8 +5,9 @@ namespace Combat.Buffs.TurnBuff
 {
     public abstract class EndTrunEffectBuffBase<T> : EndTurnDecreaseBuffBase<T> where T : IBuff
     {
+        public override string Description => EffectDescription + "，并减少一层。";
 
-        protected override string EffectDescription => "回合结束时，";
+        protected override string EffectDescription => "回合结束时，" + EndTurnEffectDescription;
 
         protected abstract string EndTurnEffectDescription { get; }
 

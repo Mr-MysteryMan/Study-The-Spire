@@ -5,15 +5,17 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler, IPointerClickHandler
+public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler
 {
     [Header("卡片游戏组件")]
     //----------------------游戏组件---------------------//
     public GameObject cardObj;
     public Image background; // 卡片背景
-    public Text cardValueText; // 卡片数值文本
+    public Image image; // 卡片内容图片
 
     public Text cardCostText; // 卡片费用文本
+    public Text cardNameText; // 卡片名称文本
+    public Text cardDescText; // 卡片描述文本
 
     [Header("卡片基本信息")]
     //----------------------基本信息---------------------//
@@ -77,19 +79,6 @@ public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler, IPo
         this.manager = manager; // 设置卡片管理器
     }
 
-    public void OnPointerClick(PointerEventData eventData) {
-        return ;
-        if (manager == null) return; // 如果没有卡片管理器, 则不执行
-        
-        var from = manager.getUser(this); // 获取使用者
-        var to = manager.getTarget(this); // 获取目标
-        if (from && to && manager.EnergyPoint >= this.CardCost) { // 如果有使用者和目标 且 能量足够
-            this.Effect.Work(from, to); // 执行卡牌效果
-            manager.reportUse(this); // 向卡片管理器报告使用
-            manager.setEnergy(manager.EnergyPoint - this.CardCost); // 扣除能量
-        }
-    }
-
     private IEnumerator AnimateTransform(Vector3 targetScale)
     {
         float timer = 0f;
@@ -111,11 +100,17 @@ public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler, IPo
 
     //----------------------更新UI---------------------//
     public void UpdateCardUI() {
-        // 背景
-        this.background.sprite = CardUI.GetCardBackground(cardData); // 设置卡片背景
-        // 数字
-        this.cardValueText.text = cardData.Desc.ToString(); // 设置卡片数值文本
-        this.cardCostText.text = cardData.CardName.ToString(); // 设置卡片数值颜色
+        // 按照CardCategory加载背景spirit
+        this.background.sprite = cardData.CardCategory switch {
+            CardCategory.Attack => Resources.Load<Sprite>("CardUI/Attack"),
+            CardCategory.Skill => Resources.Load<Sprite>("CardUI/Skill"),
+            CardCategory.Status => Resources.Load<Sprite>("CardUI/Status"),
+            _ => Resources.Load<Sprite>("CardUI/None"),
+        };
+        this.image.sprite = cardData.Sprite; // 设置卡片图片
+        this.cardCostText.text = cardData.Cost.ToString();// 加载卡片费用
+        this.cardNameText.text = cardData.CardName; // 加载卡片名称
+        this.cardDescText.text = cardData.Desc; // 加载卡片描述
         // 弃牌
         if (IsDiscarded) { //弃置时背景半透明
             Color color = this.background.color;

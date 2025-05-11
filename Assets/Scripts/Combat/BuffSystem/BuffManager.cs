@@ -58,6 +58,11 @@ namespace Combat.Buffs
             return (T)buffs.Find(buff => buff is T);
         }
 
+        public IBuff GetBuff(Type type)
+        {
+            return buffs.Find(buff => buff.GetType() == type);
+        }
+
         public void Init(CombatSystem combatSystem)
         {
             this.buffListController.Init(combatSystem);

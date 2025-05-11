@@ -5,6 +5,7 @@ using Combat.Command;
 using Combat.Command.Buff;
 using Combat.Events.Turn;
 using Combat.EventVariable;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -47,7 +48,7 @@ namespace Combat
         protected virtual void Init(CombatSystem combatSystem)
         {
             var eventManager = combatSystem.EventManager;
-            if (buffManager == null) return ;
+            if (buffManager == null) return;
             buffManager.Init(combatSystem);
 
             maxHp = new ReactiveIntVariable("MaxHp", initMaxHp, eventManager, this);
@@ -65,6 +66,8 @@ namespace Combat
                 hPController.launch(this);
             }
         }
+
+
         // 攻击target,造成damage点伤害，会触发相应事件
         public void Attack(Character target, int damage)
         {
@@ -95,19 +98,19 @@ namespace Combat
             combatSystem.ProcessCommand(new AddAmmorCommand(this, this, ammor));
         }
 
-        public void AddBuff<T>(Character target, T buff, int count = 1) where T : IBuff
+        public void AddBuff(Character target, IBuff buff, int count = 1)
         {
-            combatSystem.ProcessCommand(new ApplyBuffCommand<T>(this, target, buff, count));
+            combatSystem.ProcessCommand(new ApplyBuffCommand(this, target, buff, count));
         }
 
-        public void DecreaseBuff<T>(Character target, T buff, int count = 1) where T : IBuff
+        public void DecreaseBuff(Character target, IBuff buff, int count = 1)
         {
-            combatSystem.ProcessCommand(new ApplyBuffCommand<T>(this, target, buff, -count));
+            combatSystem.ProcessCommand(new ApplyBuffCommand(this, target, buff, -count));
         }
 
-        public void RemoveBuff<T>(Character target) where T : IBuff
+        public void RemoveBuff(Character target, Type type)
         {
-            combatSystem.ProcessCommand(new RemoveBuffCommand<T>(this, target));
+            combatSystem.ProcessCommand(new RemoveBuffCommand(this, target, type));
         }
 
         // 当前生命值减少，只有简单的数值保证(damage>=0)
@@ -174,9 +177,9 @@ namespace Combat
             }
         }
 
-        internal void _ApplyBuff<T>(T buff, int count) where T : IBuff
+        internal void _ApplyBuff(IBuff buff, int count)
         {
-            var _buff = buffManager.GetBuff<T>();
+            var _buff = buffManager.GetBuff(buff.GetType());
             if (_buff != null)
             {
                 buff.OnUpdate(buff, count);
@@ -186,22 +189,22 @@ namespace Combat
             buffManager.AddBuff(buff);
         }
 
-        internal void _UpdateBuffCount<T>(int count) where T : IBuff
+        internal void _UpdateBuffCount(Type type, int count)
         {
-            var _buff = buffManager.GetBuff<T>();
+            var _buff = buffManager.GetBuff(type);
             if (_buff != null)
             {
-                _buff.OnUpdate(_buff.Count + count);
+                _buff.OnUpdate(count);
             }
             else
             {
-                Debug.LogError("Buff not found, cannot update count.");
+                Debug.LogError("找不到buff, 无法更新buff的层数");
             }
         }
 
-        internal void _RemoveBuff<T>() where T : IBuff
+        internal void _RemoveBuff(Type type)
         {
-            var _buff = buffManager.GetBuff<T>();
+            var _buff = buffManager.GetBuff(type);
             if (_buff != null)
             {
                 _buff.OnRemove();
@@ -217,6 +220,11 @@ namespace Combat
         public T GetBuff<T>() where T : IBuff
         {
             return buffManager.GetBuff<T>();
+        }
+
+        public IBuff GetBuff(Type type)
+        {
+            return buffManager.GetBuff(type);
         }
 
         /* 战斗内触发函数 */

@@ -81,9 +81,9 @@ namespace Cards.CardDatas
         {
             return cardType switch
             {
-                CardType.Attack => Resources.Load<Sprite>("Sprites/Card/Attack"),// 攻击效果图片
-                CardType.Defense => Resources.Load<Sprite>("Sprites/Card/Defense"),// 防御效果图片
-                CardType.Heal => Resources.Load<Sprite>("Sprites/Card/Heal"),// 治疗效果图片
+                CardType.Attack => Resources.Load<Sprite>("CardUI/AttackCardSprite"),// 攻击效果图片
+                CardType.Defense => Resources.Load<Sprite>("CardUI/DefenseCardSprite"),// 防御效果图片
+                CardType.Heal => Resources.Load<Sprite>("CardUI/HealCardSprite"),// 治疗效果图片
                 _ => throw new System.ArgumentOutOfRangeException(nameof(cardType), cardType, null) // 异常处理
             };
         }

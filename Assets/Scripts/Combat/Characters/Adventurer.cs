@@ -1,5 +1,8 @@
 using Combat;
+using Combat.Events;
 using Combat.EventVariable;
+using DG.Tweening;
+using TMPro;
 using UnityEngine;
 namespace Combat.Characters
 {

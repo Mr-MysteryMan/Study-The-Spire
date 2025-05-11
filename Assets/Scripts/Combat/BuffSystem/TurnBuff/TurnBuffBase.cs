@@ -50,8 +50,8 @@ namespace Combat.Buffs.TurnBuff
 
         public virtual void OnUpdate(int count)
         {
-            if (count == Count) return;
-            Count = count;
+            if (count == 0) return;
+            Count = count + Count;
         }
 
         public void OnUpdate(IBuff buff, int count)
