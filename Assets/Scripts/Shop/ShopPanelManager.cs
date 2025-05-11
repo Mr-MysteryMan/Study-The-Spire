@@ -213,7 +213,7 @@ public class ShopPanelManager : MonoBehaviour
         // TODO 设置删除金币
         const int deleteCost = 100;
         if (cardManager.SpendGold(deleteCost)) {
-            UpdateGoldDisplayWithEffect(selectedItemData.gold);
+            UpdateGoldDisplayWithEffect(deleteCost);
             cardManager.RemoveCard(selectedItemData.cardData);
             Destroy(selectedItemGO);
             selectedItemGO = null;
