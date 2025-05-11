@@ -176,7 +176,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &8854411703700379425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,8 +207,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HPbar: {fileID: 7780274743436461601}
-  initMaxHp: 100
-  initCurHp: 100
+  initMaxHp: 10
+  initCurHp: 10
   initAmmor: 0
   combatSystem: {fileID: 0}
   PostiveDirection: {x: 1, y: 0}

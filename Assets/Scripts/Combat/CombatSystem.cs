@@ -13,6 +13,7 @@ using Combat.Events.Turn;
 using Combat.Events;
 using System.Collections;
 using UnityEngine.Assertions;
+using GlobalCardManager = CardManager;
 
 namespace Combat
 {
@@ -110,9 +111,7 @@ namespace Combat
         {
             // 弹出宝藏窗口
             var treasure = Instantiate(TreasurePrefab);
-            treasure.GetComponent<Treasure>().init(this.playerCharacter.CurHp); // 设置宝物的生命值
-
-            backToMenuEvent.RaiseEvent(null, this);
+            treasure.GetComponent<Treasure>().init(this.playerCharacter.CurHp, () => backToMenuEvent.RaiseEvent(null, this)); // 设置宝物的生命值
         }
 
         private void Fail()
@@ -181,7 +180,7 @@ namespace Combat
             Vector3 monsterPosition = new Vector3(300, 20, 0); // 敌人位置
             // 暂且1v1
 
-            int curHp = 100; // TODO: 接入背包系统, 获取当前血量
+            int curHp = GlobalCardManager.Instance.health;
             // 创建玩家角色
             playerCharacter = CreateCharacter(playerPosition);
             playerCharacter.SetInitHP(Setting.PlayerHp, curHp);
@@ -379,7 +378,8 @@ namespace Combat
             {
                 var nextCommand = commandQueue.Dequeue();
                 ProcessOneCommand(nextCommand);
-                if (commandQueue.Count > 1000) {
+                if (commandQueue.Count > 1000)
+                {
                     Debug.LogError($"待处理命令过多，数量：{commandQueue.Count}, 可能陷入死循环，请检查命令的执行逻辑");
                     commandQueue.Clear();
                     isProcessing = false;
@@ -391,7 +391,8 @@ namespace Combat
 
         private void ProcessOneCommand<T>(T command) where T : ICommand
         {
-            if (isProcessing) {
+            if (isProcessing)
+            {
                 commandQueue.Enqueue(command);
                 return;
             }

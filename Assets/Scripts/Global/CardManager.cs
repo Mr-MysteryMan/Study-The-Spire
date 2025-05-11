@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Cards.CardDatas;
+using Cards;
 
 // 卡牌管理器：负责管理玩家所有卡牌数据，包括增删查与金币管理功能
 public class CardManager : MonoBehaviour
@@ -15,7 +16,7 @@ public class CardManager : MonoBehaviour
     public int Gold { get; private set; } = 200;
 
     // 玩家血量
-    public int health { get; set; } = 0;
+    public int health { get; set; } = 100;
 
     private void Awake()
     {
@@ -28,7 +29,7 @@ public class CardManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject); // 防止切换场景丢失
 
-        allCards = randomCardData();
+        allCards = LocalCards.GetCards();
     }
 
     // 设置金币数
@@ -69,8 +70,8 @@ public class CardManager : MonoBehaviour
                 // 随机生成卡片数据
                 int cardType = Random.Range(0, 3); // 随机卡片类型
                 CardType type = (CardType)cardType; // 转换为枚举类型
-                int value = Random.Range(0, 100); // 随机卡片内容
                 int cost = Random.Range(1, 5); // 随机卡片费用
+                int value = Random.Range((cost - 1) * 8, cost * 10);
                 cardData.Add(new TypedCardData(type,value,cost)); // 随机生成卡片数据
             }
 

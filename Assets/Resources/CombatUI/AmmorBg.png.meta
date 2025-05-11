@@ -132,7 +132,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      AmmorBg_0: -7498871544771815322
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

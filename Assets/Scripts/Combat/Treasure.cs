@@ -13,10 +13,13 @@ public class Treasure : MonoBehaviour
     private int goldNum; // 金币数
     private int health; // 生命值
     private List<ICardData> cardDataList = new List<ICardData>(); // 卡片数据列表
-    private static CardManager cardManager = CardManager.Instance; // 卡片管理器
+    private static CardManager cardManager;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
-    public void init(int health) {
+    public void init(int health, OnClosed onClosed)
+    {
+        if (cardManager == null) // 如果卡片管理器为空
+            cardManager = CardManager.Instance; // 获取卡片管理器实例
         this.health = health; // 设置生命值
         // 生成金币数
         int goldNumBase = Setting.TreasureGoldNum; // 设置金币数
@@ -25,6 +28,7 @@ public class Treasure : MonoBehaviour
 
         // 生成卡片
         int cardNumBase = Setting.TreasureCardNum; // 设置卡片数
+        List<ICardData> cardDataList = CardManager.randomCardData(cardNumBase);
         for (int i = 0; i < cardNumBase; i++)
         {
             // 在panel上生成卡片
@@ -39,29 +43,39 @@ public class Treasure : MonoBehaviour
 
             // 设置卡片数据
             // TODO: 生成随机卡片数据
-            // ICardData cardData = RandomCardData(); // 获取随机卡片数据
-            // cardObj.GetComponent<Card>().updateCardStatus(cardData); // 更新卡片数据
-            // cardDataList.Add(cardData); // 添加到卡片数据列表
+            ICardData cardData = cardDataList[i];
+            cardObj.GetComponent<Card>().updateCardStatus(cardData); // 更新卡片数据
+            cardDataList.Add(cardData); // 添加到卡片数据列表
 
             // 给卡片绑定点击事件
             Button button = cardObj.GetComponent<Button>();
-            List<int> test = new List<int> { 1, 2, 3}; // 测试,删
+            List<int> test = new List<int> { 1, 2, 3 }; // 测试,删
             int j = test[i]; // 测试,删
-            button.onClick.AddListener(() => {
+            button.onClick.AddListener(() =>
+            {
                 // 点击卡片时，应用宝物效果
                 Debug.Log(goldNum + " " + j + " " + health);
-                // work(goldNum, cardData, health);
+                work(goldNum, cardData, health);
                 close(); // 关闭宝物
             });
         }
+
+        this.onClosed += onClosed; // 绑定关闭事件
     }
 
-    public void close() {
+    public void close()
+    {
         Destroy(treasure); // 销毁
+        onClosed?.Invoke(); // 触发关闭事件
     }
+
+    public delegate void OnClosed();
+
+    public event OnClosed onClosed;
 
     // 应用宝物效果
-    public static void work(int GoldNum,ICardData cardData,int health) {
+    public static void work(int GoldNum, ICardData cardData, int health)
+    {
         cardManager.AddGold(GoldNum); // 设置金币
         cardManager.AddCard(cardData); // 添加卡片
         cardManager.health = health; // 设置生命值

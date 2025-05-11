@@ -37,8 +37,6 @@ namespace Combat
 
         public CombatSystem combatSystem;
 
-        public Vector2 PostiveDirection = new Vector2(0, 1); // 正方向
-
         [SerializeField] public BuffManager buffManager;
 
         public void SetInitHP(int maxHp, int curHp) // 设置初始化生命值数据
