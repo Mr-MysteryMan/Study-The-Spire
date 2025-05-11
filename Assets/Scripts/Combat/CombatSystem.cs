@@ -72,6 +72,8 @@ namespace Combat
         
         public EnemyType enemyType;
 
+        private float enemyMargin = 120; // 怪物的间隔
+
         void Awake()
         {
             CreateCharacters(); // 获取角色
@@ -182,10 +184,10 @@ namespace Combat
         {
             // 指定角色位置
             Vector3 playerPosition = new Vector3(-300, 20, 0); // 玩家位置
-            Vector3 monsterPosition = new Vector3(300, 20, 0); // 敌人位置
+            Vector3 centerMonsterPos = new Vector3(240, 20, 0); // 敌人位置
             // 暂且1v1
 
-            int curHp = GlobalCardManager.Instance.health;
+            int curHp = GlobalCardManager.Instance ? GlobalCardManager.Instance.health : Setting.PlayerHp; // 获取当前玩家的生命值
             // 创建玩家角色
             playerCharacter = CreateCharacter(playerPosition);
             playerCharacter.SetInitHP(Setting.PlayerHp, curHp);
@@ -197,9 +199,15 @@ namespace Combat
             monsterCharacter = new List<Enemy>();
             for (int i = 0; i < monsterPrefabs.Count; i++)
             {
+                var monsterPosition = GetMonsterPosition(i, monsterPrefabs.Count, centerMonsterPos);
                 var monster = CreateCharacter(monsterPosition, monsterPrefabs[i]);
                 monsterCharacter.Add(monster as Enemy); // 添加怪物角色
             }
+        }
+
+        private Vector3 GetMonsterPosition(int index, int total, Vector3 center) {
+            var leftStartPos = center - new Vector3(enemyMargin * (total - 1) / 2, 0, 0);
+            return leftStartPos + new Vector3(enemyMargin * index, 0, 0);
         }
 
         /* 处理角色的部分函数 */

@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: EliteState
   m_EditorClassIdentifier: 
   effectSOList:
-  - effect: {fileID: 11400000, guid: a9ba6fb509e0baf49a72facf1714efe3, type: 2}
+  - effect: {fileID: 11400000, guid: 7ceea4fcb5316264fa4f93e1435026c3, type: 2}
     weight: 1
-  - effect: {fileID: 11400000, guid: e4f459a74a12a5a468be4ed8e1192290, type: 2}
+  - effect: {fileID: 11400000, guid: fa61666b0476ef242982988aa54bacfd, type: 2}
     weight: 1
-  - effect: {fileID: 11400000, guid: d5e82ee0ddd8910468c3980cbbf52ec5, type: 2}
+  - effect: {fileID: 11400000, guid: 3c958600821bf2847b2d3225f24e9d2a, type: 2}
     weight: 1
