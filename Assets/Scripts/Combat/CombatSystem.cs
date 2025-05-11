@@ -14,6 +14,7 @@ using Combat.Events;
 using System.Collections;
 using UnityEngine.Assertions;
 using GlobalCardManager = CardManager;
+using static Combat.Characters.EnemyLib;
 
 namespace Combat
 {
@@ -66,6 +67,10 @@ namespace Combat
         private EventListener.BasicRuleLib eventRulesLib;
 
         private TriggerLib triggerLib;
+
+        [SerializeField] private EnemyLib enemyLibSO; // 怪物库
+        
+        public EnemyType enemyType;
 
         void Awake()
         {
@@ -188,11 +193,12 @@ namespace Combat
             (playerCharacter as Adventurer).SetInitMana(Setting.RoundEnergy); // 设置玩家角色的初始法力值
             // 创建怪物角色
             // TODO: 接入关卡管理, 获取敌人数据
+            var monsterPrefabs = enemyLibSO.GetEnemy(enemyType).ToList();
             monsterCharacter = new List<Enemy>();
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < monsterPrefabs.Count; i++)
             {
-                var monster = CreateCharacter(monsterPosition, CharacterType.Enemy) as Enemy;
-                monsterCharacter.Add(monster);
+                var monster = CreateCharacter(monsterPosition, monsterPrefabs[i]);
+                monsterCharacter.Add(monster as Enemy); // 添加怪物角色
             }
         }
 
@@ -206,8 +212,13 @@ namespace Combat
         private Character CreateCharacter(Vector3 position, CharacterType type = CharacterType.Player)
         {
             var Prefab = type == CharacterType.Player ? AdventurerPrefab : EnemyPrefab;
-            // 根据位置坐标在UI上创建角色
-            var Obj = Instantiate(Prefab, UI.transform);
+
+            return CreateCharacter(position, Prefab);
+        }
+
+        private Character CreateCharacter(Vector3 position, GameObject prefab)
+        {
+            var Obj = Instantiate(prefab, UI.transform);
             Obj.transform.localPosition = position;
             var character = Obj.GetComponent<Character>();
             character.combatSystem = this; // 设置战斗系统为自身

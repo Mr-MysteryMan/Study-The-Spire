@@ -211,7 +211,6 @@ MonoBehaviour:
   initCurHp: 10
   initAmmor: 0
   combatSystem: {fileID: 0}
-  PostiveDirection: {x: 1, y: 0}
   buffManager: {fileID: 8854006647397062437}
   stateMachine: {fileID: 286206233503564372}
   effectStateMakerSO: {fileID: 11400000, guid: 7b942edaec4e8a545933e32c6b17f43f, type: 2}
