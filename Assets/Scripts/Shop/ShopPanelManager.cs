@@ -118,7 +118,6 @@ public class ShopPanelManager : MonoBehaviour
         deleteBtn.GetComponent<Button>().onClick.AddListener(OnClickDelete);
         closeBtn.GetComponent<Button>().onClick.AddListener(OnClickClose);
         confirmBtn.GetComponent<Button>().onClick.AddListener(OnConfirm);
-        // detailBtn.GetComponent<Button>().onClick.AddListener(OnDetail);
         backBtn.GetComponent<Button>().onClick.AddListener(OnBack);
     }
 
