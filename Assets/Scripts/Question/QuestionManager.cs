@@ -8,6 +8,8 @@ public class QuestionManager : MonoBehaviour
     public GameObject Question; // 问题整体
     public GameObject QuestionBox; // 问题框
     public GameObject[] AnswerBox; // 选项框
+
+    public Image image; // 背景图
     // -----------------------------变量----------------------------------
     public static QuestionList questionList; // 问题列表
     QuestionData question;
@@ -51,9 +53,11 @@ public class QuestionManager : MonoBehaviour
     {
         // 检查答案是否正确
         if (index == question.answer) {
+            image.sprite = Resources.Load<Sprite>("QuestionUI/Correct"); // 加载正确答案的图片
             onCorrect(); // 调用正确答案的回调函数
         }
         else {
+            image.sprite = Resources.Load<Sprite>("QuestionUI/Wrong"); // 加载错误答案的图片
             onWrong(); // 调用错误答案的回调函数
         }
     }
