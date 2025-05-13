@@ -1,11 +1,14 @@
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using Unity.VisualScripting;
 using Cards.CardDatas;
+using System;
 
 public enum ShopMode
 {
@@ -24,6 +27,8 @@ public class ShopPanelManager : MonoBehaviour
 
     private Transform buyIcon1, buyIcon2, buySelect;
     private Transform deleteIcon1, deleteIcon2, deleteSelect;
+    
+    private Transform searchInput;
 
     private Transform centerPanel;
     private Transform scrollViewContent;
@@ -51,11 +56,8 @@ public class ShopPanelManager : MonoBehaviour
     public GameObject ShopUIItemPrefab;
     public GameObject goldFloatTextPrefab;
 
-
     private GameObject selectedItemGO = null;
     private ItemData selectedItemData = null;
-    private List<ICardData> backItems = new List<ICardData>();
-    private List<ItemData> shopItems = new List<ItemData>();
 
     void Start()
     {
@@ -83,6 +85,8 @@ public class ShopPanelManager : MonoBehaviour
         deleteSelect = deleteBtn.Find("Select");
 
         closeBtn = root.Find("RightTop/Close");
+
+        searchInput = root.Find("BetweenTopAndCenter/SearchInput");
 
         centerPanel = root.Find("Center");
         scrollViewContent = centerPanel.Find("Scroll View/Viewport/Content");
@@ -119,6 +123,7 @@ public class ShopPanelManager : MonoBehaviour
         closeBtn.GetComponent<Button>().onClick.AddListener(OnClickClose);
         confirmBtn.GetComponent<Button>().onClick.AddListener(OnConfirm);
         backBtn.GetComponent<Button>().onClick.AddListener(OnBack);
+        searchInput.GetComponent<InputField>().onValueChanged.AddListener(OnSearchChanged);
     }
 
     private void OnClickBuy()
@@ -293,6 +298,11 @@ public class ShopPanelManager : MonoBehaviour
         confirmPopup.gameObject.SetActive(false);
 
         // 加载内容
+        ShowContentByMode();
+    }
+
+    private void ShowContentByMode()
+    {
         if (curMode == ShopMode.buy)
         {
             LoadShopItems();
@@ -314,12 +324,28 @@ public class ShopPanelManager : MonoBehaviour
         return JsonConvert.DeserializeObject<List<ItemData>>(jsonFile.text);
     }
 
+    private List<ItemData> shopItems = new List<ItemData>();
     private void LoadShopItems()
     {
+        foreach (Transform child in scrollViewContent)
+        {
+            Destroy(child.gameObject);
+        }
+        
         Debug.Log("加载商店中的商品...");
         // shopItems = LoadItemDataFromJson("ItemData/shop_items");
 
-        foreach (ItemData item in shopItems)
+        List<ItemData> cards = shopItems.ToList();
+
+        if (!string.IsNullOrEmpty(currentSearchKeyword))
+        {
+            cards = cards.Where( c => 
+                c.cardData.CardName.ToLower().Contains(currentSearchKeyword) ||
+                c.cardData.CardCategory.ToString().ToLower().Contains(currentSearchKeyword)
+            ).ToList();
+        }
+
+        foreach (ItemData item in cards)
         {
             GameObject itemGO = Instantiate(ShopUIItemPrefab, scrollViewContent);
 
@@ -357,12 +383,28 @@ public class ShopPanelManager : MonoBehaviour
         }
     }
 
+    private List<ICardData> backItems = new List<ICardData>();
     private void LoadBackItems()
     {
+        foreach (Transform child in scrollViewContent)
+        {
+            Destroy(child.gameObject);
+        }
+
         Debug.Log("加载背包中的物品...");
         backItems = cardManager.GetAllCards();
 
-        foreach (ICardData item in backItems)
+        List<ICardData> cards = backItems.ToList();
+
+        if (!string.IsNullOrEmpty(currentSearchKeyword))
+        {
+            cards = cards.Where( c => 
+                c.CardName.ToLower().Contains(currentSearchKeyword) ||
+                c.CardCategory.ToString().ToLower().Contains(currentSearchKeyword)
+            ).ToList();
+        }
+
+        foreach (ICardData item in cards)
         {
             GameObject itemGO = Instantiate(ShopUIItemPrefab, scrollViewContent);
 
@@ -451,6 +493,13 @@ public class ShopPanelManager : MonoBehaviour
             int cost = Random.Range(1, 5);
             shopItems.Add(new ItemData(gold, value, cost, type));
         }
+    }
+
+    private String currentSearchKeyword = "";
+    private void OnSearchChanged(string keyword)
+    {
+        currentSearchKeyword = keyword.Trim().ToLower();
+        ShowContentByMode();
     }
 
 }

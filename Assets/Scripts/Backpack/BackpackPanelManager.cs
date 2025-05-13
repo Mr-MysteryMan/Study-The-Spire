@@ -37,7 +37,7 @@ public class BackpackPanelManager : MonoBehaviour
         cardManager = CardManager.Instance;
         CacheUI();
         InitClick();
-        UpdateTopIcons();
+        RefreshUI();
     }
 
     private void CacheUI()
@@ -78,15 +78,20 @@ public class BackpackPanelManager : MonoBehaviour
     private void ShowCards()
     {
         curMode = BackpackMode.card;
-        UpdateTopIcons();
+        RefreshUI();
         ShowCardList();
     }
 
-    private void UpdateTopIcons()
+    private void RefreshUI()
     {
         cardIcon1.gameObject.SetActive(curMode != BackpackMode.card);
         cardIcon2.gameObject.SetActive(curMode == BackpackMode.card);
         cardSelect.gameObject.SetActive(curMode == BackpackMode.card);
+        searchInput.gameObject.SetActive(curMode != BackpackMode.normal);
+        foreach (Transform child in scrollViewContent)
+        {
+            Destroy(child.gameObject);
+        }
     }
 
     private void ShowCardList()
