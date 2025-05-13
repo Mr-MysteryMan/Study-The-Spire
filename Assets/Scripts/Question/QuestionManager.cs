@@ -12,8 +12,8 @@ public class QuestionManager : MonoBehaviour
     public static QuestionList questionList; // 问题列表
     QuestionData question;
     // -----------------------------回调方法-------------------------------
-    public delegate void onCorrect(); // 回答正确回调
-    public delegate void onWrong(); // 回答错误回调
+    public callBackFunction onCorrect = () => {Debug.Log("Correct answer!");}; // 回答正确回调
+    public callBackFunction onWrong = () => {Debug.Log("Wrong answer!");}; // 回答错误回调
 
     void Start()
     {
@@ -37,8 +37,10 @@ public class QuestionManager : MonoBehaviour
     }
 
     // 传入回调函数
-    public void init (onCorrect onCorrect,onWrong onWrong) {
+    public void init (callBackFunction onCorrect, callBackFunction onWrong) {
         // 保存回调函数
+        this.onCorrect = onCorrect;
+        this.onWrong = onWrong;
     }
 
     public void close() {
@@ -48,13 +50,11 @@ public class QuestionManager : MonoBehaviour
     private void OnAnswerSelected(int index)
     {
         // 检查答案是否正确
-        if (index == question.answer)
-        {
-            Debug.Log("Correct answer!");
+        if (index == question.answer) {
+            onCorrect(); // 调用正确答案的回调函数
         }
-        else
-        {
-            Debug.Log("Wrong answer!");
+        else {
+            onWrong(); // 调用错误答案的回调函数
         }
     }
 
@@ -94,6 +94,9 @@ public class QuestionManager : MonoBehaviour
         }
     }
 }
+
+public delegate void callBackFunction(); // 回调函数类型
+
 [System.Serializable]
 public class QuestionList {
     public QuestionData[] questions;
