@@ -40,6 +40,26 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 48c77c1dc6c948d4b92da9041ade546c
+    m_Address: Assets/Scenes/Combat.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4f292071524bc524eb556bb80ba4e66c
+    m_Address: Assets/Scenes/Backpack.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 821427e60df544646b681a6597878b83
+    m_Address: Assets/Scenes/Elite.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c346f568a97935846a6c9967a1603b71
+    m_Address: Assets/Scenes/Boss.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8112e8a6a14283c40bbea58a84045f04, type: 2}
   m_SchemaSet:

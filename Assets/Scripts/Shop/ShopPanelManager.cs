@@ -1,18 +1,21 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using Unity.VisualScripting;
+using Cards.CardDatas;
 
-public enum ShopMode {
+public enum ShopMode
+{
     normal,
     buy,
     delete,
 }
 
-public class ShopPanelManager : MonoBehaviour {
+public class ShopPanelManager : MonoBehaviour
+{
     private CardManager cardManager;
     private Transform topCenter;
     private Transform buyBtn;
@@ -38,17 +41,33 @@ public class ShopPanelManager : MonoBehaviour {
     private Transform confirmPopup;
     private Transform popupConfirmBtn;
     private Transform popupCancelBtn;
+    private Transform goldInsufficientPopup;
+    private Transform goldTextParent;
+    
+    public ObjectEventSO loadMapEvent;
+    
 
     public ShopMode curMode = ShopMode.normal;
+    public GameObject ShopUIItemPrefab;
+    public GameObject goldFloatTextPrefab;
 
-    void Start() {
+
+    private GameObject selectedItemGO = null;
+    private ItemData selectedItemData = null;
+    private List<ICardData> backItems = new List<ICardData>();
+    private List<ItemData> shopItems = new List<ItemData>();
+
+    void Start()
+    {
         cardManager = CardManager.Instance;
+        GenerateRandomShopItems();
         CacheUI();
         InitClick();
         RefreshUI();
     }
 
-    private void CacheUI() {
+    private void CacheUI()
+    {
         var root = transform;
 
         topCenter = root.Find("TopCenter");
@@ -71,6 +90,8 @@ public class ShopPanelManager : MonoBehaviour {
 
         bottomPanel = root.Find("Bottom");
         bottomMenus = bottomPanel.Find("BottomMenus");
+        bottomMenus.Find("ShowGold/Text").GetComponent<Text>().text = $"Gold {cardManager.Gold}";
+        goldTextParent = bottomMenus.Find("ShowGold");
         // detailBtn = bottomMenus.Find("DetailBtn");
 
         deletePanel = bottomPanel.Find("DeletePanel");
@@ -82,38 +103,47 @@ public class ShopPanelManager : MonoBehaviour {
         popupConfirmBtn = confirmPopup.Find("ConfirmBtn");
         popupCancelBtn = confirmPopup.Find("CancelBtn");
 
-        // 默认隐藏Bottom,Detail,ConfirmPopup面板
-        bottomPanel.gameObject.SetActive(false);
+        goldInsufficientPopup = root.Find("GoldInsufficientPopup");
+
+        // 默认隐藏deletePanel,Detail,ConfirmPopup,GoldInsufficientPopup面板
+        deletePanel.gameObject.SetActive(false);
         detailPanel.gameObject.SetActive(false);
         confirmPopup.gameObject.SetActive(false);
+        goldInsufficientPopup.gameObject.SetActive(false);
     }
 
-    private void InitClick() {
+    private void InitClick()
+    {
         buyBtn.GetComponent<Button>().onClick.AddListener(OnClickBuy);
         deleteBtn.GetComponent<Button>().onClick.AddListener(OnClickDelete);
         closeBtn.GetComponent<Button>().onClick.AddListener(OnClickClose);
         confirmBtn.GetComponent<Button>().onClick.AddListener(OnConfirm);
-        // detailBtn.GetComponent<Button>().onClick.AddListener(OnDetail);
         backBtn.GetComponent<Button>().onClick.AddListener(OnBack);
     }
 
-    private void OnClickBuy() {
+    private void OnClickBuy()
+    {
         curMode = ShopMode.buy;
         RefreshUI();
     }
 
-    private void OnClickDelete() {
+    private void OnClickDelete()
+    {
         curMode = ShopMode.delete;
         RefreshUI();
     }
 
-    private void OnClickClose() {
-        gameObject.SetActive(false);
+    private void OnClickClose()
+    {
+//        gameObject.SetActive(false);
         curMode = ShopMode.normal;
+        loadMapEvent.RaiseEvent(null, this);
     }
 
-    private void OnConfirm() {
-        if (selectedItemData == null) {
+    private void OnConfirm()
+    {
+        if (selectedItemData == null)
+        {
             Debug.LogWarning("未选中物品");
             return;
         }
@@ -121,66 +151,100 @@ public class ShopPanelManager : MonoBehaviour {
         confirmPopup.gameObject.SetActive(true);
         Text popupContent = confirmPopup.Find("Content").GetComponent<Text>();
 
-        if (curMode == ShopMode.buy) {
+        if (curMode == ShopMode.buy)
+        {
             popupContent.text = $"是否花费 {selectedItemData.gold} 金币购买选中卡牌？";
             popupConfirmBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             popupConfirmBtn.GetComponent<Button>().onClick.AddListener(DoBuyItem);
-        } else if (curMode == ShopMode.delete) {
+        }
+        else if (curMode == ShopMode.delete)
+        {
             popupContent.text = $"是否花费 100 金币移除选中卡牌？";
             popupConfirmBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             popupConfirmBtn.GetComponent<Button>().onClick.AddListener(DoDeleteItem);
         }
 
         popupCancelBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-        popupCancelBtn.GetComponent<Button>().onClick.AddListener(() => {
+        popupCancelBtn.GetComponent<Button>().onClick.AddListener(() =>
+        {
             confirmPopup.gameObject.SetActive(false);
         });
     }
 
-    private void DoBuyItem() {
-        cardManager.SpendGold(selectedItemData.gold);
-        cardManager.AddCard(selectedItemData);
-
-        // 从 shopItems 中移除该商品
-        shopItems.Remove(selectedItemData);
-        // SaveItemDataToJson("ItemData/shop_items", shopItems);
-
-        Destroy(selectedItemGO);
-        selectedItemGO = null;
-        selectedItemData = null;
-
-        confirmPopup.gameObject.SetActive(false);
-        detailPanel.gameObject.SetActive(false);
+    // 自动关闭弹窗的协程
+    private IEnumerator AutoHidePopup(Transform popup, float delay) {
+        yield return new WaitForSeconds(delay);
+        popup.gameObject.SetActive(false);
     }
 
-    private void DoDeleteItem() {
-        // 与CardManager交互
-        const int deleteCost = 100;
-        if (cardManager.SpendGold(deleteCost)) {
-            cardManager.RemoveCard(selectedItemData.cardId);
+    private void UpdateGoldDisplayWithEffect(int amount) {
+        // 更新显示文本
+        bottomMenus.Find("ShowGold/Text").GetComponent<Text>().text = $"Gold {cardManager.Gold}";
+
+        // 创建浮动文字动画
+        if (goldFloatTextPrefab != null && goldTextParent != null) {
+            GameObject go = Instantiate(goldFloatTextPrefab, goldTextParent);
+            go.transform.localPosition = Vector3.zero; // 居中显示
+            go.GetComponent<GoldFloatText>().SetAmount(amount);
+        }
+    }
+
+    private void DoBuyItem() {
+        if (cardManager.SpendGold(selectedItemData.gold)) {
+            UpdateGoldDisplayWithEffect(selectedItemData.gold);
+            cardManager.AddCard(selectedItemData.cardData);
+
+            shopItems.Remove(selectedItemData);
+            // SaveItemDataToJson("ItemData/shop_items", shopItems);
+
             Destroy(selectedItemGO);
             selectedItemGO = null;
             selectedItemData = null;
+        } else {
+            goldInsufficientPopup.gameObject.SetActive(true);
+            StartCoroutine(AutoHidePopup(goldInsufficientPopup, 1f)); // 1秒后自动关闭
         }
 
         confirmPopup.gameObject.SetActive(false);
         detailPanel.gameObject.SetActive(false);
     }
 
-    private void SaveItemDataToJson(string path, List<ItemData> items) {
+    private void DoDeleteItem() {
+        // TODO 设置删除金币
+        const int deleteCost = 100;
+        if (cardManager.SpendGold(deleteCost)) {
+            UpdateGoldDisplayWithEffect(deleteCost);
+            cardManager.RemoveCard(selectedItemData.cardData);
+            Destroy(selectedItemGO);
+            selectedItemGO = null;
+            selectedItemData = null;
+        } else {
+            goldInsufficientPopup.gameObject.SetActive(true);
+            StartCoroutine(AutoHidePopup(goldInsufficientPopup, 1f));
+        }
+
+        confirmPopup.gameObject.SetActive(false);
+        detailPanel.gameObject.SetActive(false);
+    }
+
+    private void SaveItemDataToJson(string path, List<ItemData> items)
+    {
         string json = JsonConvert.SerializeObject(items, Formatting.Indented);
         File.WriteAllText(Path.Combine(Application.dataPath, "Resources", path + ".json"), json);
     }
 
 
-    private void OnBack() {
+    private void OnBack()
+    {
         curMode = ShopMode.normal;
         RefreshUI();
     }
 
-    private void RefreshUI() {
+    private void RefreshUI()
+    {
 
-        if (curMode == ShopMode.normal) {
+        if (curMode == ShopMode.normal)
+        {
             buyIcon1.gameObject.SetActive(true);
             buyIcon2.gameObject.SetActive(false);
             buySelect.gameObject.SetActive(false);
@@ -189,9 +253,12 @@ public class ShopPanelManager : MonoBehaviour {
             deleteIcon2.gameObject.SetActive(false);
             deleteSelect.gameObject.SetActive(false);
 
-            bottomPanel.gameObject.SetActive(false);
+            deletePanel.gameObject.SetActive(false);
+            bottomMenus.gameObject.SetActive(true);
 
-        } else if (curMode == ShopMode.buy) {
+        }
+        else if (curMode == ShopMode.buy)
+        {
             buyIcon1.gameObject.SetActive(false);
             buyIcon2.gameObject.SetActive(true);
             buySelect.gameObject.SetActive(true);
@@ -200,7 +267,8 @@ public class ShopPanelManager : MonoBehaviour {
             deleteIcon2.gameObject.SetActive(false);
             deleteSelect.gameObject.SetActive(false);
 
-            bottomPanel.gameObject.SetActive(true);
+            deletePanel.gameObject.SetActive(true);
+            bottomMenus.gameObject.SetActive(true);
         } else if (curMode == ShopMode.delete) {
             buyIcon1.gameObject.SetActive(true);
             buyIcon2.gameObject.SetActive(false);
@@ -210,11 +278,13 @@ public class ShopPanelManager : MonoBehaviour {
             deleteIcon2.gameObject.SetActive(true);
             deleteSelect.gameObject.SetActive(true);
 
-            bottomPanel.gameObject.SetActive(true);
+            deletePanel.gameObject.SetActive(true);
+            bottomMenus.gameObject.SetActive(true);
         }
 
         // 清空 Scroll View 内容
-        foreach (Transform child in scrollViewContent) {
+        foreach (Transform child in scrollViewContent)
+        {
             Destroy(child.gameObject);
         }
         selectedItemData = null;
@@ -223,46 +293,46 @@ public class ShopPanelManager : MonoBehaviour {
         confirmPopup.gameObject.SetActive(false);
 
         // 加载内容
-        if (curMode == ShopMode.buy) {
+        if (curMode == ShopMode.buy)
+        {
             LoadShopItems();
-        } else if (curMode == ShopMode.delete) {
+        }
+        else if (curMode == ShopMode.delete)
+        {
             LoadBackItems();
         }
     }
 
-    public GameObject ShopUIItemPrefab;
-
-    private List<ItemData> shopItems = new List<ItemData>();
-
     private List<ItemData> LoadItemDataFromJson(string resourcePath) {
         TextAsset jsonFile = Resources.Load<TextAsset>(resourcePath);
-        if (jsonFile == null) {
+        if (jsonFile == null)
+        {
             Debug.LogError($"找不到资源路径：Resources/{resourcePath}.json");
             return new List<ItemData>();
         }
 
         return JsonConvert.DeserializeObject<List<ItemData>>(jsonFile.text);
     }
-    
-    private GameObject selectedItemGO = null;
-    private ItemData selectedItemData = null;
 
-    private void LoadShopItems() {
+    private void LoadShopItems()
+    {
         Debug.Log("加载商店中的商品...");
         // shopItems = LoadItemDataFromJson("ItemData/shop_items");
 
-        foreach (ItemData item in shopItems) {
+        foreach (ItemData item in shopItems)
+        {
             GameObject itemGO = Instantiate(ShopUIItemPrefab, scrollViewContent);
 
             // 设置图标
             Image icon = itemGO.transform.Find("Top/Icon").GetComponent<Image>();
-            Sprite sprite = CardUI.GetCardBackground(item.cardType);
+            Sprite sprite = item.cardData.Sprite;
             if (sprite) icon.sprite = sprite;
 
             // 设置名称
             Text nameText = itemGO.transform.Find("Bottom/NameText").GetComponent<Text>();
-            if (curMode != ShopMode.buy) {
-                nameText.text = item.cardValue.ToString();
+            if (curMode != ShopMode.buy)
+            {
+                nameText.text = item.cardData.CardName;
             }
             // Debug.Log("加载了：" + item.name);
 
@@ -277,31 +347,35 @@ public class ShopPanelManager : MonoBehaviour {
 
             // 设置选中按钮
             Button btn = itemGO.GetComponent<Button>();
-            if (btn != null) {
-                btn.onClick.AddListener(() => {
+            if (btn != null)
+            {
+                btn.onClick.AddListener(() =>
+                {
                     OnItemClicked(itemGO, item);
                 });
             }
         }
     }
 
-    private List<CardData> backItems = new List<CardData>();
-    private void LoadBackItems() {
+    private void LoadBackItems()
+    {
         Debug.Log("加载背包中的物品...");
         backItems = cardManager.GetAllCards();
 
-        foreach (CardData item in backItems) {
+        foreach (ICardData item in backItems)
+        {
             GameObject itemGO = Instantiate(ShopUIItemPrefab, scrollViewContent);
 
             // 设置图标
             Image icon = itemGO.transform.Find("Top/Icon").GetComponent<Image>();
-            Sprite sprite = CardUI.GetCardBackground(item.cardType);
+            Sprite sprite = item.Sprite;
             if (sprite) icon.sprite = sprite;
 
             // 设置名称
             Text nameText = itemGO.transform.Find("Bottom/NameText").GetComponent<Text>();
-            if (curMode != ShopMode.buy) {
-                nameText.text = item.cardValue.ToString();
+            if (curMode != ShopMode.buy)
+            {
+                nameText.text = item.CardName;
             }
             // Debug.Log("加载了：" + item.name);
 
@@ -314,17 +388,21 @@ public class ShopPanelManager : MonoBehaviour {
 
             // 设置选中按钮
             Button btn = itemGO.GetComponent<Button>();
-            if (btn != null) {
-                btn.onClick.AddListener(() => {
-                    OnItemClicked(itemGO, new ItemData(item.cardType, item.cardValue, 0));
+            if (btn != null)
+            {
+                btn.onClick.AddListener(() =>
+                {
+                    OnItemClicked(itemGO, new ItemData(0, item));
                 });
             }
         }
     }
 
 
-    private void OnItemClicked(GameObject itemGO, ItemData itemData) {
-        if (selectedItemGO != null) {
+    private void OnItemClicked(GameObject itemGO, ItemData itemData)
+    {
+        if (selectedItemGO != null)
+        {
             selectedItemGO.transform.Find("Select").gameObject.SetActive(false);
         }
 
@@ -337,24 +415,42 @@ public class ShopPanelManager : MonoBehaviour {
         ShowItemDetail(itemData);
 
         Text text = bottomPanel.Find("DeletePanel/ConfirmBtn/Text").GetComponent<Text>();
-        if (curMode == ShopMode.buy) {
+        if (curMode == ShopMode.buy)
+        {
             text.text = itemData.gold.ToString();
-        } else if (curMode == ShopMode.delete) {
+        }
+        else if (curMode == ShopMode.delete)
+        {
             text.text = "100";
         }
     }
 
-    private void ShowItemDetail(ItemData item) {
+    private void ShowItemDetail(ItemData item)
+    {
         detailPanel.gameObject.SetActive(true);
 
         Text nameText = detailPanel.Find("Top/Title").GetComponent<Text>();
         Image iconImage = detailPanel.Find("Center/Icon").GetComponent<Image>();
         Text descText = detailPanel.Find("Bottom/Description").GetComponent<Text>();
 
-        // nameText.text = item.name;
-        // descText.text = item.description;
+        nameText.text = item.cardData.CardName;
+        descText.text = item.cardData.Desc;
 
-        Sprite icon = CardUI.GetCardBackground(item.cardType);
+        Sprite icon = item.cardData.Sprite;
         if (icon) iconImage.sprite = icon;
     }
+
+    private void GenerateRandomShopItems(int count = 5)
+    {
+        shopItems.Clear();
+        for (int i = 0; i < count; i++)
+        {
+            CardType type = (CardType)Random.Range(0, 3); // Attack, Defence, Heal
+            int value = Random.Range(1, 10);
+            int gold = Random.Range(50, 200);
+            int cost = Random.Range(1, 5);
+            shopItems.Add(new ItemData(gold, value, cost, type));
+        }
+    }
+
 }

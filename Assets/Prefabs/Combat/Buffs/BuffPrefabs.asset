@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acc5bdefab80daf4bb0bfebdd3e4be62, type: 3}
+  m_Name: BuffPrefabs
+  m_EditorClassIdentifier: 
+  DefaultPrefab: {fileID: 2187094996593306050, guid: 2e7796a1e68bc0a4784cffcb9876f8f8, type: 3}
+  DefaultBuffPrefab: {fileID: 2187094996593306050, guid: 2e7796a1e68bc0a4784cffcb9876f8f8, type: 3}
+  DefaultDebuffPrefab: {fileID: 4734952451108878410, guid: 3f113154e07e1884cbecc7c634b05bab, type: 3}
+  BuffPrefabMapEntries: []

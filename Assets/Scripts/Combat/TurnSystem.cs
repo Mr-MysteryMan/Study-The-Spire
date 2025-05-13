@@ -47,7 +47,7 @@ namespace Combat
             StartCombat();
         }
 
-        private void StartCombat()
+        public void StartCombat()
         {
             // 开始战斗
             Debug.Log("战斗开始");
@@ -57,7 +57,6 @@ namespace Combat
             {
                 monster.OnCombatStart(); // 敌人角色开始战斗
             }
-
             StartPlayerTurn();
         }
 

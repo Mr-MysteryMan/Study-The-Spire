@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 995c17a6e40edd440a0bb07bb872a685, type: 3}
+  m_Name: EliteState
+  m_EditorClassIdentifier: 
+  effectSOList:
+  - effect: {fileID: 11400000, guid: 7ceea4fcb5316264fa4f93e1435026c3, type: 2}
+    weight: 1
+  - effect: {fileID: 11400000, guid: fa61666b0476ef242982988aa54bacfd, type: 2}
+    weight: 1
+  - effect: {fileID: 11400000, guid: 3c958600821bf2847b2d3225f24e9d2a, type: 2}
+    weight: 1
