@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using System.Linq;
-using System;
 
 public enum BackpackMode
 {
@@ -12,31 +10,29 @@ public enum BackpackMode
 
 public class BackpackPanelManager : MonoBehaviour
 {
-    private CardManager cardManager;
-    private Transform topCenter;
-    private Transform cardBtn;
-    private Transform cardIcon1, cardIcon2, cardSelect;
-    private Transform closeBtn;
-    private Transform searchInput;
-    private Transform centerPanel;
-    private Transform scrollViewContent;
-    private Transform detailPanel;
-    private Transform bottomPanel;
-    private Transform bottomMenus;
-    private Transform detailBtn;
-    private Transform goldAmount;
-    public ObjectEventSO loadMapEvent;
     public GameObject BackpackUIItem;
-    public BackpackMode curMode = BackpackMode.normal;
+    public GameObject DetailPanel;
+    public CardSearchBar cardSearchBar;
+    public ObjectEventSO loadMapEvent;
 
-    private GameObject selectedCardGO = null;
-    private ICardData selectedCard = null;
+    private CardManager cardManager;
+    private Transform cardBtn, cardIcon1, cardIcon2, cardSelect;
+    private Transform closeBtn, scrollViewContent;
+    private Transform detailBtn, goldAmount;
+    private GameObject detailPanel;
+    private Text detailCostText, detailNameText, detailDescText;
+    private Image detailIconImage;
+
+    private GameObject selectedCardGO;
+    private ICardData selectedCard;
+
+    public BackpackMode curMode = BackpackMode.normal;
 
     void Start()
     {
         cardManager = CardManager.Instance;
         CacheUI();
-        InitClick();
+        InitEvents();
         RefreshUI();
     }
 
@@ -44,42 +40,41 @@ public class BackpackPanelManager : MonoBehaviour
     {
         var root = transform;
 
-        topCenter = root.Find("TopCenter");
-        cardBtn = topCenter.Find("Menu/Card");
+        cardBtn = root.Find("TopCenter/Menu/Card");
         cardIcon1 = cardBtn.Find("icon1");
         cardIcon2 = cardBtn.Find("icon2");
         cardSelect = cardBtn.Find("Select");
 
         closeBtn = root.Find("RightTop/Close");
-        
-        searchInput = root.Find("BetweenTopAndCenter/SearchInput");
 
-        centerPanel = root.Find("Center");
-        scrollViewContent = centerPanel.Find("Scroll View/Viewport/Content");
-        detailPanel = centerPanel.Find("DetailPanel");
+        scrollViewContent = root.Find("Center/Scroll View/Viewport/Content");
 
-        bottomPanel = root.Find("Bottom");
-        bottomMenus = bottomPanel.Find("BottomMenus");
-        detailBtn = bottomMenus.Find("DetailBtn");
-        goldAmount = bottomMenus.Find("Gold/amount");
+        detailPanel = Instantiate(DetailPanel, root.Find("Center"));
+        detailPanel.SetActive(false);
 
-        detailPanel.gameObject.SetActive(false);
+        detailCostText = detailPanel.transform.Find("Center/Cost/Text").GetComponent<Text>();
+        detailNameText = detailPanel.transform.Find("Top/Title").GetComponent<Text>();
+        detailIconImage = detailPanel.transform.Find("Center/Icon").GetComponent<Image>();
+        detailDescText = detailPanel.transform.Find("Bottom/Description").GetComponent<Text>();
+
+        detailBtn = root.Find("Bottom/BottomMenus/DetailBtn");
+        goldAmount = root.Find("Bottom/BottomMenus/Gold/amount");
+        goldAmount.GetComponent<Text>().text = $"{cardManager.Gold}";
     }
 
-    private void InitClick()
+    private void InitEvents()
     {
-        cardBtn.GetComponent<Button>().onClick.AddListener(() => ShowCards());
+        cardBtn.GetComponent<Button>().onClick.AddListener(ShowCards);
         closeBtn.GetComponent<Button>().onClick.AddListener(() => loadMapEvent.RaiseEvent(null, this));
-        detailBtn.GetComponent<Button>().onClick.AddListener(OnDetail);
-        goldAmount.GetComponent<Text>().text = $"{cardManager.Gold}";
-        searchInput.GetComponent<InputField>().onValueChanged.AddListener(OnSearchChanged);
+        detailBtn.GetComponent<Button>().onClick.AddListener(ShowCardDetail);
+        cardSearchBar.OnSearchKeywordChanged += OnSearchChanged;
     }
 
     private void ShowCards()
     {
         curMode = BackpackMode.card;
         RefreshUI();
-        ShowCardList();
+        DisplayCardList(cardManager.GetAllCards());
     }
 
     private void RefreshUI()
@@ -87,45 +82,27 @@ public class BackpackPanelManager : MonoBehaviour
         cardIcon1.gameObject.SetActive(curMode != BackpackMode.card);
         cardIcon2.gameObject.SetActive(curMode == BackpackMode.card);
         cardSelect.gameObject.SetActive(curMode == BackpackMode.card);
-        searchInput.gameObject.SetActive(curMode != BackpackMode.normal);
-        foreach (Transform child in scrollViewContent)
-        {
+        cardSearchBar.gameObject.SetActive(curMode == BackpackMode.normal ? false : true);
+
+        foreach (Transform child in scrollViewContent){
             Destroy(child.gameObject);
         }
     }
 
-    private void ShowCardList()
+    private void DisplayCardList(List<ICardData> cards)
     {
-        foreach (Transform child in scrollViewContent)
-        {
-            Destroy(child.gameObject);
-        }
-
-        List<ICardData> cards = cardManager.GetAllCards().ToList();
-
-        // 根据搜索关键字过滤
-        if (!string.IsNullOrEmpty(currentSearchKeyword))
-        {
-            cards = cards.Where( c => 
-                c.CardName.ToLower().Contains(currentSearchKeyword) ||
-                c.CardCategory.ToString().ToLower().Contains(currentSearchKeyword)
-            ).ToList();
-        }
+        RefreshUI();
 
         foreach (var card in cards)
         {
-            GameObject itemGO = Instantiate(BackpackUIItem, scrollViewContent);
+            var itemGO = Instantiate(BackpackUIItem, scrollViewContent);
 
-            var icon = itemGO.transform.Find("Top/Icon").GetComponent<Image>();
-            icon.sprite = card.Sprite;
-
-            var text = itemGO.transform.Find("Bottom/Text").GetComponent<Text>();
-            text.text = card.CardName;
-
+            itemGO.transform.Find("Top/Icon").GetComponent<Image>().sprite = card.Sprite;
+            itemGO.transform.Find("Bottom/Text").GetComponent<Text>().text = card.CardName;
+            itemGO.transform.Find("Top/Cost/Text").GetComponent<Text>().text = card.Cost.ToString();
             itemGO.transform.Find("Select").gameObject.SetActive(false);
 
-            var btn = itemGO.GetComponent<Button>();
-            btn.onClick.AddListener(() => OnCardClicked(itemGO, card));
+            itemGO.GetComponent<Button>().onClick.AddListener(() => OnCardClicked(itemGO, card));
         }
 
         Debug.Log($"展示卡牌，共 {cards.Count} 张");
@@ -133,8 +110,7 @@ public class BackpackPanelManager : MonoBehaviour
 
     private void OnCardClicked(GameObject itemGO, ICardData card)
     {
-        if (selectedCardGO != null)
-        {
+        if (selectedCardGO != null){
             selectedCardGO.transform.Find("Select").gameObject.SetActive(false);
         }
 
@@ -143,25 +119,21 @@ public class BackpackPanelManager : MonoBehaviour
         selectedCardGO.transform.Find("Select").gameObject.SetActive(true);
     }
 
-    private void OnDetail()
+    private void ShowCardDetail()
     {
         if (selectedCard == null) return;
 
-        detailPanel.gameObject.SetActive(true);
+        detailCostText.text = selectedCard.Cost.ToString();
+        detailNameText.text = selectedCard.CardName;
+        detailIconImage.sprite = selectedCard.Sprite;
+        detailDescText.text = selectedCard.Desc;
 
-        var nameText = detailPanel.Find("Top/Title").GetComponent<Text>();
-        var iconImage = detailPanel.Find("Center/Icon").GetComponent<Image>();
-        var descText = detailPanel.Find("Bottom/Description").GetComponent<Text>();
-
-        nameText.text = selectedCard.CardName;
-        iconImage.sprite = selectedCard.Sprite;
-        descText.text = selectedCard.Desc;
+        detailPanel.SetActive(true);
     }
 
-    private String currentSearchKeyword = "";
     private void OnSearchChanged(string keyword)
     {
-        currentSearchKeyword = keyword.Trim().ToLower();
-        ShowCardList();
+        var filtered = CardFilterUtils.FilterCards(keyword, cardManager.GetAllCards());
+        DisplayCardList(filtered);
     }
 }
