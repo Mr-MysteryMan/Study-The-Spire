@@ -31,6 +31,12 @@ public class CardManager : MonoBehaviour
 
         allCards = LocalCards.GetCards();
     }
+    public void AddHealth(int amount)
+    {
+        health += Mathf.Max(0, amount);
+        Debug.Log($"获得血量：+{amount}，当前血量：{health}");
+    }
+
 
     // 设置金币数
     public void SetGold(int amount)
