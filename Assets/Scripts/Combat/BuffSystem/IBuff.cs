@@ -10,6 +10,7 @@ namespace Combat.Buffs
 
     public interface IBuff
     {
+        
         string Name { get; }
         string Description { get; }
 
@@ -53,6 +54,26 @@ namespace Combat.Buffs
         /// <param name="buff"></param>
         /// <param name="count"></param>
         void OnUpdate(IBuff buff, int count);
+
+        /*TODO 所有实现 IBuff 接口的类都需要实现新添加的 GetMultiplier 和 SetMultiplier 方法。*/
+
+
+        /// <summary>
+        /// 获取当前Buff的乘数。
+        /// 这个乘数可用于在计算伤害、治疗量或其他战斗相关数值时，对基础数值进行缩放。
+        /// 例如，一个攻击增强的Buff可能会返回一个大于1的乘数，以增加角色的攻击力；
+        /// 而一个防御削弱的Debuff可能会返回一个小于1的乘数，以减少角色的防御力。
+        /// </summary>
+        /// <returns>返回当前Buff对应的乘数，该值为浮点数。</returns>
+        float GetMultiplier();
+
+        /// <summary>
+        /// 设置当前Buff的乘数。
+        /// 此乘数可在计算伤害、治疗量或其他战斗相关数值时，对基础数值进行缩放。
+        /// 例如，可通过设置大于1的乘数来增强攻击Buff的效果，或设置小于1的乘数来削弱防御Debuff的效果。
+        /// </summary>
+        /// <param name="multiplier">要设置的乘数，使用浮点数表示。</param>
+        void SetMultiplier(float multiplier);
     }
 
     public class BuffConstants
@@ -60,3 +81,5 @@ namespace Combat.Buffs
         public static readonly string ReactiveVariableName = "BuffCount";
     }
 }
+
+

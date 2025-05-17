@@ -19,6 +19,8 @@ namespace Combat.Buffs.TurnBuff
 
         protected CombatSystem _combatSystem;
 
+        private float _multiplier = 1f; // 初始倍率为1
+
         public bool IsAvaliable(int count)
         {
             return count > 0;
@@ -57,6 +59,18 @@ namespace Combat.Buffs.TurnBuff
         public void OnUpdate(IBuff buff, int count)
         {
             OnUpdate(count);
+            //添加buff更新逻辑
+        }
+
+
+        public float GetMultiplier()
+        {
+            return multiplier;
+        }
+
+        public void SetMultiplier(float multiplier)
+        {
+            this.multiplier = multiplier;
         }
 
         protected abstract void OnTurnStart(TurnStartEvent e);

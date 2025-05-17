@@ -69,10 +69,12 @@ namespace Combat
         private TriggerLib triggerLib;
 
         [SerializeField] private EnemyLib enemyLibSO; // 怪物库
-        
+
         public EnemyType enemyType;
 
         private float enemyMargin = 120; // 怪物的间隔
+
+        private QuizSystem quizSystem; // 答题系统
 
         void Awake()
         {
@@ -205,7 +207,8 @@ namespace Combat
             }
         }
 
-        private Vector3 GetMonsterPosition(int index, int total, Vector3 center) {
+        private Vector3 GetMonsterPosition(int index, int total, Vector3 center)
+        {
             var leftStartPos = center - new Vector3(enemyMargin * (total - 1) / 2, 0, 0);
             return leftStartPos + new Vector3(enemyMargin * index, 0, 0);
         }
@@ -439,5 +442,32 @@ namespace Combat
             }
             isProcessing = false;
         }
+        
+        // 处理答题结果
+    private void HandleAnswerResult(bool isCorrect)
+    {
+        // 获取玩家的某个Buff（例如Strength）并修改倍率
+        IBuff strengthBuff = player.GetBuff<Strength>();
+        if (strengthBuff != null)
+        {
+            if (isCorrect)
+            {
+                strengthBuff.SetMultiplier(1.5f); // 答题正确：伤害倍率提高50%
+                ShowMessage("答题成功,伤害倍率提升至150%");
+            }
+            else
+            {
+                strengthBuff.SetMultiplier(0.7f); // 答题错误：伤害倍率降低30%
+                ShowMessage("答题失败,伤害倍率降低至70%");
+            }
+        }
+    }
+
+        // 显示战斗消息
+        private void ShowMessage(string message)
+        {
+            // 在UI上显示消息
+        /*TODO*/
+    }
     }
 }

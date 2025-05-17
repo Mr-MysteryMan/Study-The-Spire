@@ -22,6 +22,8 @@ namespace Combat.Buffs.PermanentBuff
 
         protected CombatSystem _combatSystem;
 
+        private float _multiplier = 1f; // 初始倍率为1
+
         public bool IsAvaliable(int count)
         {
             return count != 0;
@@ -43,6 +45,7 @@ namespace Combat.Buffs.PermanentBuff
         {
             if (count == 0) return;
             this.Count = count + this.Count;
+            //处理buff更新逻辑
         }
 
 
@@ -61,6 +64,17 @@ namespace Combat.Buffs.PermanentBuff
         {
             return Count != 0;
         }
+
+        public float GetMultiplier()
+        {
+            return multiplier;
+        }
+
+        public void SetMultiplier(float multiplier)
+        {
+            this.multiplier = multiplier;
+        }
+        
     }
 
     public class StrengthProcessor : IProcessor<AttackCommand>
