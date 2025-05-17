@@ -10,9 +10,11 @@ public class SceneLoadManager : MonoBehaviour
 
     public AssetReference map;
     public AssetReference menu;
+    public AssetReference backpack;
 
     private Vector2Int currentRoomVector;
     private Room currentRoom;
+    private Room currentRoomSelect111;
     public ObjectEventSO updateRoomEvent;
     public ObjectEventSO afterRoomLoadedEvent;
 
@@ -101,5 +103,23 @@ public class SceneLoadManager : MonoBehaviour
         currentScene = menu;
         await LoadSceneTask();
     }
+    
+    public async void LoadBackpack()
+    {
+        if (Camera.main == null || Camera.main != mainCamera)
+        {
+            if (Camera.main)
+            {
+                Camera.main.gameObject.SetActive(false);
+            }
+            mainCamera.gameObject.SetActive(true);
+        }
+        if (currentScene != null)
+            await UnloadSceneTask();
+
+        currentScene = backpack;
+        await LoadSceneTask();
+    }
+
 
 }

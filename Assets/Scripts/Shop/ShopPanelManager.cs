@@ -44,6 +44,8 @@ public class ShopPanelManager : MonoBehaviour
     private Transform goldInsufficientPopup;
     private Transform goldTextParent;
     
+    public ObjectEventSO loadMapEvent;
+    
 
     public ShopMode curMode = ShopMode.normal;
     public GameObject ShopUIItemPrefab;
@@ -116,7 +118,6 @@ public class ShopPanelManager : MonoBehaviour
         deleteBtn.GetComponent<Button>().onClick.AddListener(OnClickDelete);
         closeBtn.GetComponent<Button>().onClick.AddListener(OnClickClose);
         confirmBtn.GetComponent<Button>().onClick.AddListener(OnConfirm);
-        // detailBtn.GetComponent<Button>().onClick.AddListener(OnDetail);
         backBtn.GetComponent<Button>().onClick.AddListener(OnBack);
     }
 
@@ -134,8 +135,9 @@ public class ShopPanelManager : MonoBehaviour
 
     private void OnClickClose()
     {
-        gameObject.SetActive(false);
+//        gameObject.SetActive(false);
         curMode = ShopMode.normal;
+        loadMapEvent.RaiseEvent(null, this);
     }
 
     private void OnConfirm()
