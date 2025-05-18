@@ -42,6 +42,8 @@ public interface ICardData
 
     void Discard(); // 弃牌方法
     void Reset(); // 重置方法
+
+    void Modify(float factor); // 修改方法
 }
 
 public abstract class CardData : ICardData
@@ -77,16 +79,16 @@ public abstract class CardData : ICardData
     {
         isDiscarded = false; // 重置为非弃牌
     }
+
+    public abstract void Modify(float factor); // 修改方法
 }
 
-public class BasicCardData : CardData
+public abstract class BasicCardData : CardData
 {
-    public BasicCardData(string name, string desc, int cardCost, CardCategory cardCategory, CardEffectTarget cardEffectTarget, Sprite sprite, IEffect effect)
+    public BasicCardData(string name, int cardCost, CardCategory cardCategory, CardEffectTarget cardEffectTarget, Sprite sprite, IEffect effect)
     {
         this.cardCost = cardCost; // 设置卡牌费用
-        this.effect = effect;
         this.cardName = name; // 设置卡牌名称
-        this.cardDesc = desc; // 设置卡牌描述
         this.cardCategory = cardCategory; // 设置卡牌分类
         this.cardEffectTarget = cardEffectTarget; // 设置卡牌效果目标
         this.sprite = sprite; // 设置卡牌图片
@@ -94,7 +96,6 @@ public class BasicCardData : CardData
 
     private int cardCost; // 卡牌费用
     private string cardName; // 卡牌名称
-    private string cardDesc; // 卡牌描述
     private IEffect effect; // 卡牌效果
 
     private CardCategory cardCategory; // 卡牌分类
@@ -105,12 +106,9 @@ public class BasicCardData : CardData
     public override CardCategory CardCategory => cardCategory; // 卡牌分类属性
     public override CardEffectTarget CardEffectTarget => cardEffectTarget; // 卡牌效果目标属性
     public override Sprite Sprite => sprite; // 卡牌图片属性
-    public override string Desc => cardDesc; // 卡牌描述属性
-
     public override int Cost => cardCost; // 卡牌费用属性
-
-    public override IEffect Effect => effect;
     public override string CardName => cardName; // 卡牌名称属性
+    public override IEffect Effect => effect; // 卡牌效果属性
 }
 
 public static class CardDataExtensions

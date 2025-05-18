@@ -19,6 +19,7 @@ namespace Cards.CardDatas
             this.cardCost = cardCost; // 设置卡牌费用
         }
 
+        [Modifier.ModifyAttribute.Basic]
         private int cardValue; // 卡牌数值
         private CardType cardType; // 卡牌类型
         private int cardCost; // 卡牌费用
@@ -97,6 +98,11 @@ namespace Cards.CardDatas
                 CardType.Heal => CardCategory.Status,// 治疗效果分类
                 _ => throw new System.ArgumentOutOfRangeException(nameof(cardType), cardType, null) // 异常处理
             };
+        }
+
+        public override void Modify(float factor)
+        {
+            Modifier.BasicCardModifier.Modify(this, factor); // 修改卡牌属性
         }
     }
 }
