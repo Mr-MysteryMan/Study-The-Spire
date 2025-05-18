@@ -1,109 +1,116 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using System.Linq;
+
+public enum BackpackMode
+{
+    normal,
+    card,
+}
 
 public class BackpackPanelManager : MonoBehaviour
 {
-    private CardManager cardManager;
-    private Transform attackBtn, defenceBtn, healBtn, closeBtn, detailBtn;
-    private Transform attackSelect, defenceSelect, healSelect;
-    private Transform scrollViewContent, detailPanel;
-    private CardCategory currentCategory;
+    public GameObject BackpackUIItem;
+    public GameObject DetailPanel;
+    public CardSearchBar cardSearchBar;
     public ObjectEventSO loadMapEvent;
 
-    public GameObject BackpackUIItem;
+    private CardManager cardManager;
+    private Transform cardBtn, cardIcon1, cardIcon2, cardSelect;
+    private Transform closeBtn, scrollViewContent;
+    private Transform detailBtn, goldAmount;
+    private GameObject detailPanel;
+    private Text detailCostText, detailNameText, detailDescText;
+    private Image detailIconImage;
 
-    private GameObject selectedCardGO = null;
-    private ICardData selectedCard = null;
+    private GameObject selectedCardGO;
+    private ICardData selectedCard;
+
+    public BackpackMode curMode = BackpackMode.normal;
 
     void Start()
     {
         cardManager = CardManager.Instance;
         CacheUI();
-        InitClick();
-        ShowCardsByCategory(CardCategory.Attack);
+        InitEvents();
+        RefreshUI();
     }
 
     private void CacheUI()
     {
         var root = transform;
 
-        attackBtn = root.Find("TopCenter/Menu/Attack");
-        attackSelect = attackBtn.Find("Select");
-
-        defenceBtn = root.Find("TopCenter/Menu/Defence");
-        defenceSelect = defenceBtn.Find("Select");
-
-        healBtn = root.Find("TopCenter/Menu/Heal");
-        healSelect = healBtn.Find("Select");
+        cardBtn = root.Find("TopCenter/Menu/Card");
+        cardIcon1 = cardBtn.Find("icon1");
+        cardIcon2 = cardBtn.Find("icon2");
+        cardSelect = cardBtn.Find("Select");
 
         closeBtn = root.Find("RightTop/Close");
-        detailBtn = root.Find("Bottom/BottomMenus/DetailBtn");
 
         scrollViewContent = root.Find("Center/Scroll View/Viewport/Content");
-        detailPanel = root.Find("Center/DetailPanel");
 
-        root.Find("Bottom/BottomMenus/Gold/amount").GetComponent<Text>().text = $"{cardManager.Gold}";
+        detailPanel = Instantiate(DetailPanel, root.Find("Center"));
+        detailPanel.SetActive(false);
 
-        detailPanel.gameObject.SetActive(false);
+        detailCostText = detailPanel.transform.Find("Center/Cost/Text").GetComponent<Text>();
+        detailNameText = detailPanel.transform.Find("Top/Title").GetComponent<Text>();
+        detailIconImage = detailPanel.transform.Find("Center/Icon").GetComponent<Image>();
+        detailDescText = detailPanel.transform.Find("Bottom/Description").GetComponent<Text>();
+
+        detailBtn = root.Find("Bottom/BottomMenus/DetailBtn");
+        goldAmount = root.Find("Bottom/BottomMenus/Gold/amount");
+        goldAmount.GetComponent<Text>().text = $"{cardManager.Gold}";
     }
 
-    private void InitClick()
+    private void InitEvents()
     {
-        attackBtn.GetComponent<Button>().onClick.AddListener(() => ShowCardsByCategory(CardCategory.Attack));
-        defenceBtn.GetComponent<Button>().onClick.AddListener(() => ShowCardsByCategory(CardCategory.Skill));
-        healBtn.GetComponent<Button>().onClick.AddListener(() => ShowCardsByCategory(CardCategory.Status));
+        cardBtn.GetComponent<Button>().onClick.AddListener(ShowCards);
         closeBtn.GetComponent<Button>().onClick.AddListener(() => loadMapEvent.RaiseEvent(null, this));
-        detailBtn.GetComponent<Button>().onClick.AddListener(OnDetail);
+        detailBtn.GetComponent<Button>().onClick.AddListener(ShowCardDetail);
+        cardSearchBar.OnSearchKeywordChanged += OnSearchChanged;
     }
 
-    private void ShowCardsByCategory(CardCategory category)
+    private void ShowCards()
     {
-        currentCategory = category;
-        UpdateTopIcons(category);
-        RefreshCardList(category);
+        curMode = BackpackMode.card;
+        RefreshUI();
+        DisplayCardList(cardManager.GetAllCards());
     }
 
-    private void UpdateTopIcons(CardCategory selectedCategory)
+    private void RefreshUI()
     {
-        attackSelect.gameObject.SetActive(selectedCategory == CardCategory.Attack);
-        defenceSelect.gameObject.SetActive(selectedCategory == CardCategory.Skill);
-        healSelect.gameObject.SetActive(selectedCategory == CardCategory.Status);
-    }
+        cardIcon1.gameObject.SetActive(curMode != BackpackMode.card);
+        cardIcon2.gameObject.SetActive(curMode == BackpackMode.card);
+        cardSelect.gameObject.SetActive(curMode == BackpackMode.card);
+        cardSearchBar.gameObject.SetActive(curMode == BackpackMode.normal ? false : true);
 
-    private void RefreshCardList(CardCategory category)
-    {
-        foreach (Transform child in scrollViewContent)
-        {
+        foreach (Transform child in scrollViewContent){
             Destroy(child.gameObject);
         }
+    }
 
-        List<ICardData> cards = cardManager.GetCardsByCardCategory(category).ToList();
+    private void DisplayCardList(List<ICardData> cards)
+    {
+        RefreshUI();
 
         foreach (var card in cards)
         {
-            GameObject itemGO = Instantiate(BackpackUIItem, scrollViewContent);
+            var itemGO = Instantiate(BackpackUIItem, scrollViewContent);
 
-            var icon = itemGO.transform.Find("Top/Icon").GetComponent<Image>();
-            icon.sprite = card.Sprite;
-
-            var text = itemGO.transform.Find("Bottom/Text").GetComponent<Text>();
-            text.text = card.CardName;
-
+            itemGO.transform.Find("Top/Icon").GetComponent<Image>().sprite = card.Sprite;
+            itemGO.transform.Find("Bottom/Text").GetComponent<Text>().text = card.CardName;
+            itemGO.transform.Find("Top/Cost/Text").GetComponent<Text>().text = card.Cost.ToString();
             itemGO.transform.Find("Select").gameObject.SetActive(false);
 
-            var btn = itemGO.GetComponent<Button>();
-            btn.onClick.AddListener(() => OnCardClicked(itemGO, card));
+            itemGO.GetComponent<Button>().onClick.AddListener(() => OnCardClicked(itemGO, card));
         }
 
-        Debug.Log($"展示{category}类卡牌，共 {cards.Count} 张");
+        Debug.Log($"展示卡牌，共 {cards.Count} 张");
     }
 
     private void OnCardClicked(GameObject itemGO, ICardData card)
     {
-        if (selectedCardGO != null)
-        {
+        if (selectedCardGO != null){
             selectedCardGO.transform.Find("Select").gameObject.SetActive(false);
         }
 
@@ -112,18 +119,21 @@ public class BackpackPanelManager : MonoBehaviour
         selectedCardGO.transform.Find("Select").gameObject.SetActive(true);
     }
 
-    private void OnDetail()
+    private void ShowCardDetail()
     {
         if (selectedCard == null) return;
 
-        detailPanel.gameObject.SetActive(true);
+        detailCostText.text = selectedCard.Cost.ToString();
+        detailNameText.text = selectedCard.CardName;
+        detailIconImage.sprite = selectedCard.Sprite;
+        detailDescText.text = selectedCard.Desc;
 
-        var nameText = detailPanel.Find("Top/Title").GetComponent<Text>();
-        var iconImage = detailPanel.Find("Center/Icon").GetComponent<Image>();
-        var descText = detailPanel.Find("Bottom/Description").GetComponent<Text>();
+        detailPanel.SetActive(true);
+    }
 
-        nameText.text = selectedCard.CardName;
-        iconImage.sprite = selectedCard.Sprite;
-        descText.text = selectedCard.Desc;
+    private void OnSearchChanged(string keyword)
+    {
+        var filtered = CardFilterUtils.FilterCards(keyword, cardManager.GetAllCards());
+        DisplayCardList(filtered);
     }
 }
