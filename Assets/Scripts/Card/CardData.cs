@@ -24,6 +24,14 @@ public enum CardCategory
     Status,
 }
 
+public enum ModifyType
+{
+    All,
+    Attack,
+    Heal,
+    Denfense,
+}
+
 public interface ICardData
 {
     CardCategory CardCategory { get; } // 卡牌分类
@@ -43,7 +51,7 @@ public interface ICardData
     void Discard(); // 弃牌方法
     void Reset(); // 重置方法
 
-    void Modify(float factor); // 修改方法
+    void Modify(float factor, ModifyType type); // 修改方法
 }
 
 public abstract class CardData : ICardData
@@ -80,18 +88,19 @@ public abstract class CardData : ICardData
         isDiscarded = false; // 重置为非弃牌
     }
 
-    public abstract void Modify(float factor); // 修改方法
+    public abstract void Modify(float factor, ModifyType modifyType); // 修改方法
 }
 
-public abstract class BasicCardData : CardData
+public class BasicCardData : CardData
 {
-    public BasicCardData(string name, int cardCost, CardCategory cardCategory, CardEffectTarget cardEffectTarget, Sprite sprite, IEffect effect)
+    public BasicCardData(string name, string desc, int cardCost, CardCategory cardCategory, CardEffectTarget cardEffectTarget, Sprite sprite, IEffect effect)
     {
         this.cardCost = cardCost; // 设置卡牌费用
         this.cardName = name; // 设置卡牌名称
         this.cardCategory = cardCategory; // 设置卡牌分类
         this.cardEffectTarget = cardEffectTarget; // 设置卡牌效果目标
         this.sprite = sprite; // 设置卡牌图片
+        this.desc = desc;
     }
 
     private int cardCost; // 卡牌费用
@@ -103,12 +112,18 @@ public abstract class BasicCardData : CardData
     private CardEffectTarget cardEffectTarget; // 卡牌效果目标
 
     private Sprite sprite; // 卡牌图片
+
+    private string desc; // 卡牌描述
     public override CardCategory CardCategory => cardCategory; // 卡牌分类属性
     public override CardEffectTarget CardEffectTarget => cardEffectTarget; // 卡牌效果目标属性
     public override Sprite Sprite => sprite; // 卡牌图片属性
     public override int Cost => cardCost; // 卡牌费用属性
     public override string CardName => cardName; // 卡牌名称属性
     public override IEffect Effect => effect; // 卡牌效果属性
+    public override string Desc => desc; // 卡牌描述属性
+
+    public override void Modify(float factor, ModifyType modifyType)
+    {}
 }
 
 public static class CardDataExtensions

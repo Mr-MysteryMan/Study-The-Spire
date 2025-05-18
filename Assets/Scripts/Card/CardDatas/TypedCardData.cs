@@ -19,7 +19,7 @@ namespace Cards.CardDatas
             this.cardCost = cardCost; // 设置卡牌费用
         }
 
-        [Modifier.ModifyAttribute.Basic]
+        [Modifier.ModifyAttribute.Basic(ModifyType.All)]
         private int cardValue; // 卡牌数值
         private CardType cardType; // 卡牌类型
         private int cardCost; // 卡牌费用
@@ -100,9 +100,9 @@ namespace Cards.CardDatas
             };
         }
 
-        public override void Modify(float factor)
+        public override void Modify(float factor, ModifyType type)
         {
-            Modifier.BasicCardModifier.Modify(this, factor); // 修改卡牌属性
+            Modifier.BasicCardModifier.Modify(this, factor, type); // 修改卡牌属性
         }
     }
 }

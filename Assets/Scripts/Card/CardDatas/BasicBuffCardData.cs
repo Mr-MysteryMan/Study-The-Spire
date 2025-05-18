@@ -7,20 +7,39 @@ using Cards.Modifier;
 
 namespace Cards.CardDatas
 {
-    public abstract class OneValueCardData : BasicCardData
+    public abstract class OneValueCardData : CardData
     {
         public OneValueCardData(string cardName, int cardValue, int cardCost, CardCategory cardCategory, CardEffectTarget cardEffectTarget,
-            Sprite sprite) : base(cardName, cardCost, cardCategory, cardEffectTarget, sprite)
+            Sprite sprite)
         {
             this.cardValue = cardValue;
+            this.cardCost = cardCost; // 设置卡牌费用
+            this.cardName = cardName; // 设置卡牌名称
+            this.cardCategory = cardCategory; // 设置卡牌分类
+            this.cardEffectTarget = cardEffectTarget; // 设置卡牌效果目标
+            this.sprite = sprite; // 设置卡牌图片
         }
 
-        [Modifier.ModifyAttribute.Basic]
+        private int cardCost; // 卡牌费用
+        private string cardName; // 卡牌名称
+
+        private CardCategory cardCategory; // 卡牌分类
+
+        private CardEffectTarget cardEffectTarget; // 卡牌效果目标
+
+        private Sprite sprite; // 卡牌图片
+        public override CardCategory CardCategory => cardCategory; // 卡牌分类属性
+        public override CardEffectTarget CardEffectTarget => cardEffectTarget; // 卡牌效果目标属性
+        public override Sprite Sprite => sprite; // 卡牌图片属性
+        public override int Cost => cardCost; // 卡牌费用属性
+        public override string CardName => cardName; // 卡牌名称属性
+
+        [Modifier.ModifyAttribute.Basic(ModifyType.All)]
         protected int cardValue;
 
-        public override void Modify(float factor)
+        public override void Modify(float factor, ModifyType modifyType)
         {
-            BasicCardModifier.Modify(this, factor);
+            BasicCardModifier.Modify(this, factor, modifyType);
         }
     }
 
