@@ -121,5 +121,12 @@ public class SceneLoadManager : MonoBehaviour
         await LoadSceneTask();
     }
 
+    public RoomType GetRoomType()
+    {
+        RoomType roomType = currentRoom.roomData.roomType;
+
+        return roomType;
+    }
+
 
 }

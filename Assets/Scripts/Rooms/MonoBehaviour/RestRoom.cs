@@ -14,7 +14,6 @@ public class RestRoom : MonoBehaviour
         cardManager.AddHealth(100);
         //·µ»ØµØÍ¼
         loadMapEvent.RaiseEvent(null, this);
-
     }
 
     private void HandleWrongAnswer()
