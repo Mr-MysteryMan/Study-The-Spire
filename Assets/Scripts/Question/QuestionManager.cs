@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +12,6 @@ public class QuestionManager : MonoBehaviour
     public Image image; // 背景图
     // -----------------------------变量----------------------------------
     public QuestionData question; // 问题数据
-    public QuestionStore questionStore = new QuestionStore(); // 题库
     // -----------------------------回调方法-------------------------------
     public callBackFunction onCorrect = () => { Debug.Log("Correct answer!"); }; // 回答正确回调
     public callBackFunction onWrong = () => { Debug.Log("Wrong answer!"); }; // 回答错误回调

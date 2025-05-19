@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7492753644180526129}
   - component: {fileID: 532992546677667317}
   m_Layer: 5
-  m_Name: Answer
+  m_Name: TextBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -92,6 +92,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AnswerText: {fileID: 3674438979035518911}
   text: 
+  mark: 1
 --- !u!114 &532992546677667317
 MonoBehaviour:
   m_ObjectHideFlags: 0
