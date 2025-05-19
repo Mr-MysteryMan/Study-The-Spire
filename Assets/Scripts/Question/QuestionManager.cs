@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,52 +12,53 @@ public class QuestionManager : MonoBehaviour
 
     public Image image; // 背景图
     // -----------------------------变量----------------------------------
-    public static QuestionList questionList; // 问题列表
-    QuestionData question;
+    public QuestionData question; // 问题数据
+    public QuestionStore questionStore = new QuestionStore(); // 题库
     // -----------------------------回调方法-------------------------------
-    public callBackFunction onCorrect = () => {Debug.Log("Correct answer!");}; // 回答正确回调
-    public callBackFunction onWrong = () => {Debug.Log("Wrong answer!");}; // 回答错误回调
+    public callBackFunction onCorrect = () => { Debug.Log("Correct answer!"); }; // 回答正确回调
+    public callBackFunction onWrong = () => { Debug.Log("Wrong answer!"); }; // 回答错误回调
 
     void Start()
     {
-        if (questionList == null) {
-            Init();
+        if (QuestionStore.isInit == false)
+        {
+            QuestionStore.Init(); // 初始化题库
         }
         // 选取随机问题
-        int randomIndex = Random.Range(0, questionList.questions.Length);
-        question = questionList.questions[randomIndex];
+        this.question = QuestionStore.GetRandomQuestion();
         // 初始化问题组件UI
         upDateUI();
         // 选项点击事件
         for (int i = 0; i < AnswerBox.Length; i++)
         {
-            if (i < question.selection.Length)
-            {
-                int index = i; // 捕获变量
-                AnswerBox[i].GetComponent<Button>().onClick.AddListener(() => OnAnswerSelected(index));
-            }
+            string ans = AnswerBox[i].GetComponent<TextBox>().text; // 获取选项文本
+            AnswerBox[i].GetComponent<Button>().onClick.AddListener(() => OnAnswerSelected(ans));
         }
     }
 
     // 传入回调函数
-    public void init (callBackFunction onCorrect, callBackFunction onWrong) {
+    public void init(callBackFunction onCorrect, callBackFunction onWrong)
+    {
         // 保存回调函数
         this.onCorrect = onCorrect;
         this.onWrong = onWrong;
     }
 
-    public void close() {
+    public void close()
+    {
         Destroy(Question);
     }
 
-    private void OnAnswerSelected(int index)
+    private void OnAnswerSelected(string answer)
     {
         // 检查答案是否正确
-        if (index == question.answer) {
+        if (answer == question.selection[question.answer])
+        {
             image.sprite = Resources.Load<Sprite>("QuestionUI/Correct"); // 加载正确答案的图片
             onCorrect(); // 调用正确答案的回调函数
         }
-        else {
+        else
+        {
             image.sprite = Resources.Load<Sprite>("QuestionUI/Wrong"); // 加载错误答案的图片
             onWrong(); // 调用错误答案的回调函数
         }
@@ -66,57 +68,22 @@ public class QuestionManager : MonoBehaviour
     {
         // 更新问题框
         QuestionBox.GetComponent<TextBox>().SetAnswerText(question.question);
-        // 更新选项框
-        for (int i = 0; i < AnswerBox.Length; i++)
+        // 更新选项框, 四个选项随机出现
+        List<int> randomIndex = new List<int>();
+        for (int i = 0; i < question.selection.Length; i++)
         {
-            if (i < question.selection.Length)
-            {
-                AnswerBox[i].GetComponent<TextBox>().SetAnswerText(question.selection[i]);
-            }
+            randomIndex.Add(i);
+        }
+        for (int i = 0; i < question.selection.Length; i++)
+        {
+            int random = Random.Range(0, randomIndex.Count);
+            AnswerBox[i].GetComponent<TextBox>().SetAnswerText(question.selection[randomIndex[random]]);
+            randomIndex.RemoveAt(random);
         }
     }
 
-    // 初始化静态变量
-    public static void Init()
-    {
-        questionList = LoadQuestions("questions.json");
-    }
 
-    private static QuestionList LoadQuestions(string fileName)
-    {
-        string filePath = Path.Combine(Application.streamingAssetsPath, fileName);
-        if (File.Exists(filePath))
-        {
-            string json = File.ReadAllText(filePath);
-            QuestionList questionList = JsonUtility.FromJson<QuestionList>(json);
-            return questionList;
-        }
-        else
-        {
-            Debug.LogError("File not found: " + filePath);
-            return null;
-        }
-    }
 }
 
 public delegate void callBackFunction(); // 回调函数类型
 
-[System.Serializable]
-public class QuestionList {
-    public QuestionData[] questions;
-    public QuestionList(QuestionData[] questions) {
-        this.questions = questions;
-    }
-}
-[System.Serializable]
-public class QuestionData {
-    public string question;
-    public string[] selection;
-    public int answer;
-
-    public QuestionData(string question, string[] selection, int answer) {
-        this.question = question;
-        this.selection = selection;
-        this.answer = answer;
-    }
-}

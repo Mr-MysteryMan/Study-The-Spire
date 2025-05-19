@@ -1,0 +1,504 @@
+{
+  "questions": [
+    {
+      "question": "《鬼灭之刃》的主角名字是？",
+      "selection": ["富冈义勇", "灶门炭治郎", "时透无一郎", "我妻善逸"],
+      "answer": 1
+    },
+    {
+      "question": "《海贼王》路飞吃的果实是？",
+      "selection": ["火焰果实", "冰冻果实", "橡胶果实", "震震果实"],
+      "answer": 2
+    },
+    {
+      "question": "《EVA》中碇真嗣驾驶的是？",
+      "selection": ["初号机", "零号机", "二号机", "八号机"],
+      "answer": 0
+    },
+    {
+      "question": "《银魂》中银时最爱吃的食物是？",
+      "selection": ["草莓", "布丁", "糖", "甜食"],
+      "answer": 3
+    },
+    {
+      "question": "《Fate》系列中的Saber真名是？",
+      "selection": ["亚瑟王", "吉尔伽美什", "兰斯洛特", "亚历山大"],
+      "answer": 0
+    },
+    {
+      "question": "《东京喰种》金木研的赫子是？",
+      "selection": ["甲赫", "鳞赫", "尾赫", "羽赫"],
+      "answer": 2
+    },
+    {
+      "question": "《你的名字。》的导演是？",
+      "selection": ["新海诚", "宫崎骏", "细田守", "今敏"],
+      "answer": 0
+    },
+    {
+      "question": "《CLANNAD》是哪家公司的作品？",
+      "selection": ["Key社", "Type-Moon", "Nitro+", "ufotable"],
+      "answer": 0
+    },
+    {
+      "question": "《Re:零》中谁是大罪司教？",
+      "selection": ["帕克", "雷姆", "贝特鲁吉乌斯", "库珥修"],
+      "answer": 2
+    },
+    {
+      "question": "《进击的巨人》中艾伦能力是？",
+      "selection": ["硬化", "操气流", "变身巨人", "控制水"],
+      "answer": 2
+    },
+    {
+      "question": "《名侦探柯南》柯南的真名？",
+      "selection": ["工藤新一", "服部平次", "毛利小五郎", "安室透"],
+      "answer": 0
+    },
+    {
+      "question": "《中二病也要谈恋爱》女主？",
+      "selection": ["凸守早苗", "小鸟游六花", "丹生谷森夏", "五月七日"],
+      "answer": 1
+    },
+    {
+      "question": "《魔法禁书目录》中炮姐本名？",
+      "selection": ["御坂美琴", "白井黑子", "食蜂操祈", "茵蒂克丝"],
+      "answer": 0
+    },
+    {
+      "question": "《干物妹！小埋》的女主特点？",
+      "selection": ["宅女", "班长", "运动系", "学生会"],
+      "answer": 0
+    },
+    {
+      "question": "《凉宫春日》中谁是外星人？",
+      "selection": ["长门有希", "朝比奈实玖瑠", "古泉一树", "阿虚"],
+      "answer": 0
+    },
+    {
+      "question": "《兽娘动物园》的主角叫？",
+      "selection": ["小包", "小黑", "猫猫", "柴柴"],
+      "answer": 0
+    },
+    {
+      "question": "《LoveLive!》所属团体？",
+      "selection": ["μ's", "Liella!", "Aqours", "Roselia"],
+      "answer": 0
+    },
+    {
+      "question": "《K-ON！》中谁弹吉他？",
+      "selection": ["律", "梓", "唯", "澪"],
+      "answer": 2
+    },
+    {
+      "question": "《未闻花名》中“面码”是谁？",
+      "selection": ["安城鸣子", "本间芽衣子", "鹤见知利子", "久川铁道"],
+      "answer": 1
+    },
+    {
+      "question": "《白色相簿2》中女主角之一？",
+      "selection": ["冬马和纱", "樱井梨穗子", "小鸟游优", "月宫林檎"],
+      "answer": 0
+    },
+    {
+      "question": "《中二病》中六花的武器名？",
+      "selection": ["无敌魔王斩", "爆裂魔法", "邪王真眼", "黄昏秘剑"],
+      "answer": 2
+    },
+    {
+      "question": "《天元突破》中螺旋王是谁？",
+      "selection": ["席蒙", "卡米那", "罗修", "罗杰诺姆"],
+      "answer": 3
+    },
+    {
+      "question": "《No Game No Life》中兄妹名？",
+      "selection": ["司波兄妹", "空白", "电光", "红莲"],
+      "answer": 1
+    },
+    {
+      "question": "《未来日记》中女主绰号？",
+      "selection": ["电锯女", "病娇女", "杀手女", "战斗女"],
+      "answer": 1
+    },
+    {
+      "question": "《干物妹！小埋》的本名？",
+      "selection": ["土间埋", "高坂桐乃", "阿良良木月火", "一之濑帆波"],
+      "answer": 0
+    },
+    {
+      "question": "《刀剑神域》男主使用武器？",
+      "selection": ["短刀", "双剑", "弓箭", "枪"],
+      "answer": 1
+    },
+    {
+      "question": "《夏目友人帐》中猫咪老师真身？",
+      "selection": ["犬神", "狐妖", "斑", "雪女"],
+      "answer": 2
+    },
+    {
+      "question": "《魔法少女小圆》反派是？",
+      "selection": ["小焰", "丘比", "沙耶香", "美树"],
+      "answer": 1
+    },
+    {
+      "question": "《约会大作战》中琴里身份？",
+      "selection": ["精灵", "指挥官", "人类", "人偶"],
+      "answer": 1
+    },
+    {
+      "question": "《斩！赤红之瞳》中帝具是？",
+      "selection": ["武器", "魔法", "契约", "宠物"],
+      "answer": 0
+    },
+    {
+      "question": "《狼与香辛料》中女主是？",
+      "selection": ["神明", "商人", "贤狼", "骑士"],
+      "answer": 2
+    },
+    {
+      "question": "《辉夜大小姐》四宫辉夜职位？",
+      "selection": ["学生会长", "副会长", "书记", "会计"],
+      "answer": 1
+    },
+    {
+      "question": "《JOJO》第一部主角是？",
+      "selection": ["乔纳森", "乔瑟夫", "承太郎", "徐伦"],
+      "answer": 0
+    },
+    {
+      "question": "《JOJO》第三部替身名？",
+      "selection": ["白金之星", "疯狂钻石", "白蛇", "紫烟"],
+      "answer": 0
+    },
+    {
+      "question": "《寒蝉鸣泣之时》的舞台？",
+      "selection": ["雾岛村", "雏见泽", "上条村", "凛之地"],
+      "answer": 1
+    },
+    {
+      "question": "《吹响吧上低音号》中主角乐器？",
+      "selection": ["长号", "低音号", "圆号", "萨克斯"],
+      "answer": 1
+    },
+    {
+      "question": "《Charlotte》中能力是？",
+      "selection": ["念力", "时间停止", "附身", "隐形"],
+      "answer": 2
+    },
+    {
+      "question": "《魔禁》中的上条能力？",
+      "selection": ["魔法", "幻想杀手", "超电磁炮", "念力"],
+      "answer": 1
+    },
+    {
+      "question": "《Angel Beats!》中音无是谁？",
+      "selection": ["班长", "鼓手", "主角", "NPC"],
+      "answer": 2
+    },
+    {
+      "question": "《紫罗兰永恒花园》职业？",
+      "selection": ["兵", "记者", "代笔人偶", "画师"],
+      "answer": 2
+    },
+    {
+      "question": "《天使降临了！》中花音是谁？",
+      "selection": ["主角", "妹妹", "配角", "天使"],
+      "answer": 0
+    },
+    {
+      "question": "《轻音少女》中乐队名？",
+      "selection": ["AfterS", "放学后茶会", "夏色乐队", "响响响"],
+      "answer": 1
+    },
+    {
+      "question": "《中二病》六花的眼罩原因？",
+      "selection": ["伤疤", "时尚", "封印", "视力差"],
+      "answer": 2
+    },
+    {
+      "question": "《LoveLive》中真姬的特长？",
+      "selection": ["舞蹈", "唱歌", "钢琴", "摄影"],
+      "answer": 2
+    },
+    {
+      "question": "《Re从零》中昴的能力？",
+      "selection": ["风刃", "死亡回归", "冻结", "附体"],
+      "answer": 1
+    },
+    {
+      "question": "《干物妹！小埋》中哥哥名？",
+      "selection": ["太平", "太郎", "阿哲", "土间太平"],
+      "answer": 3
+    },
+    {
+      "question": "《Guilty Crown》中王的能力？",
+      "selection": ["控制心", "抽出虚空", "召唤剑", "传送术"],
+      "answer": 1
+    },
+    {
+      "question": "《未闻花名》主题？",
+      "selection": ["成长", "复仇", "悬疑", "战争"],
+      "answer": 0
+    },
+    {
+      "question": "《五等分》中中野五月爱好？",
+      "selection": ["吃拉面", "打篮球", "唱歌", "摄影"],
+      "answer": 0
+    },
+    {
+      "question": "《辉夜大小姐》中石上是？",
+      "selection": ["会计", "书记", "会长", "副会长"],
+      "answer": 0
+    },
+    {
+      "question": "《魔女之旅》中主角名字？",
+      "selection": ["小魔", "伊蕾娜", "露米娅", "艾莉"],
+      "answer": 1
+    },
+    {
+      "question": "《Lycoris Recoil》中千束职业？",
+      "selection": ["杀手", "侦探", "女仆", "咖啡师"],
+      "answer": 0
+    },
+    {
+      "question": "《少女与战车》中使用？",
+      "selection": ["战机", "机甲", "战车", "军舰"],
+      "answer": 2
+    },
+    {
+      "question": "《佐贺偶像是传奇》的设定？",
+      "selection": ["僵尸偶像", "吸血鬼", "狼人", "外星人"],
+      "answer": 0
+    },
+    {
+      "question": "《宝可梦》小智的第一只？",
+      "selection": ["皮卡丘", "妙蛙种子", "喷火龙", "杰尼龟"],
+      "answer": 0
+    },
+    {
+      "question": "《工作细胞》中红细胞工作？",
+      "selection": ["运氧", "免疫", "修复", "吞噬"],
+      "answer": 0
+    },
+    {
+      "question": "《赛马娘》中特别周是？",
+      "selection": ["马", "学生", "赛马娘", "人类"],
+      "answer": 2
+    },
+    {
+      "question": "《花开伊吕波》的背景？",
+      "selection": ["温泉旅馆", "高中", "岛屿", "都市"],
+      "answer": 0
+    },
+    {
+      "question": "《兽娘动物园》风格？",
+      "selection": ["战斗", "动物拟人", "恋爱", "推理"],
+      "answer": 1
+    },
+    {
+      "question": "《石纪元》千空职业？",
+      "selection": ["医生", "科学家", "战士", "商人"],
+      "answer": 1
+    },
+    {
+      "question": "《辉夜大小姐》中藤原书记性格？",
+      "selection": ["高冷", "呆萌", "毒舌", "腹黑"],
+      "answer": 1
+    },
+    {
+      "question": "《摇曳露营》中最常露营者？",
+      "selection": ["志摩凛", "各务原抚子", "犬山葵", "齐藤惠那"],
+      "answer": 0
+    },
+    {
+      "question": "《轻音少女》中鼓手是？",
+      "selection": ["澪", "唯", "律", "梓"],
+      "answer": 2
+    },
+    {
+      "question": "《命运石之门》冈伦的外号？",
+      "selection": ["狂气科学家", "时间使者", "命运之子", "黑暗之魂"],
+      "answer": 0
+    },
+    {
+      "question": "《为美好世界》惠惠擅长？",
+      "selection": ["雷魔法", "爆裂魔法", "水魔法", "治愈魔法"],
+      "answer": 1
+    },
+    {
+      "question": "《排球少年》中影山位置？",
+      "selection": ["接应", "主攻", "自由人", "二传"],
+      "answer": 3
+    },
+    {
+      "question": "《黑子的篮球》主角能力？",
+      "selection": ["火焰球", "消失运球", "空中接力", "三分球"],
+      "answer": 1
+    },
+    {
+      "question": "《冰上的尤里》是关于？",
+      "selection": ["篮球", "滑冰", "排球", "棒球"],
+      "answer": 1
+    },
+    {
+      "question": "《三月的狮子》主角职业？",
+      "selection": ["医生", "棋士", "画家", "厨师"],
+      "answer": 1
+    },
+    {
+      "question": "《Clannad》中渚喜欢？",
+      "selection": ["棒球", "戏剧", "绘画", "剑道"],
+      "answer": 1
+    },
+    {
+      "question": "《K-ON》中主唱乐器？",
+      "selection": ["吉他", "贝斯", "鼓", "键盘"],
+      "answer": 0
+    },
+    {
+      "question": "《IS》中的战斗装甲叫？",
+      "selection": ["GUNDAM", "IS", "ARMOR", "SUIT"],
+      "answer": 1
+    },
+    {
+      "question": "《空之境界》女主名字？",
+      "selection": ["远坂凛", "两仪式", "苍崎橙子", "间桐樱"],
+      "answer": 1
+    },
+    {
+      "question": "《轻拍翻转小魔女》设定？",
+      "selection": ["魔法学校", "战斗部队", "偶像", "恋爱"],
+      "answer": 0
+    },
+    {
+      "question": "《地狱少女》艾瑟拉武器？",
+      "selection": ["头发", "法阵", "红线", "人偶"],
+      "answer": 2
+    },
+    {
+      "question": "《来自深渊》中莱卡的伙伴？",
+      "selection": ["蕾吉", "奈诺", "利克", "普鲁修卡"],
+      "answer": 0
+    },
+    {
+      "question": "《BLOOD-C》女主武器？",
+      "selection": ["枪", "弓", "长刀", "短剑"],
+      "answer": 2
+    },
+    {
+      "question": "《月刊少女野崎君》中千代？",
+      "selection": ["助手", "作者", "粉丝", "编辑"],
+      "answer": 0
+    },
+    {
+      "question": "《暗杀教室》中老师特点？",
+      "selection": ["绿色皮", "章鱼状", "透明", "机械"],
+      "answer": 1
+    },
+    {
+      "question": "《甘城光辉游乐园》主角是？",
+      "selection": ["经理", "游客", "店员", "魔王"],
+      "answer": 0
+    },
+    {
+      "question": "《凉宫春日》系列女主是？",
+      "selection": ["长门有希", "朝比奈实玖瑠", "凉宫春日", "朝仓凉子"],
+      "answer": 2
+    },
+    {
+      "question": "《命运石之门》中助手是谁？",
+      "selection": ["真由理", "铃羽", "牧濑红莉栖", "桐生萌郁"],
+      "answer": 2
+    },
+    {
+      "question": "《花名未闻》中小芽死因？",
+      "selection": ["车祸", "跌落", "病死", "溺水"],
+      "answer": 1
+    },
+    {
+      "question": "《星之梦》中的神秘少女？",
+      "selection": ["艾莉", "七海", "渚", "小夜"],
+      "answer": 0
+    },
+    {
+      "question": "《灌篮高手》中樱木位置？",
+      "selection": ["控卫", "得分后卫", "中锋", "大前锋"],
+      "answer": 3
+    },
+    {
+      "question": "《Fate》中士郎使用武器？",
+      "selection": ["弓", "剑", "枪", "魔导书"],
+      "answer": 1
+    },
+    {
+      "question": "《宝石之国》中主角是哪种？",
+      "selection": ["金刚", "磷叶石", "钻石", "青金石"],
+      "answer": 1
+    },
+    {
+      "question": "《电锯人》中波奇塔形态？",
+      "selection": ["枪", "电锯", "犬", "猫"],
+      "answer": 2
+    },
+    {
+      "question": "《孤独摇滚》女主擅长？",
+      "selection": ["吉他", "鼓", "贝斯", "唱歌"],
+      "answer": 0
+    },
+    {
+      "question": "《恋上换装娃娃》女主爱好？",
+      "selection": ["游戏", "化妆", "COSPLAY", "料理"],
+      "answer": 2
+    },
+    {
+      "question": "《赛博朋克：边缘行者》中Lucy职业？",
+      "selection": ["骇客", "医生", "特工", "猎人"],
+      "answer": 0
+    },
+    {
+      "question": "《间谍过家家》中安妮亚能力？",
+      "selection": ["预测", "变身", "读心", "隐形"],
+      "answer": 2
+    },
+    {
+      "question": "《Lycoris Recoil》中二人性格？",
+      "selection": ["冷热组合", "全冷系", "全热血", "都傲娇"],
+      "answer": 0
+    },
+    {
+      "question": "《电锯人》中早川的武器？",
+      "selection": ["枪", "刀", "恶魔", "锤"],
+      "answer": 2
+    },
+    {
+      "question": "《莉可丽丝》中千束怕？",
+      "selection": ["猫", "虫", "医院", "枪声"],
+      "answer": 2
+    },
+    {
+      "question": "《石纪元》中复活药是？",
+      "selection": ["酒+硝酸", "水+电解", "药草", "花粉"],
+      "answer": 0
+    },
+    {
+      "question": "《魔法禁书目录》中御坂？",
+      "selection": ["三位", "电击使", "水之使", "心控"],
+      "answer": 1
+    },
+    {
+      "question": "《巨人》艾伦的巨人是？",
+      "selection": ["战锤", "女巨人", "进击", "铠之"],
+      "answer": 2
+    },
+    {
+      "question": "《异世界舅舅》中舅舅主力？",
+      "selection": ["火魔法", "冰魔法", "风魔法", "雷魔法"],
+      "answer": 3
+    },
+    {
+      "question": "《终将成为你》主题是？",
+      "selection": ["百合", "亲情", "复仇", "推理"],
+      "answer": 0
+    }
+  ]
+}

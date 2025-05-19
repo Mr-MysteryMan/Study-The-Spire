@@ -162,6 +162,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -682,7 +695,30 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      IMG_4292_0: 8144014452104338489
+      IMG_4292_1: 8563407274739509931
+      IMG_4292_10: 5026051808773784341
+      IMG_4292_11: 3907774595402801127
+      IMG_4292_12: -137956921146483008
+      IMG_4292_13: -1681051914947937557
+      IMG_4292_14: -5258804993221656061
+      IMG_4292_15: 3375167718120225863
+      IMG_4292_16: 7174071255456806092
+      IMG_4292_17: 1188733478401355526
+      IMG_4292_18: -7694743033256947276
+      IMG_4292_19: 7279617105406586788
+      IMG_4292_2: 6573403998359871793
+      IMG_4292_20: -8609721601860004553
+      IMG_4292_21: 8309057832008051626
+      IMG_4292_22: -7382980775311755088
+      IMG_4292_3: -2598017180234250190
+      IMG_4292_4: -6345246213653443136
+      IMG_4292_5: -7734656807160157293
+      IMG_4292_6: 7283607816791838231
+      IMG_4292_7: -6323085935579295126
+      IMG_4292_8: -9162362341028105664
+      IMG_4292_9: -368864275050807023
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
