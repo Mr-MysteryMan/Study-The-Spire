@@ -13,7 +13,7 @@ public class CardManager : MonoBehaviour
     private List<ICardData> allCards;
 
     // 玩家金币
-    public int Gold { get; private set; } = Setting.TreasureGoldNum;
+    public int gold { get; private set; } = Setting.TreasureGoldNum;
 
     // 玩家血量
     public int health { get; set; } = Setting.PlayerHp;
@@ -31,39 +31,33 @@ public class CardManager : MonoBehaviour
 
         allCards = LocalCards.GetCards();
     }
-    public void AddHealth(int amount)
-    {
-        health += Mathf.Max(0, amount);
-        Debug.Log($"获得血量：+{amount}，当前血量：{health}");
-    }
-
 
     // 设置金币数
     public void SetGold(int amount)
     {
-        Gold = Mathf.Max(0, amount);
-        Debug.Log($"设置金币为：{Gold}");
+        gold = Mathf.Max(0, amount);
+        Debug.Log($"设置金币为：{gold}");
     }
 
     // 增加金币
     public void AddGold(int amount)
     {
-        Gold += Mathf.Max(0, amount);
-        Debug.Log($"获得金币：+{amount}，当前金币：{Gold}");
+        gold += Mathf.Max(0, amount);
+        Debug.Log($"获得金币：+{amount}，当前金币：{gold}");
     }
 
     // 消耗金币，返回是否成功
     public bool SpendGold(int amount)
     {
-        if (Gold >= amount)
+        if (gold >= amount)
         {
-            Gold -= amount;
-            Debug.Log($"花费金币：-{amount}，剩余金币：{Gold}");
+            gold -= amount;
+            Debug.Log($"花费金币：-{amount}，剩余金币：{gold}");
             return true;
         }
         else
         {
-            Debug.LogWarning($"金币不足，尝试消费 {amount}，当前金币：{Gold}");
+            Debug.LogWarning($"金币不足，尝试消费 {amount}，当前金币：{gold}");
             return false;
         }
     }

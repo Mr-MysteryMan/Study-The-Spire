@@ -10,17 +10,17 @@ public class RestRoom : MonoBehaviour
 
     private void HandleCorrectAnswer()
     {
-        Debug.Log($"»Ø´ðÕýÈ·£¡");
-        cardManager.AddHealth(100);
-        //·µ»ØµØÍ¼
+        Debug.Log($"ï¿½Ø´ï¿½ï¿½ï¿½È·ï¿½ï¿½");
+        cardManager.health += 100;
+        //ï¿½ï¿½ï¿½Øµï¿½Í¼
         loadMapEvent.RaiseEvent(null, this);
     }
 
     private void HandleWrongAnswer()
     {
-        Debug.Log($"»Ø´ð´íÎó£¡");
-        cardManager.AddHealth(-50);
-        //·µ»ØµØÍ¼
+        Debug.Log($"ï¿½Ø´ï¿½ï¿½ï¿½ï¿½");
+        cardManager.health -= 50;
+        //ï¿½ï¿½ï¿½Øµï¿½Í¼
         loadMapEvent.RaiseEvent(null, this);
     }
 
@@ -29,8 +29,8 @@ public class RestRoom : MonoBehaviour
         var question = Instantiate(questionPrefab);
         QuestionManager questionManager = question.GetComponent<QuestionManager>();
         questionManager.init(
-            () => HandleCorrectAnswer(),  // ÕýÈ·´ð°¸»Øµ÷
-            () => HandleWrongAnswer()    // ´íÎó´ð°¸»Øµ÷
+            () => HandleCorrectAnswer(),  // ï¿½ï¿½È·ï¿½ð°¸»Øµï¿½
+            () => HandleWrongAnswer()    // ï¿½ï¿½ï¿½ï¿½ð°¸»Øµï¿½
         );
         cardManager = CardManager.Instance;
      
