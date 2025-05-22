@@ -1,10 +1,12 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Combat.Buffs;
 using Combat.Command;
 using Combat.Command.Buff;
 using Combat.Events.Turn;
 using Combat.EventVariable;
+using Combat.VFX;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -16,6 +18,7 @@ namespace Combat
     public class Character : MonoBehaviour
     {
         public GameObject HPbar;
+        public VfxManager vfxManager;
 
         // 注意使用了ReactiveIntVariable之后，一次函数尽量只有一次赋值，避免触发多次事件。
         [SerializeField] private ReactiveIntVariable maxHp;
@@ -69,9 +72,11 @@ namespace Combat
 
 
         // 攻击target,造成damage点伤害，会触发相应事件
-        public void Attack(Character target, int damage)
+        public IEnumerator Attack(Character target, int damage)
         {
+            yield return this.vfxManager.PlayAttackForward();
             combatSystem.ProcessCommand(new AttackCommand(this, target, damage, DamageType.Normal));
+            yield return this.vfxManager.PlayAttackBack();
         }
 
         // 为target加血，会触发相应事件

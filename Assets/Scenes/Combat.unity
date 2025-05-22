@@ -861,6 +861,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HPbar: {fileID: 0}
+  vfxManager: {fileID: 0}
   initMaxHp: 10
   initCurHp: 10
   initAmmor: 0
@@ -882,7 +883,7 @@ MonoBehaviour:
   CardDeck: {fileID: 273858339}
   EnergySpotText: {fileID: 1478292857}
   uiRectTransform: {fileID: 518319095}
-  cardSource: 0
+  cardSource: 2
 --- !u!114 &1160243201
 MonoBehaviour:
   m_ObjectHideFlags: 0

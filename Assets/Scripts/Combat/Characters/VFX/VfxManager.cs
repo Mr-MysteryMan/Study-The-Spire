@@ -1,6 +1,8 @@
+using System.Collections;
 using Combat.Events;
 using DG.Tweening;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Combat.VFX
@@ -30,7 +32,6 @@ namespace Combat.VFX
             eventManager.Subscribe<DamageDealtEvent>(OnDamageDealt);
             eventManager.Subscribe<HealDealtEvent>(OnHealDealt);
             eventManager.Subscribe<AddAmmorEvent>(OnAddAmmor);
-            eventManager.Subscribe<BeforeAttackEvent>(OnBeforeAttack);
         }
 
         private void OnDestroy() {
@@ -39,7 +40,6 @@ namespace Combat.VFX
                 eventManager.Unsubscribe<DamageDealtEvent>(OnDamageDealt);
                 eventManager.Unsubscribe<HealDealtEvent>(OnHealDealt);
                 eventManager.Unsubscribe<AddAmmorEvent>(OnAddAmmor);
-                eventManager.Unsubscribe<BeforeAttackEvent>(OnBeforeAttack);
             }
         }
 
@@ -67,14 +67,6 @@ namespace Combat.VFX
             }
         }
 
-        private void OnBeforeAttack(BeforeAttackEvent e)
-        {
-            if (e.Attacker == character)
-            {
-                 PlayAttack();
-            }
-        }
-
         private void Start()
         {
             if (this.character == null)
@@ -93,17 +85,20 @@ namespace Combat.VFX
             Basic,
         }
 
-        private void PlayAttack()
+        private Vector2 oriPos;
+        public IEnumerator PlayAttackForward()
         {
+            oriPos = new Vector2(transform.position.x, transform.position.y);
             var targetPos = transform.position;
             Vector2 offset = new Vector2(40f, 0);
             offset *= transform.localScale;
             targetPos += new Vector3(offset.x, offset.y, 0);
-            var seq = DOTween.Sequence();
-            seq.Append(transform.DOMoveX(targetPos.x, 0.3f));
-            seq.Append(transform.DOMoveX(transform.position.x, 0.2f));
-            seq.SetAutoKill(true); // 设置自动销毁
-            seq.Play(); // 播放动画
+            yield return transform.DOMoveX(targetPos.x, 0.2f).WaitForCompletion(); // 移动到目标位置
+        }
+
+        public IEnumerator PlayAttackBack()
+        {
+            yield return transform.DOMoveX(oriPos.x, 0.2f).WaitForCompletion(); // 移动回原位置
         }
 
         private void PlayDamageText(DamageType type, int damage)

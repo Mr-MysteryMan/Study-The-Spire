@@ -69,7 +69,7 @@ namespace Combat
         private TriggerLib triggerLib;
 
         [SerializeField] private EnemyLib enemyLibSO; // 怪物库
-        
+
         public EnemyType enemyType;
 
         private float enemyMargin = 120; // 怪物的间隔
@@ -205,7 +205,8 @@ namespace Combat
             }
         }
 
-        private Vector3 GetMonsterPosition(int index, int total, Vector3 center) {
+        private Vector3 GetMonsterPosition(int index, int total, Vector3 center)
+        {
             var leftStartPos = center - new Vector3(enemyMargin * (total - 1) / 2, 0, 0);
             return leftStartPos + new Vector3(enemyMargin * index, 0, 0);
         }
@@ -392,30 +393,6 @@ namespace Combat
 
         public void ProcessCommand<T>(T command) where T : ICommand
         {
-            ProcessOneCommand(command);
-            while (!isProcessing && commandQueue.Count > 0)
-            {
-                var nextCommand = commandQueue.Dequeue();
-                ProcessOneCommand(nextCommand);
-                if (commandQueue.Count > 1000)
-                {
-                    Debug.LogError($"待处理命令过多，数量：{commandQueue.Count}, 可能陷入死循环，请检查命令的执行逻辑");
-                    commandQueue.Clear();
-                    isProcessing = false;
-                    Debug.LogError($"命令队列已清空");
-                    break;
-                }
-            }
-        }
-
-        private void ProcessOneCommand<T>(T command) where T : ICommand
-        {
-            if (isProcessing)
-            {
-                commandQueue.Enqueue(command);
-                return;
-            }
-            isProcessing = true;
             foreach (var processor in GetProcessors<T>(command.Source, ProcessorEffectSideType.Source))
             {
                 processor.Process(ref command);
@@ -437,7 +414,30 @@ namespace Combat
             {
                 trigger.PostCheck(eventManager, command);
             }
-            isProcessing = false;
+        }
+
+        public IEnumerator ProcessCommandAsync<T>(T command) where T : IAsyncCommand
+        {
+            foreach (var processor in GetProcessors<T>(command.Source, ProcessorEffectSideType.Source))
+            {
+                processor.Process(ref command);
+            }
+            foreach (var processor in GetProcessors<T>(command.Target, ProcessorEffectSideType.Target))
+            {
+                processor.Process(ref command);
+            }
+
+            foreach (var trigger in GetTrigger<T>())
+            {
+                trigger.PreCheck(eventManager, command);
+            }
+
+            yield return command.ExecuteAsync();
+
+            foreach (var trigger in GetTrigger<T>())
+            {
+                trigger.PostCheck(eventManager, command);
+            }
         }
     }
 }

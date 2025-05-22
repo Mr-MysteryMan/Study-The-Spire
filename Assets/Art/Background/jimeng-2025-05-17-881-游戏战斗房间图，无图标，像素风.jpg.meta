@@ -132,7 +132,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      "jimeng-2025-05-17-881-\u6E38\u620F\u6218\u6597\u623F\u95F4\u56FE\uFF0C\u65E0\u56FE\u6807\uFF0C\u50CF\u7D20\u98CE_0": -6080211612620384295
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

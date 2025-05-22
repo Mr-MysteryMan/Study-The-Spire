@@ -176,7 +176,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &8854411703700379425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,6 +207,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HPbar: {fileID: 7780274743436461601}
+  vfxManager: {fileID: 3437819894675083737}
   initMaxHp: 10
   initCurHp: 10
   initAmmor: 0
@@ -377,6 +378,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 04e98999699eef446a1931fbbaae82f1, type: 3}
+--- !u!114 &3437819894675083737 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 252119510298386119, guid: 04e98999699eef446a1931fbbaae82f1, type: 3}
+  m_PrefabInstance: {fileID: 3227431257556569886}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96564ceab0efaa3488f7772a95d6baef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &3706216528264867310 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2280233093116617456, guid: 04e98999699eef446a1931fbbaae82f1, type: 3}

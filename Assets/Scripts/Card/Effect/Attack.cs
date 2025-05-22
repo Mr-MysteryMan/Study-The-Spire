@@ -9,6 +9,6 @@ class AttackEffect : IEffect
     }
     public void Work(Character from, Character to)
     {
-        from.Attack(to, damage); // 调用角色的攻击方法
+        from.StartCoroutine(from.Attack(to, damage));
     }
 }

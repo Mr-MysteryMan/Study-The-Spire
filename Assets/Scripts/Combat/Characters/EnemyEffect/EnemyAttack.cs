@@ -10,7 +10,7 @@ namespace Combat.Characters.EnemyEffect
         public override EnemyEffectType EffectType => EnemyEffectType.Attack;
         public override void Work(Character source, Character target)
         {
-            source.Attack(target, Damage);
+            source.StartCoroutine(source.Attack(target, Damage));
         }
     }
 }
