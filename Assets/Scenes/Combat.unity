@@ -820,7 +820,7 @@ MonoBehaviour:
   uiPanel: {fileID: 1120299469}
   rulesLibSO: {fileID: 11400000, guid: 48420e6f6666f3a41a646992888b6368, type: 2}
   enemyLibSO: {fileID: 11400000, guid: 89286d9ceae72154eb2c478945748328, type: 2}
-  enemyType: 0
+  enemyType: 1
 --- !u!114 &1160243197
 MonoBehaviour:
   m_ObjectHideFlags: 0

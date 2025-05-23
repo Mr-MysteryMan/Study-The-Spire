@@ -415,29 +415,5 @@ namespace Combat
                 trigger.PostCheck(eventManager, command);
             }
         }
-
-        public IEnumerator ProcessCommandAsync<T>(T command) where T : IAsyncCommand
-        {
-            foreach (var processor in GetProcessors<T>(command.Source, ProcessorEffectSideType.Source))
-            {
-                processor.Process(ref command);
-            }
-            foreach (var processor in GetProcessors<T>(command.Target, ProcessorEffectSideType.Target))
-            {
-                processor.Process(ref command);
-            }
-
-            foreach (var trigger in GetTrigger<T>())
-            {
-                trigger.PreCheck(eventManager, command);
-            }
-
-            yield return command.ExecuteAsync();
-
-            foreach (var trigger in GetTrigger<T>())
-            {
-                trigger.PostCheck(eventManager, command);
-            }
-        }
     }
 }
