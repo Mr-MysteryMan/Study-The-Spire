@@ -1,0 +1,434 @@
+{
+  "questions": [
+    {
+      "question": "What does 'LOL' stand for?",
+      "selection": [
+        "Lots of love",
+        "Laugh out loud",
+        "Little old lady",
+        "Load of luggage"
+      ],
+      "answer": 1
+    },
+    {
+      "question": "What is a 'selfie'?",
+      "selection": [
+        "A fruit",
+        "A type of car",
+        "A self-portrait",
+        "A hairstyle"
+      ],
+      "answer": 2
+    },
+    {
+      "question": "Meaning of 'brb'?",
+      "selection": ["Right back", "Be right back", "Bye-bye", "Baby"],
+      "answer": 1
+    },
+    {
+      "question": "What is 'ASAP'?",
+      "selection": [
+        "As soon as pub",
+        "As soon as possible",
+        "After school activity",
+        "All sorts of apples"
+      ],
+      "answer": 1
+    },
+    {
+      "question": "Meaning of 'FOMO'?",
+      "selection": [
+        "Fear of missing out",
+        "First of many others",
+        "Finding one's mother",
+        "Father of many others"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "What is 'YOLO' short for?",
+      "selection": [
+        "You only live once",
+        "You obviously like oranges",
+        "Year of living опасно",
+        "Yellow or lemon once"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Meaning of 'IDK'?",
+      "selection": ["I don't know", "I do know", "In deep kiss", "I did know"],
+      "answer": 0
+    },
+    {
+      "question": "What does 'TBH' mean?",
+      "selection": [
+        "To be honest",
+        "To be happy",
+        "To be here",
+        "To be helpful"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Meaning of 'IMO'?",
+      "selection": [
+        "In my opinion",
+        "In my office",
+        "In many others",
+        "In memory of"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "What is 'IRL'?",
+      "selection": [
+        "In real life",
+        "I really like",
+        "In relation to",
+        "In room left"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Meaning of 'AF'?",
+      "selection": ["As f***", "A friend", "All finished", "Absolutely fine"],
+      "answer": 0
+    },
+    {
+      "question": "What does 'DM' stand for?",
+      "selection": [
+        "Direct message",
+        "Doesn't matter",
+        "Deeply moved",
+        "Don't mention"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Meaning of 'RT'?",
+      "selection": ["Retweet", "Real time", "Roommate", "Right"],
+      "answer": 0
+    },
+    {
+      "question": "What is 'OMG'?",
+      "selection": ["Oh my God", "One more game", "On my way", "Only me, guys"],
+      "answer": 0
+    },
+    {
+      "question": "Meaning of 'GTG'?",
+      "selection": ["Got to go", "Good to go", "Going to gym", "Gotta go"],
+      "answer": 3
+    },
+    {
+      "question": "What does 'NP' mean?",
+      "selection": [
+        "No problem",
+        "New project",
+        "Never played",
+        "Not possible"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Meaning of 'JK'?",
+      "selection": ["Just kidding", "Jackpot", "Juice and kale", "Joking"],
+      "answer": 0
+    },
+    {
+      "question": "What is 'FYI'?",
+      "selection": [
+        "For your information",
+        "For your interest",
+        "Find your iPhone",
+        "For your ideas"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Meaning of 'TMI'?",
+      "selection": [
+        "Too much info",
+        "Time to eat",
+        "Talk to me",
+        "Tell me more"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "What does 'DIY' stand for?",
+      "selection": [
+        "Do it yourself",
+        "Dine in yoga",
+        "Don't invite yourself",
+        "Drink in youth"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Meaning of 'BAE'?",
+      "selection": [
+        "Before anything else",
+        "Baby",
+        "Bath and exercise",
+        "Boss and employee"
+      ],
+      "answer": 1
+    },
+    {
+      "question": "What is 'TBH'?",
+      "selection": [
+        "To be honest",
+        "To be happy",
+        "To be here",
+        "To be helpful"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Meaning of 'IDC'?",
+      "selection": [
+        "I don't care",
+        "I did care",
+        "In deep conversation",
+        "I don't check"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "What does 'ROFL' mean?",
+      "selection": [
+        "Rolling on floor laughing",
+        "Really old-fashioned laugh",
+        "Running out of laughter",
+        "Rolling over for laughs"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Meaning of 'IMO'?",
+      "selection": [
+        "In my opinion",
+        "In my office",
+        "In many others",
+        "In memory of"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "What is 'LOL'?",
+      "selection": [
+        "Laugh out loud",
+        "Lots of love",
+        "Little old lady",
+        "Load of luggage"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Meaning of 'FOMO'?",
+      "selection": [
+        "Fear of missing out",
+        "First of many others",
+        "Finding one's mother",
+        "Father of many others"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "What does 'YOLO' stand for?",
+      "selection": [
+        "You only live once",
+        "You obviously like oranges",
+        "Year of living опасно",
+        "Yellow or lemon once"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Meaning of 'IDK'?",
+      "selection": ["I don't know", "I do know", "In deep kiss", "I did know"],
+      "answer": 0
+    },
+    {
+      "question": "What is 'IRL'?",
+      "selection": [
+        "In real life",
+        "I really like",
+        "In relation to",
+        "In room left"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Meaning of 'AF'?",
+      "selection": ["As f***", "A friend", "All finished", "Absolutely fine"],
+      "answer": 0
+    },
+    {
+      "question": "What does 'DM' stand for?",
+      "selection": [
+        "Direct message",
+        "Doesn't matter",
+        "Deeply moved",
+        "Don't mention"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Meaning of 'RT'?",
+      "selection": ["Retweet", "Real time", "Roommate", "Right"],
+      "answer": 0
+    },
+    {
+      "question": "What is 'OMG'?",
+      "selection": ["Oh my God", "One more game", "On my way", "Only me, guys"],
+      "answer": 0
+    },
+    {
+      "question": "Meaning of 'GTG'?",
+      "selection": ["Got to go", "Good to go", "Going to gym", "Gotta go"],
+      "answer": 3
+    },
+    {
+      "question": "What does 'NP' mean?",
+      "selection": [
+        "No problem",
+        "New project",
+        "Never played",
+        "Not possible"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Meaning of 'JK'?",
+      "selection": ["Just kidding", "Jackpot", "Juice and kale", "Joking"],
+      "answer": 0
+    },
+    {
+      "question": "What is 'FYI'?",
+      "selection": [
+        "For your information",
+        "For your interest",
+        "Find your iPhone",
+        "For your ideas"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Meaning of 'TMI'?",
+      "selection": [
+        "Too much info",
+        "Time to eat",
+        "Talk to me",
+        "Tell me more"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "What does 'DIY' stand for?",
+      "selection": [
+        "Do it yourself",
+        "Dine in yoga",
+        "Don't invite yourself",
+        "Drink in youth"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Meaning of 'BAE'?",
+      "selection": [
+        "Before anything else",
+        "Baby",
+        "Bath and exercise",
+        "Boss and employee"
+      ],
+      "answer": 1
+    },
+    {
+      "question": "What is 'TBH'?",
+      "selection": [
+        "To be honest",
+        "To be happy",
+        "To be here",
+        "To be helpful"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Meaning of 'IDC'?",
+      "selection": [
+        "I don't care",
+        "I did care",
+        "In deep conversation",
+        "I don't check"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "What does 'ROFL' mean?",
+      "selection": [
+        "Rolling on floor laughing",
+        "Really old-fashioned laugh",
+        "Running out of laughter",
+        "Rolling over for laughs"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Meaning of 'IMO'?",
+      "selection": [
+        "In my opinion",
+        "In my office",
+        "In many others",
+        "In memory of"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "What is 'LOL'?",
+      "selection": [
+        "Laugh out loud",
+        "Lots of love",
+        "Little old lady",
+        "Load of luggage"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Meaning of 'FOMO'?",
+      "selection": [
+        "Fear of missing out",
+        "First of many others",
+        "Finding one's mother",
+        "Father of many others"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "What does 'YOLO' stand for?",
+      "selection": [
+        "You only live once",
+        "You obviously like oranges",
+        "Year of living опасно",
+        "Yellow or lemon once"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Meaning of 'IDK'?",
+      "selection": ["I don't know", "I do know", "In deep kiss", "I did know"],
+      "answer": 0
+    },
+    {
+      "question": "What is 'IRL'?",
+      "selection": [
+        "In real life",
+        "I really like",
+        "In relation to",
+        "In room left"
+      ],
+      "answer": 0
+    }
+  ]
+}
