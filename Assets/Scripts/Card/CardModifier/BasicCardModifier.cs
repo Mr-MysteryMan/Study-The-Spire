@@ -28,7 +28,7 @@ namespace Cards.Modifier
             foreach (var field in modifiableFields)
             {
                 int value = (int)field.GetValue(cardData);
-                value = (int)(value * Math.Pow(factor, 2));
+                value = (int)(value * factor);
                 field.SetValue(cardData, value);
             }
         }

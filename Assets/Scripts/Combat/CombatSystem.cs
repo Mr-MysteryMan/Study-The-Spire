@@ -393,15 +393,7 @@ namespace Combat
 
         public void ProcessCommand<T>(T command) where T : ICommand
         {
-            foreach (var processor in GetProcessors<T>(command.Source, ProcessorEffectSideType.Source))
-            {
-                processor.Process(ref command);
-            }
-
-            foreach (var processor in GetProcessors<T>(command.Target, ProcessorEffectSideType.Target))
-            {
-                processor.Process(ref command);
-            }
+            ProcessOnly(ref command);
 
             foreach (var trigger in GetTrigger<T>())
             {
@@ -413,6 +405,24 @@ namespace Combat
             foreach (var trigger in GetTrigger<T>())
             {
                 trigger.PostCheck(eventManager, command);
+            }
+        }
+
+        /// <summary>
+        /// 处理命令的管道，遍历所有处理器并执行，可以用于尝试获取处理后的结果
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="command"></param>
+        public void ProcessOnly<T>(ref T command) where T : ICommand
+        {
+            foreach (var processor in GetProcessors<T>(command.Source, ProcessorEffectSideType.Source))
+            {
+                processor.Process(ref command);
+            }
+
+            foreach (var processor in GetProcessors<T>(command.Target, ProcessorEffectSideType.Target))
+            {
+                processor.Process(ref command);
             }
         }
     }
