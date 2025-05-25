@@ -139,5 +139,10 @@ public class CardManager : MonoBehaviour
             Debug.Log(card.GetDebugInfo());
         }
     }
+    
+    public void ResetPlayerData(){
+        Gold = 200;
+        health = 100;
+    }
 
 }
