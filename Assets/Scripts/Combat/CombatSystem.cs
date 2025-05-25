@@ -85,7 +85,7 @@ namespace Combat
 
             eventRulesLib = new EventListener.BasicRuleLib(this);
 
-            cardManager.init(this); // 初始化卡片管理器
+            cardManager.init(this, this.playerCharacter); // 初始化卡片管理器
         }
 
 

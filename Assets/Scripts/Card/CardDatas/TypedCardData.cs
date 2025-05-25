@@ -1,4 +1,7 @@
 using Cards.CardEffect;
+using Cards.Modifier;
+using Combat;
+using Combat.Characters;
 using UnityEngine;
 
 namespace Cards.CardDatas
@@ -17,6 +20,11 @@ namespace Cards.CardDatas
             this.cardType = cardType; // 设置卡牌类型
             this.cardValue = cardValue; // 设置卡牌数值
             this.cardCost = cardCost; // 设置卡牌费用
+        }
+
+        public override object Clone()
+        {
+            return new TypedCardData(cardType, cardValue, cardCost); // 克隆当前卡牌数据
         }
 
         [Modifier.ModifyAttribute.Basic(ModifyType.All)]
@@ -103,6 +111,17 @@ namespace Cards.CardDatas
         public override void Modify(float factor, ModifyType type)
         {
             Modifier.BasicCardModifier.Modify(this, factor, type); // 修改卡牌属性
+        }
+
+        public override void Modify(Character character)
+        {
+            this.cardValue = CharacterCardModifier.CharacterPowerModify(cardValue, character, this.CardType switch
+            {
+                CardType.Attack => CharacterPowerType.Attack,
+                CardType.Defense => CharacterPowerType.Defense,
+                CardType.Heal => CharacterPowerType.Heal,
+                _ => throw new System.ArgumentOutOfRangeException(nameof(cardType), cardType, null)
+            }, 1);
         }
     }
 }

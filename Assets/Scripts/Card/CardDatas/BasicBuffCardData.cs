@@ -4,6 +4,8 @@ using Combat.Buffs.PermanentBuff;
 using Combat.Buffs.TurnBuff;
 using UnityEngine;
 using Cards.Modifier;
+using Combat;
+using Combat.Characters;
 
 namespace Cards.CardDatas
 {
@@ -34,12 +36,18 @@ namespace Cards.CardDatas
         public override int Cost => cardCost; // 卡牌费用属性
         public override string CardName => cardName; // 卡牌名称属性
 
-        [Modifier.ModifyAttribute.Basic(ModifyType.All)]
+        [Modifier.ModifyAttribute.Basic(ModifyType.All),
+         Modifier.ModifyAttribute.CharacterPower(CharacterPowerType.Attack, 1)]
         protected int cardValue;
 
         public override void Modify(float factor, ModifyType modifyType)
         {
             BasicCardModifier.Modify(this, factor, modifyType);
+        }
+
+        public override void Modify(Character character)
+        {
+            CharacterCardModifier.Modify(this, character);
         }
     }
 
@@ -52,6 +60,10 @@ namespace Cards.CardDatas
         public override string Desc => $"获得{cardValue}层力量";
         public override IEffect Effect => new AddBuffEffect<Strength>(new Strength(), cardValue);
 
+        public override object Clone()
+        {
+            return new GainStrength(cardValue, Cost);
+        }
     }
 
     public class ApplyWeak : OneValueCardData
@@ -62,6 +74,11 @@ namespace Cards.CardDatas
 
         public override string Desc => $"给予一名敌人{cardValue}层虚弱";
         public override IEffect Effect => new AddBuffEffect<Weak>(new Weak(), cardValue);
+
+        public override object Clone()
+        {
+            return new ApplyWeak(cardValue, Cost);
+        }
     }
 
     public class ApplyVulnerable : OneValueCardData
@@ -72,6 +89,11 @@ namespace Cards.CardDatas
 
         public override string Desc => $"给予一名敌人{cardValue}层易伤";
         public override IEffect Effect => new AddBuffEffect<Vulnerable>(new Vulnerable(), cardValue);
+
+        public override object Clone()
+        {
+            return new ApplyVulnerable(cardValue, Cost);
+        }
     }
 
     public class ApplyFragil : OneValueCardData
@@ -82,6 +104,11 @@ namespace Cards.CardDatas
 
         public override string Desc => $"给予一名敌人{cardValue}层脆弱";
         public override IEffect Effect => new AddBuffEffect<Fragil>(new Fragil(), cardValue);
+
+        public override object Clone()
+        {
+            return new ApplyFragil(cardValue, Cost);
+        }
     }
 
     public class ApplyPoison : OneValueCardData
@@ -92,5 +119,10 @@ namespace Cards.CardDatas
 
         public override string Desc => $"给予一名敌人{cardValue}层中毒";
         public override IEffect Effect => new AddBuffEffect<Poison>(new Poison(), cardValue);
+
+        public override object Clone()
+        {
+            return new ApplyPoison(cardValue, Cost);
+        }
     }
 }

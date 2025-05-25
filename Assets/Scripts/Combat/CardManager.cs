@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 using Cards;
 using Combat.Characters;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
@@ -43,15 +45,17 @@ namespace Combat
 
         [SerializeField] private CardSource cardSource = CardSource.GlobalCardManager;
 
-        public void init(CombatSystem combatSystem)
+        public void init(CombatSystem combatSystem, Character character)
         {
-            this.NewCardData = cardSource switch
+            this.NewCardData = (cardSource switch
             {
                 CardSource.GlobalCardManager => globalCardManager.GetAllCards(), // 从全局卡片管理器获取随机卡片数据
                 CardSource.RandomCardData => ViewCards.randomCardData(),
                 CardSource.LocalCardLib => LocalCards.GetCards(),
                 _ => globalCardManager.GetAllCards()
-            };
+            }).Select(x => x.Clone() as ICardData).ToList();
+
+            this.NewCardData.ForEach(x => x.Modify(character));
 
             setEnergy(Setting.RoundEnergy); // 设置能量点
             ResetNewCards();

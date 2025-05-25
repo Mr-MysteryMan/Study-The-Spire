@@ -42,6 +42,17 @@ namespace Combat
 
         [SerializeField] public BuffManager buffManager;
 
+        public int AttackPower; // 攻击力
+        public int DefensePower; // 防御力
+        public int HealPower; // 治疗力
+
+        public void SetPowers(int attackPower, int defensePower, int healPower)
+        {
+            AttackPower = attackPower;
+            DefensePower = defensePower;
+            HealPower = healPower;
+        }
+
         public void SetInitHP(int maxHp, int curHp) // 设置初始化生命值数据
         {
             initCurHp = curHp;
