@@ -19,7 +19,11 @@ namespace Combat.VFX
         [SerializeField] private GameObject HealTextPrefab;
         [SerializeField] private GameObject BasicTextPrefab;
 
+        [SerializeField] private GameObject HealParticlePrefab;
+        [SerializeField] private GameObject AmmorParticlePrefab;
+
         [SerializeField] private RectTransform textRectTransform;
+        [SerializeField] private RectTransform bootomRectTransform;
 
         [SerializeField] private GameObject indicator;
 
@@ -55,7 +59,7 @@ namespace Combat.VFX
         {
             if (e.Target == character)
             {
-                PlayHeal(e.Heal);
+                PlayDamageText(DamageType.Heal, e.Heal);
             }
         }
 
@@ -134,9 +138,11 @@ namespace Combat.VFX
             seq.Play(); // 播放动画
         }
 
-        private void PlayHeal(int heal)
+        public IEnumerator PlayHeal()
         {
-            PlayDamageText(DamageType.Heal, heal);
+            var pc = Instantiate(HealParticlePrefab, bootomRectTransform).GetComponent<ParticleController>();
+            yield return null; // 等待一帧，确保粒子系统已初始化
+            yield return pc.WaitForEnd();   // 等待粒子效果结束
         }
 
         private void PlayAddAmmor(int ammor)
