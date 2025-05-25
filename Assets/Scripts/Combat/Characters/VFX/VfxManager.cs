@@ -141,7 +141,6 @@ namespace Combat.VFX
         public IEnumerator PlayHeal()
         {
             var pc = Instantiate(HealParticlePrefab, bootomRectTransform).GetComponent<ParticleController>();
-            yield return null; // 等待一帧，确保粒子系统已初始化
             yield return pc.WaitForEnd();   // 等待粒子效果结束
         }
 

@@ -12,6 +12,7 @@ public class ParticleController : MonoBehaviour
 
     public IEnumerator WaitForEnd()
     {
+        yield return null; // 等待下一帧，确保ParticleSystem已初始化
         while (ps != null && ps.isPlaying)
         {
             yield return null;

@@ -80,8 +80,9 @@ namespace Combat
         }
 
         // 为target加血，会触发相应事件
-        public void Heal(Character target, int heal)
+        public IEnumerator Heal(Character target, int heal)
         {
+            yield return target.vfxManager.PlayHeal();
             combatSystem.ProcessCommand(new HealCommand(this, target, heal));
         }
 

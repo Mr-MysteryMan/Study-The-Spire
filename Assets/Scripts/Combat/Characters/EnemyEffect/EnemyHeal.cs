@@ -9,7 +9,7 @@ namespace Combat.Characters.EnemyEffect
         public override EnemyEffectType EffectType => EnemyEffectType.Buff;
         public override void Work(Character source, Character target)
         {
-            source.Heal(target, HealAmount);
+            source.StartCoroutine(source.Heal(target, HealAmount));
         }
     }
 }
