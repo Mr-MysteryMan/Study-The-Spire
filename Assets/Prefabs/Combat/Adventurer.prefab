@@ -116,6 +116,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HPbar: {fileID: 1346142233314231824}
+  vfxManager: {fileID: 6260836259682374120}
   initMaxHp: 100
   initCurHp: 100
   initAmmor: 0
@@ -293,3 +294,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2280233093116617456, guid: 04e98999699eef446a1931fbbaae82f1, type: 3}
   m_PrefabInstance: {fileID: 6169157656566501167}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6260836259682374120 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 252119510298386119, guid: 04e98999699eef446a1931fbbaae82f1, type: 3}
+  m_PrefabInstance: {fileID: 6169157656566501167}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96564ceab0efaa3488f7772a95d6baef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

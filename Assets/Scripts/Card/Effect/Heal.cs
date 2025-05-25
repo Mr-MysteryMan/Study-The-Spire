@@ -11,6 +11,6 @@ class HealEffect : IEffect
 
     public void Work(Character survivor, Character enemy)
     {
-        survivor.Heal(health);
+        survivor.StartCoroutine(survivor.Heal(health));
     }
 }

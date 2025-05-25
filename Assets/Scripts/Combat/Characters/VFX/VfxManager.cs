@@ -1,6 +1,8 @@
+using System.Collections;
 using Combat.Events;
 using DG.Tweening;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Combat.VFX
@@ -17,7 +19,11 @@ namespace Combat.VFX
         [SerializeField] private GameObject HealTextPrefab;
         [SerializeField] private GameObject BasicTextPrefab;
 
+        [SerializeField] private GameObject HealParticlePrefab;
+        [SerializeField] private GameObject AmmorParticlePrefab;
+
         [SerializeField] private RectTransform textRectTransform;
+        [SerializeField] private RectTransform bootomRectTransform;
 
         [SerializeField] private GameObject indicator;
 
@@ -30,7 +36,6 @@ namespace Combat.VFX
             eventManager.Subscribe<DamageDealtEvent>(OnDamageDealt);
             eventManager.Subscribe<HealDealtEvent>(OnHealDealt);
             eventManager.Subscribe<AddAmmorEvent>(OnAddAmmor);
-            eventManager.Subscribe<BeforeAttackEvent>(OnBeforeAttack);
         }
 
         private void OnDestroy() {
@@ -39,7 +44,6 @@ namespace Combat.VFX
                 eventManager.Unsubscribe<DamageDealtEvent>(OnDamageDealt);
                 eventManager.Unsubscribe<HealDealtEvent>(OnHealDealt);
                 eventManager.Unsubscribe<AddAmmorEvent>(OnAddAmmor);
-                eventManager.Unsubscribe<BeforeAttackEvent>(OnBeforeAttack);
             }
         }
 
@@ -55,7 +59,7 @@ namespace Combat.VFX
         {
             if (e.Target == character)
             {
-                PlayHeal(e.Heal);
+                PlayDamageText(DamageType.Heal, e.Heal);
             }
         }
 
@@ -64,14 +68,6 @@ namespace Combat.VFX
             if (e.Target == character)
             {
                 PlayAddAmmor(e.Ammor);
-            }
-        }
-
-        private void OnBeforeAttack(BeforeAttackEvent e)
-        {
-            if (e.Attacker == character)
-            {
-                 PlayAttack();
             }
         }
 
@@ -93,17 +89,20 @@ namespace Combat.VFX
             Basic,
         }
 
-        private void PlayAttack()
+        private Vector2 oriPos;
+        public IEnumerator PlayAttackForward()
         {
+            oriPos = new Vector2(transform.position.x, transform.position.y);
             var targetPos = transform.position;
             Vector2 offset = new Vector2(40f, 0);
             offset *= transform.localScale;
             targetPos += new Vector3(offset.x, offset.y, 0);
-            var seq = DOTween.Sequence();
-            seq.Append(transform.DOMoveX(targetPos.x, 0.3f));
-            seq.Append(transform.DOMoveX(transform.position.x, 0.2f));
-            seq.SetAutoKill(true); // 设置自动销毁
-            seq.Play(); // 播放动画
+            yield return transform.DOMoveX(targetPos.x, 0.2f).WaitForCompletion(); // 移动到目标位置
+        }
+
+        public IEnumerator PlayAttackBack()
+        {
+            yield return transform.DOMoveX(oriPos.x, 0.2f).WaitForCompletion(); // 移动回原位置
         }
 
         private void PlayDamageText(DamageType type, int damage)
@@ -139,9 +138,11 @@ namespace Combat.VFX
             seq.Play(); // 播放动画
         }
 
-        private void PlayHeal(int heal)
+        public IEnumerator PlayHeal()
         {
-            PlayDamageText(DamageType.Heal, heal);
+            var pc = Instantiate(HealParticlePrefab, bootomRectTransform).GetComponent<ParticleController>();
+            yield return null; // 等待一帧，确保粒子系统已初始化
+            yield return pc.WaitForEnd();   // 等待粒子效果结束
         }
 
         private void PlayAddAmmor(int ammor)
