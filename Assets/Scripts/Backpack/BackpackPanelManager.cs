@@ -59,7 +59,7 @@ public class BackpackPanelManager : MonoBehaviour
 
         detailBtn = root.Find("Bottom/BottomMenus/DetailBtn");
         goldAmount = root.Find("Bottom/BottomMenus/Gold/amount");
-        goldAmount.GetComponent<Text>().text = $"{cardManager.Gold}";
+        goldAmount.GetComponent<Text>().text = $"{cardManager.gold}";
     }
 
     private void InitEvents()
