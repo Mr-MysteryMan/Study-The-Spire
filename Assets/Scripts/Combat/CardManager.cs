@@ -35,8 +35,9 @@ namespace Combat
 
         [SerializeField] private RectTransform uiRectTransform;
 
-        enum CardSource {
-            GlobalCardManager, 
+        enum CardSource
+        {
+            GlobalCardManager,
             RandomCardData,
             LocalCardLib
         }
@@ -61,7 +62,8 @@ namespace Combat
             this.combatSystem = combatSystem; // 设置战斗系统
         }
 
-        public void ResetNewCards () {
+        public void ResetNewCards()
+        {
             foreach (var cardData in NewCardData)
             {
                 cardData.Reset();
@@ -146,7 +148,8 @@ namespace Combat
             return this.enemy[0];
         }
 
-        public void UseHandCard(Card card, Character source, Character target) {
+        public void UseHandCard(Card card, Character source, Character target)
+        {
             Assert.IsTrue(this.HandCardData.Contains(card.CardData));
             if (this.EnergyPoint < card.CardCost) return;
             this.setEnergy(this.EnergyPoint - card.CardCost);
@@ -200,6 +203,32 @@ namespace Combat
             {
                 EnergySpotText.text = this.energy.ToString(); // 更新能量点文本
             }
+        }
+
+        public Result IsPlayable(ICardData card)
+        {
+            // 检查卡牌是否在手牌中
+            if (!HandCardData.Contains(card))
+            {
+                return Result.Fail("卡牌不在手牌中");
+            }
+
+            if (card is ICardPlayable playableCard)
+            {
+                return playableCard.IsPlayable(combatSystem); // 如果卡牌实现了ICardPlayable接口，调用其IsPlayable方法
+            }
+
+            // 检查能量点是否足够
+            if (EnergyPoint < card.Cost)
+            {
+                return Result.Fail($"能量点不足: {EnergyPoint}/{card.Cost}");
+            }
+            // 检查卡牌效果目标是否有效
+            if (!card.CardEffectTarget.IsValidTarget())
+            {
+                return Result.Fail("卡牌不可用");
+            }
+            return Result.Ok(); // 卡牌可用
         }
     }
 }

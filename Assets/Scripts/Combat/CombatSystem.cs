@@ -62,6 +62,8 @@ namespace Combat
         public Character PlayerCharacter => playerCharacter; // 玩家角色
         public List<Enemy> MonsterCharacter => monsterCharacter; // 怪物角色
 
+        public List<Character> AllCharacters => new List<Character> { playerCharacter }.Concat(monsterCharacter).ToList(); // 所有角色列表
+
         [SerializeField] private BasicRulesLibSO rulesLibSO;
 
         private EventListener.BasicRuleLib eventRulesLib;

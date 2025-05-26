@@ -1,19 +1,100 @@
 using Cards.CardEffect;
 using UnityEngine;
 
+/// <summary>
+/// 卡牌效果目标枚举
+/// </summary>
 public enum CardEffectTarget
 {
+    /// <summary>
+    /// 无效目标
+    /// </summary>
     None,
+
+    /// <summary>
+    /// 己方自身
+    /// </summary>
     AdventurerSelf,
+
+    /// <summary>
+    /// 己方单体目标
+    /// </summary>
     AdventurerOne,
+
+    /// <summary>
+    /// 己方无特定目标，全体或随机
+    /// </summary>
     AdventurerAll,
+
+    /// <summary>
+    /// 敌方单体目标
+    /// </summary>
     EnemyOne,
+
+    /// <summary>
+    /// 敌方无特定目标，全体或随机
+    /// </summary>
     EnemyAll,
 
+    /// <summary>
+    /// 单体目标
+    /// </summary>
+
     CharacterOne,
+
+    /// <summary>
+    /// 无特定目标，全体或随机
+    /// </summary>
     CharacterAll,
 
+    /// <summary>
+    /// 不可释放
+    /// </summary>
     NotPlayable,
+}
+
+public static class CardEffectTargetExtensions
+{
+    public static bool IsValidTarget(this CardEffectTarget target)
+    {
+        return target != CardEffectTarget.None && target != CardEffectTarget.NotPlayable;
+    }
+
+    public static bool IsSingleTarget(this CardEffectTarget target)
+    {
+        return target == CardEffectTarget.AdventurerOne || target == CardEffectTarget.EnemyOne || target == CardEffectTarget.CharacterOne;
+    }
+
+    public static bool IsMultiTarget(this CardEffectTarget target)
+    {
+        return target == CardEffectTarget.AdventurerAll || target == CardEffectTarget.EnemyAll || target == CardEffectTarget.CharacterAll;
+    }
+
+    public static bool IsEnemyTarget(this CardEffectTarget target)
+    {
+        return target == CardEffectTarget.EnemyOne || target == CardEffectTarget.EnemyAll;
+    }
+
+    public static bool IsAdventurerTarget(this CardEffectTarget target)
+    {
+        return target == CardEffectTarget.AdventurerOne || target == CardEffectTarget.AdventurerAll || target == CardEffectTarget.AdventurerSelf;
+    }
+
+    public static bool IsCharacterTarget(this CardEffectTarget target)
+    {
+        return target == CardEffectTarget.CharacterOne || target == CardEffectTarget.CharacterAll;
+    }
+
+    public static bool IsDragToSelectTarget(this CardEffectTarget target)
+    {
+        return target == CardEffectTarget.AdventurerOne || target == CardEffectTarget.EnemyOne || target == CardEffectTarget.CharacterOne;
+    }
+
+    public static bool IsMoveToSelectTarget(this CardEffectTarget target)
+    {
+        return target == CardEffectTarget.AdventurerAll || target == CardEffectTarget.EnemyAll || target == CardEffectTarget.CharacterAll ||
+            target == CardEffectTarget.AdventurerSelf;
+    }
 }
 
 public enum CardCategory
