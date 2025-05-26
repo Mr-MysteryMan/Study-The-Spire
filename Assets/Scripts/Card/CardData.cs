@@ -132,7 +132,7 @@ public interface ICardData
     void Discard(); // 弃牌方法
     void Reset(); // 重置方法
 
-    object Clone(); // 克隆方法
+    ICardData Clone(); // 克隆方法
 
     void Modify(float factor, ModifyType type); // 修改方法
     void Modify(Character character);
@@ -174,7 +174,7 @@ public abstract class CardData : ICardData
 
     public abstract void Modify(float factor, ModifyType modifyType); // 修改方法
     public abstract void Modify(Character character); // 修改方法
-    public abstract object Clone();
+    public abstract ICardData Clone();
 }
 
 public class BasicCardData : CardData
@@ -214,7 +214,7 @@ public class BasicCardData : CardData
     public override void Modify(Character character)
     {}
     
-    public override object Clone()
+    public override ICardData Clone()
     {
         return new BasicCardData(cardName, desc, cardCost, cardCategory, cardEffectTarget, sprite, effect);
     }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Combat.Characters.EnemyEffect
@@ -8,9 +9,14 @@ namespace Combat.Characters.EnemyEffect
         public int Damage;
 
         public override EnemyEffectType EffectType => EnemyEffectType.Attack;
-        public override void Work(Character source, Character target)
+        public override CardEffectTarget TargetType => CardEffectTarget.AdventurerOne;
+        
+        public override void Work(Character source, List<Character> targets)
         {
-            source.StartCoroutine(source.Attack(target, Damage));
+            foreach (var target in targets)
+            {
+                source.Attack(target, Damage); // 执行攻击
+            }
         }
     }
 }

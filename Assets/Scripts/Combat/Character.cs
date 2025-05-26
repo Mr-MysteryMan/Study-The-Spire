@@ -83,31 +83,27 @@ namespace Combat
 
 
         // 攻击target,造成damage点伤害，会触发相应事件
-        public IEnumerator Attack(Character target, int damage)
+        public void Attack(Character target, int damage)
         {
-            yield return this.vfxManager.PlayAttackForward();
             combatSystem.ProcessCommand(new AttackCommand(this, target, damage, DamageType.Normal));
-            yield return this.vfxManager.PlayAttackBack();
         }
 
         // 为target加血，会触发相应事件
-        public IEnumerator Heal(Character target, int heal)
+        public void Heal(Character target, int heal)
         {
-            yield return target.vfxManager.PlayHeal();
             combatSystem.ProcessCommand(new HealCommand(this, target, heal));
         }
 
         // 为自己加血，会触发相应事件
-        public IEnumerator Heal(int heal)
+        public void Heal(int heal)
         {
-            yield return this.vfxManager.PlayHeal();
             combatSystem.ProcessCommand(new HealCommand(this, this, heal));
         }
 
         // 为target添加护甲值，会触发相应事件
-        public void AddAmmor(Character character, int ammor)
+        public void AddAmmor(Character target, int ammor)
         {
-            combatSystem.ProcessCommand(new AddAmmorCommand(this, character, ammor));
+            combatSystem.ProcessCommand(new AddAmmorCommand(this, target, ammor));
         }
 
         // 为自己添加护甲值，会触发相应事件

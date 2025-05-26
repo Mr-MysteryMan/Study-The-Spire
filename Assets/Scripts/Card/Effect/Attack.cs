@@ -1,5 +1,6 @@
 using Combat;
 using Cards.CardEffect;
+using System.Collections.Generic;
 class AttackEffect : IEffect
 {
     private int damage; // 攻击伤害
@@ -7,8 +8,11 @@ class AttackEffect : IEffect
     {
         this.damage = damage;
     }
-    public void Work(Character from, Character to)
+    public void Work(Character from, List<Character> to)
     {
-        from.StartCoroutine(from.Attack(to, damage));
+        foreach (var target in to)
+        {
+            from.Attack(target, damage); // 执行攻击
+        }
     }
 }

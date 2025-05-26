@@ -1,6 +1,10 @@
 using UnityEngine;
 using Combat.Events.Turn;
 using System.Collections;
+using System.Collections.Generic;
+using Combat.Characters;
+using System.Linq;
+using System;
 
 namespace Combat
 {
@@ -97,10 +101,29 @@ namespace Combat
 
             foreach (var monster in combatSystem.MonsterCharacter)
             {
-                monster.Effect.Work(monster, monster.Effect.EffectType == Characters.EnemyEffect.EnemyEffectType.Attack ? combatSystem.PlayerCharacter : monster); // 触发敌人效果
+                monster.Effect.Work(monster, GetTargets(monster.Effect.TargetType, monster)); // 触发敌人效果
             }
 
             EndEnemyTurn(); // 结束敌人回合
+        }
+
+        private List<Character> GetTargets(CardEffectTarget effectTarget, Character character)
+        {
+            return effectTarget switch
+            {
+                CardEffectTarget.None => new List<Character>(),
+                CardEffectTarget.AdventurerOne => new List<Character> { combatSystem.PlayerCharacter },
+                CardEffectTarget.AdventurerAll => new List<Character> { combatSystem.PlayerCharacter },
+                CardEffectTarget.AdventurerSelf => new List<Character> { combatSystem.PlayerCharacter },
+
+                CardEffectTarget.EnemyOne => new List<Character> { character },
+                CardEffectTarget.EnemyAll => combatSystem.MonsterCharacter.Select(m => m as Character).ToList(),
+                CardEffectTarget.NotPlayable => new List<Character>(),
+
+                CardEffectTarget.CharacterOne => new List<Character> { character },
+                CardEffectTarget.CharacterAll => combatSystem.AllCharacters,
+                _ => throw new ArgumentOutOfRangeException(nameof(effectTarget), effectTarget, null)
+            };
         }
 
         private void EndEnemyTurn()

@@ -54,7 +54,7 @@ namespace Combat
                 CardSource.RandomCardData => ViewCards.randomCardData(),
                 CardSource.LocalCardLib => LocalCards.GetCards(),
                 _ => globalCardManager.GetAllCards()
-            }).Select(x => x.Clone() as ICardData).ToList();
+            }).Select(x => x.Clone()).ToList();
 
             this.NewCardData.ForEach(x => x.Modify(character));
 
@@ -152,12 +152,12 @@ namespace Combat
             return this.enemy[0];
         }
 
-        public void UseHandCard(Card card, Character source, Character target)
+        public void UseHandCard(Card card, Character source, List<Character> targets)
         {
             Assert.IsTrue(this.HandCardData.Contains(card.CardData));
             if (this.EnergyPoint < card.CardCost) return;
             this.setEnergy(this.EnergyPoint - card.CardCost);
-            card.Effect.Work(source, target);
+            card.Effect.Work(source, targets);
             reportUse(card);
         }
 

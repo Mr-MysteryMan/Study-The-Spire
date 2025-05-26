@@ -60,7 +60,7 @@ namespace Cards.CardDatas
         public override string Desc => $"获得{cardValue}层力量";
         public override IEffect Effect => new AddBuffEffect<Strength>(new Strength(), cardValue);
 
-        public override object Clone()
+        public override ICardData Clone()
         {
             return new GainStrength(cardValue, Cost);
         }
@@ -75,7 +75,7 @@ namespace Cards.CardDatas
         public override string Desc => $"给予一名敌人{cardValue}层虚弱";
         public override IEffect Effect => new AddBuffEffect<Weak>(new Weak(), cardValue);
 
-        public override object Clone()
+        public override ICardData Clone()
         {
             return new ApplyWeak(cardValue, Cost);
         }
@@ -90,7 +90,7 @@ namespace Cards.CardDatas
         public override string Desc => $"给予一名敌人{cardValue}层易伤";
         public override IEffect Effect => new AddBuffEffect<Vulnerable>(new Vulnerable(), cardValue);
 
-        public override object Clone()
+        public override ICardData Clone()
         {
             return new ApplyVulnerable(cardValue, Cost);
         }
@@ -105,7 +105,7 @@ namespace Cards.CardDatas
         public override string Desc => $"给予一名敌人{cardValue}层脆弱";
         public override IEffect Effect => new AddBuffEffect<Fragil>(new Fragil(), cardValue);
 
-        public override object Clone()
+        public override ICardData Clone()
         {
             return new ApplyFragil(cardValue, Cost);
         }
@@ -120,7 +120,7 @@ namespace Cards.CardDatas
         public override string Desc => $"给予一名敌人{cardValue}层中毒";
         public override IEffect Effect => new AddBuffEffect<Poison>(new Poison(), cardValue);
 
-        public override object Clone()
+        public override ICardData Clone()
         {
             return new ApplyPoison(cardValue, Cost);
         }

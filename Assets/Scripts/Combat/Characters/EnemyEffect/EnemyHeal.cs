@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Combat.Characters.EnemyEffect
@@ -7,9 +8,14 @@ namespace Combat.Characters.EnemyEffect
     {
         public int HealAmount;
         public override EnemyEffectType EffectType => EnemyEffectType.Buff;
-        public override void Work(Character source, Character target)
+        public override CardEffectTarget TargetType => CardEffectTarget.EnemyOne;
+
+        public override void Work(Character source, List<Character> targets)
         {
-            source.StartCoroutine(source.Heal(target, HealAmount));
+            foreach (var target in targets)
+            {
+                source.Heal(target, HealAmount);
+            }
         }
     }
 }

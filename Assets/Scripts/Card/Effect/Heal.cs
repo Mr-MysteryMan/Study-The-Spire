@@ -1,5 +1,6 @@
 using Combat;
 using Cards.CardEffect;
+using System.Collections.Generic;
 
 class HealEffect : IEffect
 {
@@ -9,8 +10,8 @@ class HealEffect : IEffect
         this.health = health;
     }
 
-    public void Work(Character survivor, Character enemy)
+    public void Work(Character survivor, List<Character> enemys)
     {
-        survivor.StartCoroutine(survivor.Heal(health));
+        survivor.Heal(health); // 执行治疗
     }
 }

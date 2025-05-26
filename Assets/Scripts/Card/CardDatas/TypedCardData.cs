@@ -22,7 +22,7 @@ namespace Cards.CardDatas
             this.cardCost = cardCost; // 设置卡牌费用
         }
 
-        public override object Clone()
+        public override ICardData Clone()
         {
             return new TypedCardData(cardType, cardValue, cardCost); // 克隆当前卡牌数据
         }

@@ -1,5 +1,6 @@
 using Combat;
 using Cards.CardEffect;
+using System.Collections.Generic;
 
 class DefenseEffect : IEffect
 {
@@ -8,7 +9,7 @@ class DefenseEffect : IEffect
     {
         this.Defense = Defense;
     }
-    public void Work(Character survivor, Character enemy)
+    public void Work(Character survivor, List<Character> enemy)
     {
         survivor.AddAmmor(Defense);
     }

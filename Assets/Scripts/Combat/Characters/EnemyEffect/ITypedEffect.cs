@@ -14,5 +14,6 @@ namespace Combat.Characters.EnemyEffect
     public interface ITypedEffect : IEffect
     {
         EnemyEffectType EffectType { get; }
+        CardEffectTarget TargetType { get; }
     }
 }

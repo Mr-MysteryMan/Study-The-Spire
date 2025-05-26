@@ -1,6 +1,6 @@
+using System.Collections.Generic;
 using Combat;
 using Combat.Buffs;
-using Combat.Buffs.PermanentBuff;
 
 namespace Cards.CardEffect.Buffs
 {
@@ -16,9 +16,12 @@ namespace Cards.CardEffect.Buffs
             this.count = count;
         }
 
-        public void Work(Character source, Character target)
+        public void Work(Character source, List<Character> targets)
         {
-            source.AddBuff(target, buff, count);
+            foreach (var target in targets)
+            {
+                source.AddBuff(target, buff, count);
+            }
         }
     }
 }

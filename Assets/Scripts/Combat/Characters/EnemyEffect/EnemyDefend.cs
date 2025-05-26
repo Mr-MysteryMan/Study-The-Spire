@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Combat.Characters.EnemyEffect
@@ -8,10 +9,14 @@ namespace Combat.Characters.EnemyEffect
         public int AmmorAmount;
 
         public override EnemyEffectType EffectType => EnemyEffectType.Defend;
+        public override CardEffectTarget TargetType => CardEffectTarget.EnemyOne;
 
-        public override void Work(Character source, Character target)
+        public override void Work(Character source, List<Character> targets)
         {
-            source.AddAmmor(target, AmmorAmount);
+            foreach (var target in targets)
+            {
+                source.AddAmmor(target, AmmorAmount);
+            }
         }
     }
 }
