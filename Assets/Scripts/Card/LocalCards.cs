@@ -12,6 +12,8 @@ namespace Cards
             new TypedCardData(CardType.Defense, 8, 1),
             new TypedCardData(CardType.Defense, 8, 1),
 
+            
+
             new ApplyWeak(2, 0),
             new ApplyVulnerable(2, 0),
             new ApplyFragil(2, 0),

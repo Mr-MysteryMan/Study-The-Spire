@@ -138,12 +138,12 @@ namespace Combat.VFX
             seq.Play(); // 播放动画
         }
 
-        public IEnumerator PlayHeal()
+        public IEnumerator PlayHealAsny()
         {
             var pc = Instantiate(HealParticlePrefab, bootomRectTransform).GetComponent<ParticleController>();
             yield return pc.WaitForEnd();   // 等待粒子效果结束
         }
-
+        
         private void PlayAddAmmor(int ammor)
         {
             PlayDamageText(DamageType.Ammor, ammor);

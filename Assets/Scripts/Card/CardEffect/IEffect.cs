@@ -5,7 +5,7 @@ namespace Cards.CardEffect
 {
     public interface IEffect
     {
-        void Work(Character source, List<Character> targets);
+        IEnumerator Work(Character source, List<Character> targets);
     }
 
     public interface IAsnycEffect

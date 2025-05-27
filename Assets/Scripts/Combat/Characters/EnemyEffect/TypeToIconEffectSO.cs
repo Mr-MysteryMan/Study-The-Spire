@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,9 +16,9 @@ namespace Combat.Characters.EnemyEffect
         public EnemyEffectType EffectType => Effect.EffectType;
         public CardEffectTarget TargetType => Effect.TargetType;
 
-        public void Work(Character source, List<Character> targets)
+        public IEnumerator Work(Character source, List<Character> targets)
         {
-            Effect.Work(source, targets);
+            yield return Effect.Work(source, targets);
         }
     }
 }

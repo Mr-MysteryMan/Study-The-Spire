@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +9,6 @@ namespace Combat.Characters.EnemyEffect
         public abstract EnemyEffectType EffectType { get; }
         public abstract CardEffectTarget TargetType { get; }
 
-        public abstract void Work(Character source, List<Character> targets);
+        public abstract IEnumerator Work(Character source, List<Character> targets);
     }
 }

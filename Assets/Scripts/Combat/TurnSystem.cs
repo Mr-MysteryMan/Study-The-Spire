@@ -82,10 +82,10 @@ namespace Combat
             turnState = TurnState.Ended; // 回合结束
             combatSystem.EventManager.Publish(new TurnEndEvent(combatSystem.PlayerCharacter, turnNum));
             combatSystem.PlayerCharacter.OnTurnEnd();
-            StartEnemyTurn(); // 开始敌人回合
+            StartCoroutine(StartEnemyTurn()); // 开始敌人回合
         }
 
-        private void StartEnemyTurn()
+        private IEnumerator StartEnemyTurn()
         {
             whoseTurn = WhoseTurn.Enemy; // 敌人回合
             Debug.Log($"开始第 {turnNum} 回合, 敌人回合");
@@ -101,7 +101,7 @@ namespace Combat
 
             foreach (var monster in combatSystem.MonsterCharacter)
             {
-                monster.Effect.Work(monster, GetTargets(monster.Effect.TargetType, monster)); // 触发敌人效果
+                yield return monster.Effect.Work(monster, GetTargets(monster.Effect.TargetType, monster)); // 触发敌人效果
             }
 
             EndEnemyTurn(); // 结束敌人回合

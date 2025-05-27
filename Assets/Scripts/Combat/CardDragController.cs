@@ -189,6 +189,10 @@ namespace Combat
                     return combatSystem.AllCharacters;
                 }
             }
+            else if (canMove)
+            {
+                return new List<Character> { combatSystem.PlayerCharacter };
+            }
             else
             {
                 if (target != null)
@@ -220,7 +224,11 @@ namespace Combat
             if (canExecute)
             {
                 Debug.Log("使用卡牌");
-                combatSystem.CardManager.UseHandCard(currentCard, combatSystem.PlayerCharacter, GetTargets(target));
+                UpdateTarget(false, null);
+                StartCoroutine(
+                    combatSystem.CardManager.UseHandCard(currentCard, combatSystem.PlayerCharacter, GetTargets(target))
+                );
+                return;
             }
             else
             {

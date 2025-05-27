@@ -1,6 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
 using Combat;
 using Combat.Buffs;
+using UnityEngine;
 
 namespace Cards.CardEffect.Buffs
 {
@@ -16,12 +18,14 @@ namespace Cards.CardEffect.Buffs
             this.count = count;
         }
 
-        public void Work(Character source, List<Character> targets)
+        public IEnumerator Work(Character source, List<Character> targets)
         {
+            yield return new WaitForSeconds(0.2f);
             foreach (var target in targets)
             {
                 source.AddBuff(target, buff, count);
             }
+            yield return new WaitForSeconds(0.2f);
         }
     }
 }

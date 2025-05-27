@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cards;
@@ -25,6 +26,8 @@ namespace Combat
         public List<ICardData> NewCardData; // 新卡片数据列表
         public List<ICardData> HandCardData; // 手牌数据列表
         public List<ICardData> DiscardCardData; // 弃牌数据列表
+
+        public List<ICardData> PendingCardData; // 待处理卡片数据列表
 
         private GlobalCardManager globalCardManager = GlobalCardManager.Instance; // 全局卡片管理器
 
@@ -62,6 +65,7 @@ namespace Combat
             ResetNewCards();
             HandCardData = new List<ICardData>(); // 初始化手牌数据列表
             DiscardCardData = new List<ICardData>(); // 初始化弃牌数据列表
+            PendingCardData = new List<ICardData>(); // 初始化待处理卡片数据列表
 
             this.combatSystem = combatSystem; // 设置战斗系统
         }
@@ -105,6 +109,29 @@ namespace Combat
             }
             // 更新卡片位置
             updateCardPosition();
+        }
+
+        private void MoveToPending(Card card)
+        {
+            var cardData = card.CardData; // 获取卡片数据
+            cards.Remove(card.cardObj);
+            if (HandCardData.Contains(cardData))
+            {
+                HandCardData.Remove(cardData); // 从手牌数据列表中移除
+                PendingCardData.Add(cardData); // 添加到待处理卡片数据列表
+            }
+        }
+
+        private void DiscardPending(Card card)
+        {
+            var cardData = card.CardData; // 获取卡片数据
+            if (PendingCardData.Contains(cardData))
+            {
+                cardData.Discard(); // 弃掉卡片
+                PendingCardData.Remove(cardData); // 从待处理卡片数据列表中移除
+                DiscardCardData.Add(cardData); // 将卡片添加到弃牌数据列表
+            }
+            Destroy(card.cardObj);
         }
 
         public void discardCard(Card card)
@@ -152,13 +179,15 @@ namespace Combat
             return this.enemy[0];
         }
 
-        public void UseHandCard(Card card, Character source, List<Character> targets)
+        public IEnumerator UseHandCard(Card card, Character source, List<Character> targets)
         {
             Assert.IsTrue(this.HandCardData.Contains(card.CardData));
-            if (this.EnergyPoint < card.CardCost) return;
+            if (this.EnergyPoint < card.CardCost) yield break;
             this.setEnergy(this.EnergyPoint - card.CardCost);
-            card.Effect.Work(source, targets);
-            reportUse(card);
+            MoveToPending(card);
+            yield return card.Effect.Work(source, targets);
+            DiscardPending(card); // 弃掉已使用的卡片
+            updateCardPosition();
         }
 
         public void reportUse(Card card)
