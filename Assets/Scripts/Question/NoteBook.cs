@@ -6,6 +6,7 @@ public class NoteBook : MonoBehaviour
 
     public GameObject page1;
     public GameObject page2;
+    public GameObject QuestionStorePrefab;
 
     private int page = 0; // 当前页码
     void Start()
@@ -32,6 +33,19 @@ public class NoteBook : MonoBehaviour
         }
     }
 
+    public void edit()
+    {
+        // 创建题库UI
+        Instantiate(QuestionStorePrefab);
+        // 关闭笔记本
+        close();
+    }
+
+    public void close()
+    {
+        Destroy(noteBookUI);
+    }
+
     private void upDatePage()
     {
         string name1 = QuestionStore.EnableQuestionListNames[page * 2];
@@ -45,10 +59,5 @@ public class NoteBook : MonoBehaviour
         {
             page2.GetComponent<Page>().updateStatus("", new QuestionData[0]);
         }
-    }
-
-    public void close()
-    {
-        Destroy(noteBookUI);
     }
 }
