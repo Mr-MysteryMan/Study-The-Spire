@@ -119,7 +119,7 @@ RectTransform:
   m_GameObject: {fileID: 8887891203348593607}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.6666667, y: 0.6666667, z: 1}
+  m_LocalScale: {x: 0.333333, y: 0.333333, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3675290891537607354}
@@ -176,7 +176,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &8854411703700379425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,6 +213,9 @@ MonoBehaviour:
   initAmmor: 0
   combatSystem: {fileID: 0}
   buffManager: {fileID: 8854006647397062437}
+  AttackPower: 0
+  DefensePower: 0
+  HealPower: 0
   stateMachine: {fileID: 286206233503564372}
   effectStateMakerSO: {fileID: 11400000, guid: 7b942edaec4e8a545933e32c6b17f43f, type: 2}
   enemyIndentController: {fileID: 1244039703389261783}

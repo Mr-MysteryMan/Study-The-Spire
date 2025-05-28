@@ -1,7 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Combat.Characters;
 using Combat.VFX;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -224,10 +226,7 @@ namespace Combat
             if (canExecute)
             {
                 Debug.Log("使用卡牌");
-                UpdateTarget(false, null);
-                StartCoroutine(
-                    combatSystem.CardManager.UseHandCard(currentCard, combatSystem.PlayerCharacter, GetTargets(target))
-                );
+                StartCoroutine(UseAndDisableTarget());
                 return;
             }
             else
@@ -240,6 +239,13 @@ namespace Combat
             }
             canMove = false;
             UpdateTarget(false, null); // 重置目标和可执行状态
+        }
+
+        private IEnumerator UseAndDisableTarget()
+        {
+            yield return combatSystem.CardManager.UseHandCard(currentCard, combatSystem.PlayerCharacter, GetTargets(target));
+            UpdateTarget(false, null);
+            Destroy(this.gameObject);
         }
     }
 }

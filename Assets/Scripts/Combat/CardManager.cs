@@ -131,7 +131,6 @@ namespace Combat
                 PendingCardData.Remove(cardData); // 从待处理卡片数据列表中移除
                 DiscardCardData.Add(cardData); // 将卡片添加到弃牌数据列表
             }
-            Destroy(card.cardObj);
         }
 
         public void discardCard(Card card)
