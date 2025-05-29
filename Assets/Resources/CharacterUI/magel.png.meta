@@ -132,7 +132,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      magel_0: 4519508011741744680
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

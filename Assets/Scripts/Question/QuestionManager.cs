@@ -1,3 +1,4 @@
+using System.Collections;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,6 +17,29 @@ public class QuestionManager : MonoBehaviour
     // -----------------------------回调方法-------------------------------
     public callBackFunction onCorrect = () => {Debug.Log("Correct answer!");}; // 回答正确回调
     public callBackFunction onWrong = () => {Debug.Log("Wrong answer!");}; // 回答错误回调
+
+    private bool isAnswered = false;
+
+    public void MarkAnswered() => isAnswered = true;
+
+    public IEnumerator WaitUntilAnswered()
+    {
+        yield return new WaitUntil(() => isAnswered);
+    }
+
+    private void OnAnswerSelected(int index)
+    {
+        if (index == question.answer) {
+            image.sprite = Resources.Load<Sprite>("QuestionUI/Correct");
+            onCorrect();
+        }
+        else {
+            image.sprite = Resources.Load<Sprite>("QuestionUI/Wrong");
+            onWrong();
+        }
+
+        MarkAnswered(); // 标记为已回答
+    }
 
     void Start()
     {
@@ -47,19 +71,6 @@ public class QuestionManager : MonoBehaviour
 
     public void close() {
         Destroy(Question);
-    }
-
-    private void OnAnswerSelected(int index)
-    {
-        // 检查答案是否正确
-        if (index == question.answer) {
-            image.sprite = Resources.Load<Sprite>("QuestionUI/Correct"); // 加载正确答案的图片
-            onCorrect(); // 调用正确答案的回调函数
-        }
-        else {
-            image.sprite = Resources.Load<Sprite>("QuestionUI/Wrong"); // 加载错误答案的图片
-            onWrong(); // 调用错误答案的回调函数
-        }
     }
 
     private void upDateUI()
