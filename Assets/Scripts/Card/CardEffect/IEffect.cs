@@ -8,8 +8,8 @@ namespace Cards.CardEffect
         IEnumerator Work(Character source, List<Character> targets);
     }
 
-    public interface IAsnycEffect
+    public interface ISyncEffect
     {
-        IEnumerator WorkAsync(Character source, List<Character> targets);
+        void WorkSync(Character source, List<Character> targets);
     }
 }

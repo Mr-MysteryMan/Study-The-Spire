@@ -26,6 +26,7 @@ namespace Combat
         public GameObject AdventurerPrefab; // 角色预制体
         public GameObject EnemyPrefab;
         public GameObject TreasurePrefab; // 宝物预制体
+        public GameObject QuestionPrefab;
         public ObjectEventSO backToMenuEvent;
 
         public GameObject DamageTextPrefab; // 伤害文本预制体

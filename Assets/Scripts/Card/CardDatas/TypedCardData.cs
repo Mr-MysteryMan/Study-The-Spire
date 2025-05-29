@@ -2,6 +2,7 @@ using Cards.CardEffect;
 using Cards.Modifier;
 using Combat;
 using Combat.Characters;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Cards.CardDatas

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reflection;
 using Combat;
 using Combat.Characters;
 
@@ -36,14 +37,20 @@ namespace Cards.Modifier
         public static void Modify(CardData cardData, float factor, ModifyType modifyType)
         {
             Type type = cardData.GetType();
-            var modifiableFields = type.GetFields()
-                .Where(f => f.GetCustomAttributes(typeof(ModifyAttribute.Basic), true) != null && f.FieldType == typeof(int))
-                .Where(f => ((ModifyAttribute.Basic)f.GetCustomAttributes(typeof(ModifyAttribute.Basic), true).First()).Type == modifyType || modifyType == ModifyType.All);
+            var modifiableFields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                .Where(f => f.GetCustomAttributes(typeof(ModifyAttribute.Basic), true) != null && f.FieldType == typeof(int));
             foreach (var field in modifiableFields)
             {
-                int value = (int)field.GetValue(cardData);
-                value = (int)(value * factor);
-                field.SetValue(cardData, value);
+                var attributes = field.GetCustomAttributes(typeof(ModifyAttribute.Basic), true);
+                if (attributes.Length > 0 && attributes[0] is ModifyAttribute.Basic attr)
+                {
+                    if (attr.Type == modifyType || modifyType == ModifyType.All)
+                    {
+                        int value = (int)field.GetValue(cardData);
+                        value = (int)(value * factor);
+                        field.SetValue(cardData, value);
+                    }
+                }
             }
         }
 
@@ -58,7 +65,7 @@ namespace Cards.Modifier
         public static void Modify(CardData cardData, Character character)
         {
             Type type = cardData.GetType();
-            var modifiableFields = type.GetFields()
+            var modifiableFields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                 .Where(f => f.GetCustomAttributes(typeof(ModifyAttribute.CharacterPowerAttribute), true) != null && f.FieldType == typeof(int));
             foreach (var field in modifiableFields)
             {
