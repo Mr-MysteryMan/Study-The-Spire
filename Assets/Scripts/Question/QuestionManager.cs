@@ -26,9 +26,9 @@ public class QuestionManager : MonoBehaviour
         yield return new WaitUntil(() => isAnswered);
     }
 
-    private void OnAnswerSelected(int index)
+    private void OnAnswerSelected(string answer)
     {
-        if (index == question.answer) {
+        if (answer == question.selection[question.answer]) {
             image.sprite = Resources.Load<Sprite>("QuestionUI/Correct");
             onCorrect();
         }

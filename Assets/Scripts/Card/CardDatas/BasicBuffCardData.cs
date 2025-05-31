@@ -39,16 +39,6 @@ namespace Cards.CardDatas
         [Modifier.ModifyAttribute.Basic(ModifyType.All),
          Modifier.ModifyAttribute.CharacterPower(CharacterPowerType.Attack, 1)]
         protected int cardValue;
-
-        public override void Modify(float factor, ModifyType modifyType)
-        {
-            BasicCardModifier.Modify(this, factor, modifyType);
-        }
-
-        public override void Modify(Character character)
-        {
-            CharacterCardModifier.Modify(this, character);
-        }
     }
 
     public class GainStrength : OneValueCardData
