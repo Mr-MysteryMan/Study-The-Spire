@@ -43,8 +43,8 @@ namespace Cards.CardEffect
         public static IEffect AmpilfyQuestion(float correctAmount, float falseAmount = 0.0f)
         {
             return new QuestionEffect(
-                AmplifyEffectFactory.AmplifyRandomCard(correctAmount),
-                AmplifyEffectFactory.AmplifyRandomCard(falseAmount)
+                AmplifyEffectFactory.AmplifyRandomHandCard(correctAmount),
+                AmplifyEffectFactory.AmplifyRandomHandCard(falseAmount)
             );
         }
     }

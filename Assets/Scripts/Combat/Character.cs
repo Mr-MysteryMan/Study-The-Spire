@@ -82,51 +82,6 @@ namespace Combat
         }
 
 
-        // 攻击target,造成damage点伤害，会触发相应事件
-        public void Attack(Character target, int damage)
-        {
-            combatSystem.ProcessCommand(new AttackCommand(this, target, damage, DamageType.Normal));
-        }
-
-        // 为target加血，会触发相应事件
-        public void Heal(Character target, int heal)
-        {
-            combatSystem.ProcessCommand(new HealCommand(this, target, heal));
-        }
-
-        // 为自己加血，会触发相应事件
-        public void Heal(int heal)
-        {
-            combatSystem.ProcessCommand(new HealCommand(this, this, heal));
-        }
-
-        // 为target添加护甲值，会触发相应事件
-        public void AddAmmor(Character target, int ammor)
-        {
-            combatSystem.ProcessCommand(new AddAmmorCommand(this, target, ammor));
-        }
-
-        // 为自己添加护甲值，会触发相应事件
-        public void AddAmmor(int ammor)
-        {
-            combatSystem.ProcessCommand(new AddAmmorCommand(this, this, ammor));
-        }
-
-        public void AddBuff(Character target, IBuff buff, int count = 1)
-        {
-            combatSystem.ProcessCommand(new ApplyBuffCommand(this, target, buff, count));
-        }
-
-        public void DecreaseBuff(Character target, IBuff buff, int count = 1)
-        {
-            combatSystem.ProcessCommand(new ApplyBuffCommand(this, target, buff, -count));
-        }
-
-        public void RemoveBuff(Character target, Type type)
-        {
-            combatSystem.ProcessCommand(new RemoveBuffCommand(this, target, type));
-        }
-
         // 当前生命值减少，只有简单的数值保证(damage>=0)
         // internal修饰，以防止外部调用，请只在command的execute中调用
         internal void _TakeHpDamage(int damage)

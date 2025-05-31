@@ -3,21 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cards.CardEffect;
-using Combat;
 using UnityEngine;
 using Cards.Modifier;
+using CardStackType = Combat.CardManager.CardStackType;
+using Combat;
 
 namespace Cards.CardEffect
 {
     class AmplifyCardEffect : IEffect, ISyncEffect
     {
         private float amplifyAmount;
+        private CardStackType cardSource;
         private Func<List<ICardData>, List<ICardData>> cardFilter;
 
-        public AmplifyCardEffect(float amplifyAmount, Func<List<ICardData>, List<ICardData>> cardFilter)
+        public AmplifyCardEffect(float amplifyAmount, CardStackType source, Func<List<ICardData>, List<ICardData>> cardFilter)
         {
             this.amplifyAmount = amplifyAmount;
             this.cardFilter = cardFilter;
+            this.cardSource = source;
         }
 
         public IEnumerator Work(Character source, List<Character> targets)
@@ -30,16 +33,19 @@ namespace Cards.CardEffect
 
         public void WorkSync(Character source, List<Character> targets)
         {
-            cardFilter(source.combatSystem.CardManager.HandCardData)
-                .ForEach(card => card.ModifyAdd(amplifyAmount, ModifyType.All));
+            List<ICardData> cards = cardFilter(source.combatSystem.CardManager.GetCardStack(cardSource));
+            foreach (var card in cards)
+            {
+                source.ModifyCard(card, amplifyAmount);
+            }
         }
     }
 
     static class AmplifyEffectFactory
     {
-        public static IEffect AmplifyRandomCard(float amplifyAmount)
+        public static IEffect AmplifyRandomHandCard(float amplifyAmount)
         {
-            return new AmplifyCardEffect(amplifyAmount,
+            return new AmplifyCardEffect(amplifyAmount, CardStackType.Hand,
                 cards =>
                 {
                     var randomIndex = UnityEngine.Random.Range(0, cards.Count);
@@ -48,15 +54,15 @@ namespace Cards.CardEffect
             );
         }
 
-        public static IEffect AmplifyAllCards(float amplifyAmount)
+        public static IEffect AmplifyAllHandCards(float amplifyAmount)
         {
-            return new AmplifyCardEffect(amplifyAmount,
+            return new AmplifyCardEffect(amplifyAmount, CardStackType.Hand,
                 cards => cards); // 对所有卡片生效
         }
 
-        public static IEffect AmplifyCardsByType(float amplifyAmount, CardCategory type)
+        public static IEffect AmplifyAllCardsByType(float amplifyAmount, CardCategory type)
         {
-            return new AmplifyCardEffect(amplifyAmount,
+            return new AmplifyCardEffect(amplifyAmount, CardStackType.All,
                 cards => cards.FindAll(card => card.CardCategory == type)); // 对指定类型的卡片生效
         }
     }

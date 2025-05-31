@@ -4,7 +4,6 @@ using System.Linq;
 using Cards;
 using Cards.Modifier;
 using Combat.Characters;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
@@ -29,6 +28,26 @@ namespace Combat
         public List<ICardData> DiscardCardData; // 弃牌数据列表
 
         public List<ICardData> PendingCardData; // 待处理卡片数据列表
+
+        public enum CardStackType
+        {
+            Hand, // 手牌
+            Discard, // 弃牌
+            DrawPile, // 抽牌堆
+            All,
+        }
+
+        public List<ICardData> GetCardStack(CardStackType type)
+        {
+            return type switch
+            {
+                CardStackType.Hand => HandCardData,
+                CardStackType.Discard => DiscardCardData,
+                CardStackType.DrawPile => NewCardData,
+                CardStackType.All => NewCardData.Concat(HandCardData).Concat(DiscardCardData).Concat(PendingCardData).ToList(),
+                _ => new List<ICardData>()
+            };
+        }
 
         private GlobalCardManager globalCardManager = GlobalCardManager.Instance; // 全局卡片管理器
 
@@ -214,6 +233,25 @@ namespace Combat
                 Card card = cardObj.GetComponent<Card>();
                 card.updateCardStatus(cardData); // 更新卡片状态
             }
+        }
+
+        public enum ModifySubType
+        {
+            Add,
+            Mul
+        }
+
+        public void ModifyCard(ICardData cardData, float factor, ModifyType type, ModifySubType subType)
+        {
+            if (subType == ModifySubType.Add)
+            {
+                cardData.ModifyAdd(factor, type); // 添加修改
+            }
+            else if (subType == ModifySubType.Mul)
+            {
+                cardData.ModifyMul(factor, type); // 乘法修改
+            }
+            UpdateCardStatus(cardData); // 更新卡片状态
         }
 
         public void updateCardPosition()
