@@ -1,5 +1,9 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Combat.Characters;
 using Combat.VFX;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -14,7 +18,7 @@ namespace Combat
 
         private Card currentCard;
 
-        private (int width, int height) cardSize;
+        private (float width, float height) cardSize;
         private bool canMove;           // 能否移动
         private bool canExecute;        // 能否执行效果
         private Character target;
@@ -25,7 +29,7 @@ namespace Combat
         {
             currentCard = GetComponent<Card>();
             var rt = currentCard.GetComponent<RectTransform>();
-            cardSize = (width: (int)rt.rect.width, height: (int)rt.rect.height);
+            cardSize = (rt.rect.width, rt.rect.height);
         }
 
         private void OnDisable()
@@ -42,110 +46,176 @@ namespace Combat
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            // 卡牌不可用
-            if (combatSystem.CardManager.EnergyPoint <= 0 || currentCard.CardCost > combatSystem.CardManager.EnergyPoint)
+            if (combatSystem.CardManager.IsPlayable(currentCard.CardData) is Result result && !result.Success)
             {
-                Debug.Log("能量不足，无法使用卡牌！");
+                Debug.Log($"卡牌不可用: {result.Error}");
                 return;
             }
 
-            switch (currentCard.CardData.CardEffectTarget)
+            canExecute = false;
+            target = null;
+            if (currentCard.CardData.CardEffectTarget.IsMoveToSelectTarget())
             {
-                case CardEffectTarget.EnemyOne:
-                case CardEffectTarget.AdventurerOne:
-                case CardEffectTarget.CharacterOne:
-                    currentArrow = Instantiate(arrowPrefab, transform.position, Quaternion.identity);
-                    currentArrow.GetComponent<DragArrow>().Init(uiRectTransform);
-                    canMove = false;
-                    break;
-                case CardEffectTarget.EnemyAll:
-                case CardEffectTarget.AdventurerAll:
-                case CardEffectTarget.CharacterAll:
-                case CardEffectTarget.AdventurerSelf:
-                    canMove = true;
-                    break;
+                canMove = true;
+                return;
+            }
+
+            if (currentCard.CardData.CardEffectTarget.IsDragToSelectTarget())
+            {
+                currentArrow = Instantiate(arrowPrefab, transform.position, Quaternion.identity);
+                currentArrow.GetComponent<DragArrow>().Init(uiRectTransform);
+                canMove = false;
+                return;
             }
         }
 
         public void OnDrag(PointerEventData eventData)
         {
             // 卡牌不可用
-            if (combatSystem.CardManager.EnergyPoint <= 0 || currentCard.CardCost > combatSystem.CardManager.EnergyPoint)
+            if (combatSystem.CardManager.IsPlayable(currentCard.CardData) is Result result && !result.Success)
             {
-                Debug.Log("能量不足，无法使用卡牌！");
+                Debug.Log($"卡牌不可用: {result.Error}");
                 return;
             }
 
-            do
+            Character newTarget = null;
+            bool newCanExecute = false;
+            if (canMove)
             {
-                // 跟随鼠标移动
-                if (canMove)
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(currentCard.GetComponent<RectTransform>().transform.parent.GetComponent<RectTransform>(), Input.mousePosition, Camera.main, out Vector2 localPoint);
+                currentCard.GetComponent<RectTransform>().anchoredPosition = localPoint;
+
+                // 到达屏幕上方区域即可执行
+                newCanExecute = Input.mousePosition.y > Screen.height * 0.6f;
+            }
+            else
+            {
+                if (eventData.pointerEnter == null)
                 {
-                    RectTransformUtility.ScreenPointToLocalPointInRectangle(currentCard.GetComponent<RectTransform>().transform.parent.GetComponent<RectTransform>(), Input.mousePosition, Camera.main, out Vector2 localPoint);
-                    currentCard.GetComponent<RectTransform>().anchoredPosition = localPoint;
-
-                    // 到达屏幕上方区域即可执行
-                    canExecute = Input.mousePosition.y > Screen.height * 0.6f;
-                    if (!canExecute && target != null)
-                    {
-                        target.GetComponentInChildren<VfxManager>().SetIndicator(false);
-                    }
-                    target = canExecute ? combatSystem.PlayerCharacter : null;
-
-                    // Debug.Log(Input.mousePosition.y + " " + Screen.height * 0.6f);
+                    newCanExecute = false;
                 }
-                // 攻击牌指针的情况
-                else
+                else if (eventData.pointerEnter.CompareTag("Character"))
                 {
-                    if (eventData.pointerEnter == null || eventData.pointerEnter != target)
+                    newTarget = eventData.pointerEnter.GetComponentInParent<Character>();
+                    if (newTarget == null)
                     {
-                        if (target != null)
-                        {
-                            target.GetComponentInChildren<VfxManager>().SetIndicator(false);
-                        }
-                        if (eventData.pointerEnter == null)
-                        {
-                            canExecute = false;
-                            target = null;
-                            break;
-                        }
+                        newCanExecute = false;
                     }
-                    // Debug.Log(eventData.pointerEnter.name + " " + eventData.pointerEnter.tag);
-                    // 指向敌人
-                    if (eventData.pointerEnter.CompareTag("Character"))
+                    else if (newTarget is Adventurer && currentCard.CardData.CardEffectTarget.IsAdventurerTarget())
                     {
-                        target = eventData.pointerEnter.GetComponentInParent<Character>();
-                        if (target is Adventurer adventurer)
-                        {
-                            canExecute = false; // 不能攻击自己
-                        }
-                        else if (target is Enemy enemy)
-                        {
-                            canExecute = true; // 可以攻击敌人
-                        }
-                        break;
+                        newCanExecute = true;
                     }
-                    canExecute = false;
-                    target = null;
+                    else if (newTarget is Enemy && currentCard.CardData.CardEffectTarget.IsEnemyTarget())
+                    {
+                        newCanExecute = true;
+                    }
+                    else if (currentCard.CardData.CardEffectTarget.IsCharacterTarget())
+                    {
+                        newCanExecute = true;
+                    }
+                    else
+                    {
+                        newCanExecute = false;
+                    }
                 }
             }
-            while (false);
-            if (canExecute && target != null)
+
+            UpdateTarget(newCanExecute, newTarget);
+        }
+
+        private void UpdateTarget(bool newCanExecute, Character newTarget)
+        {
+            if (canExecute == newCanExecute && target == newTarget)
             {
-                target.GetComponentInChildren<VfxManager>().SetIndicator(true);
+                return; // 没有变化
             }
-            else if (target != null)
+
+            if (newCanExecute != canExecute)
             {
-                target.GetComponentInChildren<VfxManager>().SetIndicator(false);
+                UpdateIndicator(newCanExecute, newTarget);
+            }
+
+            canExecute = newCanExecute;
+
+            if (newTarget != target)
+            {
+                if (target != null)
+                {
+                    target.GetComponentInChildren<VfxManager>().SetIndicator(false);
+                }
+
+                if (newTarget != null && newCanExecute)
+                {
+                    newTarget.GetComponentInChildren<VfxManager>().SetIndicator(true);
+                }
+            }
+
+            target = newTarget;
+        }
+
+        private void UpdateIndicator(bool newCanExecute, Character newTarget)
+        {
+            if (newCanExecute)
+            {
+                // 将新目标的指示器设置为true
+                GetTargets(newTarget).ForEach(c =>
+                {
+                    c.GetComponentInChildren<VfxManager>().SetIndicator(true);
+                });
+            }
+            else
+            {
+                // 将之前目标的指示器设置为false
+                GetTargets(target).ForEach(c =>
+                {
+                    c.GetComponentInChildren<VfxManager>().SetIndicator(false);
+                });
             }
         }
+
+        private List<Character> GetTargets(Character target)
+        {
+            CardEffectTarget targetType = currentCard.CardData.CardEffectTarget;
+            if (targetType.IsMultiTarget())
+            {
+                if (targetType.IsAdventurerTarget())
+                {
+                    return new List<Character> { combatSystem.PlayerCharacter };
+                }
+                else if (targetType.IsEnemyTarget())
+                {
+                    return combatSystem.MonsterCharacter.Select(c => c as Character).ToList();
+                }
+                else if (targetType.IsCharacterTarget())
+                {
+                    return combatSystem.AllCharacters;
+                }
+            }
+            else if (canMove)
+            {
+                return new List<Character> { combatSystem.PlayerCharacter };
+            }
+            else
+            {
+                if (target != null)
+                {
+                    return new List<Character> { target };
+                }
+                else
+                {
+                    return new List<Character>();
+                }
+            }
+            return new List<Character>();
+        }
+
 
         public void OnEndDrag(PointerEventData eventData)
         {
             // 卡牌不可用
-            if (combatSystem.CardManager.EnergyPoint <= 0 || currentCard.CardCost > combatSystem.CardManager.EnergyPoint)
+            if (combatSystem.CardManager.IsPlayable(currentCard.CardData) is Result result && !result.Success)
             {
-                Debug.Log("能量不足，无法使用卡牌！");
+                Debug.Log($"卡牌不可用: {result.Error}");
                 return;
             }
 
@@ -156,14 +226,8 @@ namespace Combat
             if (canExecute)
             {
                 Debug.Log("使用卡牌");
-                if (canMove)
-                {
-                    combatSystem.CardManager.UseHandCard(currentCard, combatSystem.PlayerCharacter, combatSystem.PlayerCharacter);
-                }
-                else
-                {
-                    combatSystem.CardManager.UseHandCard(currentCard, combatSystem.PlayerCharacter, target);
-                }
+                StartCoroutine(UseAndDisableTarget());
+                return;
             }
             else
             {
@@ -173,13 +237,15 @@ namespace Combat
                     combatSystem.CardManager.updateCardPosition();
                 }
             }
-            canExecute = canMove = false;
-            if (target != null)
-            {
-                target.GetComponentInChildren<VfxManager>().SetIndicator(false);
-            }
+            canMove = false;
+            UpdateTarget(false, null); // 重置目标和可执行状态
         }
 
-
+        private IEnumerator UseAndDisableTarget()
+        {
+            yield return combatSystem.CardManager.UseHandCard(currentCard, combatSystem.PlayerCharacter, GetTargets(target));
+            UpdateTarget(false, null);
+            Destroy(this.gameObject);
+        }
     }
 }

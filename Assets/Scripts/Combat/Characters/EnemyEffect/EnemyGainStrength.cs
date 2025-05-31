@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using Combat.Buffs.PermanentBuff;
 using UnityEngine;
 
@@ -8,9 +10,16 @@ namespace Combat.Characters.EnemyEffect
     {
         public int StrengthAmount;
         public override EnemyEffectType EffectType => EnemyEffectType.Buff;
-        public override void Work(Character source, Character target)
+        public override CardEffectTarget TargetType => CardEffectTarget.EnemyOne;
+
+        public override IEnumerator Work(Character source, List<Character> targets)
         {
-            source.AddBuff(target, new Strength(), StrengthAmount);
+            yield return new WaitForSeconds(0.2f);
+            foreach (var target in targets)
+            {
+                source.AddBuff(target, new Strength(), StrengthAmount);
+            }
+            yield return new WaitForSeconds(0.2f);
         }
     }
 }

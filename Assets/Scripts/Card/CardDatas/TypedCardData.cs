@@ -1,4 +1,8 @@
 using Cards.CardEffect;
+using Cards.Modifier;
+using Combat;
+using Combat.Characters;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Cards.CardDatas
@@ -10,7 +14,7 @@ namespace Cards.CardDatas
         Heal
     }
 
-    public class TypedCardData : CardData
+    public class TypedCardData : CardData, ICharacterModifiable
     {
         public TypedCardData(CardType cardType, int cardValue, int cardCost)
         {
@@ -19,6 +23,12 @@ namespace Cards.CardDatas
             this.cardCost = cardCost; // 设置卡牌费用
         }
 
+        public override ICardData Clone()
+        {
+            return new TypedCardData(cardType, cardValue, cardCost); // 克隆当前卡牌数据
+        }
+
+        [Modifier.ModifyAttribute.Basic(ModifyType.All)]
         private int cardValue; // 卡牌数值
         private CardType cardType; // 卡牌类型
         private int cardCost; // 卡牌费用
@@ -97,6 +107,17 @@ namespace Cards.CardDatas
                 CardType.Heal => CardCategory.Status,// 治疗效果分类
                 _ => throw new System.ArgumentOutOfRangeException(nameof(cardType), cardType, null) // 异常处理
             };
+        }
+
+        public void CharacterModify(Character character)
+        {
+            this.cardValue = CharacterCardModifier.CharacterPowerModify(cardValue, character, this.CardType switch
+            {
+                CardType.Attack => CharacterPowerType.Attack,
+                CardType.Defense => CharacterPowerType.Defense,
+                CardType.Heal => CharacterPowerType.Heal,
+                _ => throw new System.ArgumentOutOfRangeException(nameof(cardType), cardType, null)
+            }, 1);
         }
     }
 }

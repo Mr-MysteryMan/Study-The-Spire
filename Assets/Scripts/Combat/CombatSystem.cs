@@ -26,6 +26,7 @@ namespace Combat
         public GameObject AdventurerPrefab; // 角色预制体
         public GameObject EnemyPrefab;
         public GameObject TreasurePrefab; // 宝物预制体
+        public GameObject QuestionPrefab;
         public ObjectEventSO backToMenuEvent;
 
         public GameObject DamageTextPrefab; // 伤害文本预制体
@@ -62,6 +63,8 @@ namespace Combat
         public Character PlayerCharacter => playerCharacter; // 玩家角色
         public List<Enemy> MonsterCharacter => monsterCharacter; // 怪物角色
 
+        public List<Character> AllCharacters => new List<Character> { playerCharacter }.Concat(monsterCharacter).ToList(); // 所有角色列表
+
         [SerializeField] private BasicRulesLibSO rulesLibSO;
 
         private EventListener.BasicRuleLib eventRulesLib;
@@ -69,7 +72,7 @@ namespace Combat
         private TriggerLib triggerLib;
 
         [SerializeField] private EnemyLib enemyLibSO; // 怪物库
-        
+
         public EnemyType enemyType;
 
         private float enemyMargin = 120; // 怪物的间隔
@@ -85,7 +88,7 @@ namespace Combat
 
             eventRulesLib = new EventListener.BasicRuleLib(this);
 
-            cardManager.init(this); // 初始化卡片管理器
+            cardManager.init(this, this.playerCharacter); // 初始化卡片管理器
         }
 
 
@@ -205,7 +208,8 @@ namespace Combat
             }
         }
 
-        private Vector3 GetMonsterPosition(int index, int total, Vector3 center) {
+        private Vector3 GetMonsterPosition(int index, int total, Vector3 center)
+        {
             var leftStartPos = center - new Vector3(enemyMargin * (total - 1) / 2, 0, 0);
             return leftStartPos + new Vector3(enemyMargin * index, 0, 0);
         }
@@ -392,39 +396,7 @@ namespace Combat
 
         public void ProcessCommand<T>(T command) where T : ICommand
         {
-            ProcessOneCommand(command);
-            while (!isProcessing && commandQueue.Count > 0)
-            {
-                var nextCommand = commandQueue.Dequeue();
-                ProcessOneCommand(nextCommand);
-                if (commandQueue.Count > 1000)
-                {
-                    Debug.LogError($"待处理命令过多，数量：{commandQueue.Count}, 可能陷入死循环，请检查命令的执行逻辑");
-                    commandQueue.Clear();
-                    isProcessing = false;
-                    Debug.LogError($"命令队列已清空");
-                    break;
-                }
-            }
-        }
-
-        private void ProcessOneCommand<T>(T command) where T : ICommand
-        {
-            if (isProcessing)
-            {
-                commandQueue.Enqueue(command);
-                return;
-            }
-            isProcessing = true;
-            foreach (var processor in GetProcessors<T>(command.Source, ProcessorEffectSideType.Source))
-            {
-                processor.Process(ref command);
-            }
-
-            foreach (var processor in GetProcessors<T>(command.Target, ProcessorEffectSideType.Target))
-            {
-                processor.Process(ref command);
-            }
+            ProcessOnly(ref command);
 
             foreach (var trigger in GetTrigger<T>())
             {
@@ -437,7 +409,24 @@ namespace Combat
             {
                 trigger.PostCheck(eventManager, command);
             }
-            isProcessing = false;
+        }
+
+        /// <summary>
+        /// 处理命令的管道，遍历所有处理器并执行，可以用于尝试获取处理后的结果
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="command"></param>
+        public void ProcessOnly<T>(ref T command) where T : ICommand
+        {
+            foreach (var processor in GetProcessors<T>(command.Source, ProcessorEffectSideType.Source))
+            {
+                processor.Process(ref command);
+            }
+
+            foreach (var processor in GetProcessors<T>(command.Target, ProcessorEffectSideType.Target))
+            {
+                processor.Process(ref command);
+            }
         }
     }
 }

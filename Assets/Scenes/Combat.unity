@@ -861,11 +861,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HPbar: {fileID: 0}
+  vfxManager: {fileID: 0}
   initMaxHp: 10
   initCurHp: 10
   initAmmor: 0
   combatSystem: {fileID: 1160243196}
   buffManager: {fileID: 0}
+  AttackPower: 0
+  DefensePower: 0
+  HealPower: 0
 --- !u!114 &1160243200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -882,7 +886,7 @@ MonoBehaviour:
   CardDeck: {fileID: 273858339}
   EnergySpotText: {fileID: 1478292857}
   uiRectTransform: {fileID: 518319095}
-  cardSource: 0
+  cardSource: 2
 --- !u!114 &1160243201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1266,7 +1270,7 @@ Camera:
   m_ShutterSpeed: 0.005
   m_Aperture: 16
   m_FocusDistance: 10
-  m_FocalLength: 50
+  m_FocalLength: 20.78461
   m_BladeCount: 5
   m_Curvature: {x: 2, y: 11}
   m_BarrelClipping: 0.25
@@ -1281,7 +1285,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1200
-  field of view: 60
+  field of view: 60.000004
   orthographic: 0
   orthographic size: 5
   m_Depth: 0

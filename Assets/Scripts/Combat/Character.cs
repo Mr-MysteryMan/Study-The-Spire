@@ -1,10 +1,12 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Combat.Buffs;
 using Combat.Command;
 using Combat.Command.Buff;
 using Combat.Events.Turn;
 using Combat.EventVariable;
+using Combat.VFX;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -16,6 +18,7 @@ namespace Combat
     public class Character : MonoBehaviour
     {
         public GameObject HPbar;
+        public VfxManager vfxManager;
 
         // 注意使用了ReactiveIntVariable之后，一次函数尽量只有一次赋值，避免触发多次事件。
         [SerializeField] private ReactiveIntVariable maxHp;
@@ -38,6 +41,17 @@ namespace Combat
         public CombatSystem combatSystem;
 
         [SerializeField] public BuffManager buffManager;
+
+        public int AttackPower; // 攻击力
+        public int DefensePower; // 防御力
+        public int HealPower; // 治疗力
+
+        public void SetPowers(int attackPower, int defensePower, int healPower)
+        {
+            AttackPower = attackPower;
+            DefensePower = defensePower;
+            HealPower = healPower;
+        }
 
         public void SetInitHP(int maxHp, int curHp) // 设置初始化生命值数据
         {
@@ -87,9 +101,9 @@ namespace Combat
         }
 
         // 为target添加护甲值，会触发相应事件
-        public void AddAmmor(Character character, int ammor)
+        public void AddAmmor(Character target, int ammor)
         {
-            combatSystem.ProcessCommand(new AddAmmorCommand(this, character, ammor));
+            combatSystem.ProcessCommand(new AddAmmorCommand(this, target, ammor));
         }
 
         // 为自己添加护甲值，会触发相应事件
