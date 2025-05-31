@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cards;
+using Cards.Modifier;
 using Combat.Characters;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -204,6 +205,15 @@ namespace Combat
             card.updateCardStatus(cardData); // 更新卡片状态
             card.addManager(this); // 添加卡片管理器
             cards.Add(CardObj); // 添加卡片到列表
+        }
+
+        public void UpdateCardStatus(ICardData cardData)
+        {
+            if (cards.Find(card => card.GetComponent<Card>().CardData == cardData) is GameObject cardObj)
+            {
+                Card card = cardObj.GetComponent<Card>();
+                card.updateCardStatus(cardData); // 更新卡片状态
+            }
         }
 
         public void updateCardPosition()

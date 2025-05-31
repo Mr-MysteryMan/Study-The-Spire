@@ -5,6 +5,7 @@ using System.Linq;
 using Cards.CardEffect;
 using Combat;
 using UnityEngine;
+using Cards.Modifier;
 
 namespace Cards.CardEffect
 {
@@ -30,7 +31,7 @@ namespace Cards.CardEffect
         public void WorkSync(Character source, List<Character> targets)
         {
             cardFilter(source.combatSystem.CardManager.HandCardData)
-                .ForEach(card => card.Modify(amplifyAmount, ModifyType.All));
+                .ForEach(card => card.ModifyAdd(amplifyAmount, ModifyType.All));
         }
     }
 

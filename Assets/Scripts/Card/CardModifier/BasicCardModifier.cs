@@ -34,7 +34,7 @@ namespace Cards.Modifier
 
     public static class BasicCardModifier
     {
-        public static void Modify(CardData cardData, float factor, ModifyType modifyType)
+        private static void Modify(this ICardData cardData, float factor, ModifyType modifyType, Func<int, float, int> func)
         {
             Type type = cardData.GetType();
             var modifiableFields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
@@ -47,23 +47,43 @@ namespace Cards.Modifier
                     if (attr.Type == modifyType || modifyType == ModifyType.All)
                     {
                         int value = (int)field.GetValue(cardData);
-                        value = (int)(value * factor);
+                        value = func(value, factor);
                         field.SetValue(cardData, value);
                     }
                 }
             }
         }
 
-        public static int BasicModify(int cardValue, float factor, ModifyType type)
+        public static void ModifyAdd(this ICardData cardData, float factor, ModifyType modifyType)
         {
-            return (int)(cardValue * factor);
+            if (cardData is IBasicModifiable modifiable)
+            {
+                modifiable.BasicModifyAdd(factor, modifyType);
+                return;
+            }
+            Modify(cardData, factor, modifyType, (value, factor) => (int)(value + factor));
+        }
+
+        public static void ModifyMul(this ICardData cardData, float factor, ModifyType modifyType)
+        {
+            if (cardData is IBasicModifiable modifiable)
+            {
+                modifiable.BasicModifyMul(factor, modifyType);
+                return;
+            }
+            Modify(cardData, factor, modifyType, (value, factor) => (int)(value * factor));
         }
     }
 
     public static class CharacterCardModifier
     {
-        public static void Modify(CardData cardData, Character character)
+        public static void Modify(this ICardData cardData, Character character)
         {
+            if (cardData is ICharacterModifiable modifiable)
+            {
+                modifiable.CharacterModify(character);
+                return;
+            }
             Type type = cardData.GetType();
             var modifiableFields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                 .Where(f => f.GetCustomAttributes(typeof(ModifyAttribute.CharacterPowerAttribute), true) != null && f.FieldType == typeof(int));

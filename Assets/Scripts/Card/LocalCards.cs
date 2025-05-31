@@ -21,7 +21,7 @@ namespace Cards
             new ApplyPoison(4, 1),
             new GainStrength(2, 1),
             
-            new QuestionCardData(200, 2),
+            new QuestionCardData(5, 2),
         };
 
         public static List<ICardData> GetCards()

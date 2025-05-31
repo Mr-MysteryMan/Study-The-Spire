@@ -40,11 +40,11 @@ namespace Cards.CardEffect
 
     public static class QuestionEffectFactory
     {
-        public static IEffect AmpilfyQuestion(float correctRate, float falseRate = 1.0f)
+        public static IEffect AmpilfyQuestion(float correctAmount, float falseAmount = 0.0f)
         {
             return new QuestionEffect(
-                AmplifyEffectFactory.AmplifyRandomCard(correctRate),
-                AmplifyEffectFactory.AmplifyRandomCard(falseRate)
+                AmplifyEffectFactory.AmplifyRandomCard(correctAmount),
+                AmplifyEffectFactory.AmplifyRandomCard(falseAmount)
             );
         }
     }

@@ -14,7 +14,7 @@ namespace Cards.CardDatas
         Heal
     }
 
-    public class TypedCardData : CardData
+    public class TypedCardData : CardData, ICharacterModifiable
     {
         public TypedCardData(CardType cardType, int cardValue, int cardCost)
         {
@@ -109,12 +109,7 @@ namespace Cards.CardDatas
             };
         }
 
-        public override void Modify(float factor, ModifyType type)
-        {
-            Modifier.BasicCardModifier.Modify(this, factor, type); // 修改卡牌属性
-        }
-
-        public override void Modify(Character character)
+        public void CharacterModify(Character character)
         {
             this.cardValue = CharacterCardModifier.CharacterPowerModify(cardValue, character, this.CardType switch
             {
