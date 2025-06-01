@@ -73,7 +73,10 @@ namespace Combat
             Initialize();
             InitCharacterManager();
             turnSystem.InitTurnSystem();
-            uiPanel.SetActive(false);
+            if (uiPanel != null)
+            {
+                uiPanel.SetActive(false);
+            }
 
             eventRulesLib = new EventListener.BasicRuleLib(this);
 
@@ -142,7 +145,10 @@ namespace Combat
 
         private void Fail()
         {
-            uiPanel.SetActive(true);
+            if (uiPanel != null)
+            {
+                uiPanel.SetActive(true);
+            }
         }
 
         private void InitBasicEvent()
@@ -184,6 +190,12 @@ namespace Combat
 
             this.eventManager = GetComponent<EventManager>();
             this.eventManager.Initialize();
+
+            var slmObject = GameObject.Find("SceneLoadManager");
+            if (slmObject)
+            {
+                this.uiPanel = slmObject.GetComponent<SceneLoadManager>().GameOverPanel;
+            }
 
             triggers = new();
             foreach (var trigger in this.triggerLib.GetTriggers())
