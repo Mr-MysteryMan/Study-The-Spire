@@ -18,6 +18,8 @@ public class CardManager : MonoBehaviour
     // 玩家血量
     public int health { get; set; } = Setting.PlayerHp;
 
+    public int maxHealth { get; set; } = Setting.PlayerHp;
+
     // 选择
     public List<CharacterType> characterTypes { get; private set; } = new List<CharacterType>();
 

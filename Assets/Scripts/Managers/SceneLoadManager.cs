@@ -13,7 +13,7 @@ public class SceneLoadManager : MonoBehaviour
     public AssetReference backpack;
 
     private Vector2Int currentRoomVector;
-    private Room currentRoom;
+    public Room currentRoom;
     private Room currentRoomSelect111;
     public ObjectEventSO updateRoomEvent;
     public ObjectEventSO afterRoomLoadedEvent;

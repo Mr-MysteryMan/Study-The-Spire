@@ -55,9 +55,6 @@ namespace Combat
 
         private CombatSystem combatSystem;
 
-        private Character player; // 玩家角色
-        private List<Enemy> enemy; // 敌人角色
-
         [SerializeField] private RectTransform uiRectTransform;
 
         enum CardSource
@@ -181,21 +178,6 @@ namespace Combat
             }
             cards.Clear();
             updateCardPosition(); // 更新卡片位置
-        }
-
-        public void addCharacter(Character player, List<Enemy> enemy)
-        {
-            this.player = player;
-            this.enemy = enemy;
-        }
-
-        public Character getUser(Card card)
-        {
-            return this.player;
-        }
-        public Character getTarget(Card card)
-        {
-            return this.enemy[0];
         }
 
         public IEnumerator UseHandCard(Card card, Character source, List<Character> targets)

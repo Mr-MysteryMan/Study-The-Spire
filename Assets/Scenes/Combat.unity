@@ -791,6 +791,7 @@ GameObject:
   - component: {fileID: 1160243199}
   - component: {fileID: 1160243200}
   - component: {fileID: 1160243201}
+  - component: {fileID: 1160243202}
   m_Layer: 0
   m_Name: CombatSystem
   m_TagString: Untagged
@@ -810,17 +811,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 869e3bbc26ba119429fa2bfe958ecdf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AdventurerPrefab: {fileID: 8887891203348593607, guid: bff855922a8903b43a7d26229b53d669, type: 3}
-  EnemyPrefab: {fileID: 8887891203348593607, guid: 64b40806dfa432542b20bb0941f929fe, type: 3}
   TreasurePrefab: {fileID: 6119822633930747574, guid: f3a34b8b2262d784db0cc3574ff1ad88, type: 3}
   backToMenuEvent: {fileID: 11400000, guid: 4d600f6a59870944bae4e08ce67e7823, type: 2}
   DamageTextPrefab: {fileID: 5700190467429854540, guid: d71aac6c1fcd3a44298bb244eda2f9e0, type: 3}
   combatCamera: {fileID: 1939627477}
   UI: {fileID: 518319091}
   uiPanel: {fileID: 1120299469}
+  cardManager: {fileID: 1160243200}
+  characterManager: {fileID: 1160243202}
+  systemCharacter: {fileID: 1160243199}
+  turnSystem: {fileID: 1160243201}
   rulesLibSO: {fileID: 11400000, guid: 48420e6f6666f3a41a646992888b6368, type: 2}
-  enemyLibSO: {fileID: 11400000, guid: 89286d9ceae72154eb2c478945748328, type: 2}
-  enemyType: 0
+  DefaultEnemyType: 0
 --- !u!114 &1160243197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -870,6 +872,7 @@ MonoBehaviour:
   AttackPower: 0
   DefensePower: 0
   HealPower: 0
+  IsDead: 0
 --- !u!114 &1160243200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -901,6 +904,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turnNum: 0
   combatSystem: {fileID: 1160243196}
+--- !u!114 &1160243202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1160243195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fc8e05687ec7594ab0ba4725f39ce40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyLibSO: {fileID: 11400000, guid: 89286d9ceae72154eb2c478945748328, type: 2}
+  adventurerLibSO: {fileID: 11400000, guid: 1c07b2721a00c72448910578907faeb5, type: 2}
+  enemyMargin: 120
+  combatSystem: {fileID: 1160243196}
+  uiTransform: {fileID: 518319095}
+  DeathPending: 0
 --- !u!1001 &1301142175
 PrefabInstance:
   m_ObjectHideFlags: 0

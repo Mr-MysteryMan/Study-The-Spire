@@ -46,6 +46,10 @@ namespace Combat
         public int DefensePower; // 防御力
         public int HealPower; // 治疗力
 
+        // 死亡前未被Destroy的标志
+        public bool IsDead = false;
+        public void SetDead() => this.IsDead = true;
+
         public void SetPowers(int attackPower, int defensePower, int healPower)
         {
             AttackPower = attackPower;
@@ -70,7 +74,7 @@ namespace Combat
             ammor = new ReactiveIntVariable("Ammor", initAmmor, eventManager, this);
         }
 
-        public void Start()
+        public void InitCharacter()
         {
             Init(combatSystem);
             if (HPbar != null) // 存在血条时(非系统对象), 启动血条
@@ -80,7 +84,6 @@ namespace Combat
                 hPController.launch(this);
             }
         }
-
 
         // 当前生命值减少，只有简单的数值保证(damage>=0)
         // internal修饰，以防止外部调用，请只在command的execute中调用

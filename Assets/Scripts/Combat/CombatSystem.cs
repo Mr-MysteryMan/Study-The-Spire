@@ -23,10 +23,7 @@ namespace Combat
     [RequireComponent(typeof(EventManager), typeof(Character))]
     public class CombatSystem : MonoBehaviour
     {
-        public GameObject AdventurerPrefab; // 角色预制体
-        public GameObject EnemyPrefab;
         public GameObject TreasurePrefab; // 宝物预制体
-        public GameObject QuestionPrefab;
         public ObjectEventSO backToMenuEvent;
 
         public GameObject DamageTextPrefab; // 伤害文本预制体
@@ -48,22 +45,14 @@ namespace Combat
 
         public EventManager EventManager => eventManager; // 事件管理器
 
-        private CardManager cardManager; // 卡片管理器
+        public CardManager cardManager; // 卡片管理器
 
         public CardManager CardManager => cardManager; // 卡片管理器
 
-        // 系统角色，用于一些没有直接来源的命令，暂时没用
-        private Character systemCharacter;
+        public CharacterManager characterManager;
+        public Character systemCharacter; // 系统角色，用于一些没有直接来源的命令
 
-        // 角色列表，所有参与战斗的角色
-        private Character playerCharacter;
-
-        private List<Enemy> monsterCharacter;
-
-        public Character PlayerCharacter => playerCharacter; // 玩家角色
-        public List<Enemy> MonsterCharacter => monsterCharacter; // 怪物角色
-
-        public List<Character> AllCharacters => new List<Character> { playerCharacter }.Concat(monsterCharacter).ToList(); // 所有角色列表
+        public TurnSystem turnSystem; // 回合系统
 
         [SerializeField] private BasicRulesLibSO rulesLibSO;
 
@@ -71,24 +60,59 @@ namespace Combat
 
         private TriggerLib triggerLib;
 
-        [SerializeField] private EnemyLib enemyLibSO; // 怪物库
-
-        public EnemyType enemyType;
+        public EnemyType DefaultEnemyType;
 
         private float enemyMargin = 120; // 怪物的间隔
 
+        public Character PlayerCharacter => characterManager.PlayerCharacter; // 玩家角色
+        public List<Enemy> MonsterCharacters => characterManager.MonsterCharacters; // 怪物角色列表
+        public List<Character> AllCharacters => characterManager.AllCharacters; // 所有角色列表
+
         void Awake()
         {
-            CreateCharacters(); // 获取角色
+            Initialize();
+            InitCharacterManager();
+            turnSystem.InitTurnSystem();
             uiPanel.SetActive(false);
-            var eventManager = GetComponent<EventManager>();
-            var character = GetComponent<Character>();
-            var cardManager = GetComponent<CardManager>();
-            Initialize(eventManager, character, cardManager);
 
             eventRulesLib = new EventListener.BasicRuleLib(this);
 
-            cardManager.init(this, this.playerCharacter); // 初始化卡片管理器
+            cardManager.init(this, PlayerCharacter); // 初始化卡片管理器
+
+            InitBasicEvent();
+
+            turnSystem.StartCombat(); // 开始战斗
+        }
+
+        private void InitCharacterManager()
+        {
+            var globalCardManagerObject = GameObject.Find("CardManager");
+            var globalCardManager = globalCardManagerObject == null ? null : globalCardManagerObject.GetComponent<GlobalCardManager>();
+            List<CharacterType> characterTypes;
+            int hp, maxHp;
+            EnemyType enemyType;
+            if (globalCardManager == null)
+            {
+                characterTypes = new List<CharacterType>(){ CharacterType.Mage, CharacterType.Warrior};
+                hp = Setting.PlayerHp; // 设置玩家初始血量
+                maxHp = Setting.PlayerHp; // 设置玩家最大血量
+                enemyType = DefaultEnemyType;
+            }
+            else
+            {
+                characterTypes = globalCardManager.characterTypes; // 从全局卡片管理器获取角色类型
+                hp = globalCardManager.health;
+                maxHp = globalCardManager.maxHealth;
+                enemyType = GameObject.Find("SceneLoadManager").GetComponent<SceneLoadManager>().currentRoom.roomData.roomType switch
+                {
+                    RoomType.MinorEnemy => EnemyType.Minor,
+                    RoomType.EliteEnemy => EnemyType.Elite,
+                    RoomType.BossRoom => EnemyType.Boss,
+                    _ => DefaultEnemyType // 默认怪物类型
+                };
+            }
+
+            characterManager.Init(this.systemCharacter, characterTypes, hp, maxHp, enemyType);
         }
 
 
@@ -100,12 +124,6 @@ namespace Combat
         private IEnumerator DestoryAfterDelay(int a)
         {
             yield return new WaitForEndOfFrame();
-            Destroy(this.playerCharacter.gameObject);
-            foreach (var monster in this.monsterCharacter)
-            {
-                Destroy(monster.gameObject); // 销毁怪物角色
-            }
-            this.monsterCharacter.Clear(); // 清空怪物角色列表
             Destroy(this.gameObject); // 销毁战斗系统
             if (a == 1)
             {
@@ -121,7 +139,7 @@ namespace Combat
         {
             // 弹出宝藏窗口
             var treasure = Instantiate(TreasurePrefab);
-            treasure.GetComponent<Treasure>().init(this.playerCharacter.CurHp, () => backToMenuEvent.RaiseEvent(null, this)); // 设置宝物的生命值
+            treasure.GetComponent<Treasure>().init(PlayerCharacter.CurHp, () => backToMenuEvent.RaiseEvent(null, this)); // 设置宝物的生命值
         }
 
         private void Fail()
@@ -129,7 +147,7 @@ namespace Combat
             uiPanel.SetActive(true);
         }
 
-        void Start()
+        private void InitBasicEvent()
         {
             eventRulesLib.AddListen();
             this.eventManager.Subscribe<CombatLoseEvent>((e) =>
@@ -160,98 +178,39 @@ namespace Combat
             });
         }
 
-        public void Initialize(EventManager eventManager, Character systemCharacter, CardManager cardManager)
+        public void Initialize()
         {
-            this.eventManager = eventManager;
-            this.systemCharacter = systemCharacter;
-            this.cardManager = cardManager;
-            this.cardManager.addCharacter(this.playerCharacter, this.monsterCharacter); // 添加角色到卡片管理器
             this.triggerLib = new TriggerLib();
             sourceProcessors = new();
             targetProcessors = new();
+
+            this.eventManager = GetComponent<EventManager>();
+            this.eventManager.Initialize();
 
             triggers = new();
             foreach (var trigger in this.triggerLib.GetTriggers())
             {
                 RegisterTrigger(trigger);
             }
-
-            RegisterProcessorForCharacter(this.playerCharacter); // 注册玩家角色的处理器
-            foreach (var character in this.monsterCharacter) // 注册怪物角色的处理器
-            {
-                RegisterProcessorForCharacter(character);
-            }
-        }
-
-        private void CreateCharacters()
-        {
-            // 指定角色位置
-            Vector3 playerPosition = new Vector3(-300, 20, 0); // 玩家位置
-            Vector3 centerMonsterPos = new Vector3(240, 20, 0); // 敌人位置
-            // 暂且1v1
-
-            int curHp = GlobalCardManager.Instance ? GlobalCardManager.Instance.health : Setting.PlayerHp; // 获取当前玩家的生命值
-            // 创建玩家角色
-            playerCharacter = CreateCharacter(playerPosition);
-            playerCharacter.SetInitHP(Setting.PlayerHp, curHp);
-            Assert.IsTrue(playerCharacter != null && playerCharacter is Adventurer, "玩家角色创建失败！"); // 确保玩家角色创建成功
-            (playerCharacter as Adventurer).SetInitMana(Setting.RoundEnergy); // 设置玩家角色的初始法力值
-            // 创建怪物角色
-            // TODO: 接入关卡管理, 获取敌人数据
-            var monsterPrefabs = enemyLibSO.GetEnemy(enemyType).ToList();
-            monsterCharacter = new List<Enemy>();
-            for (int i = 0; i < monsterPrefabs.Count; i++)
-            {
-                var monsterPosition = GetMonsterPosition(i, monsterPrefabs.Count, centerMonsterPos);
-                var monster = CreateCharacter(monsterPosition, monsterPrefabs[i]);
-                monsterCharacter.Add(monster as Enemy); // 添加怪物角色
-            }
-        }
-
-        private Vector3 GetMonsterPosition(int index, int total, Vector3 center)
-        {
-            var leftStartPos = center - new Vector3(enemyMargin * (total - 1) / 2, 0, 0);
-            return leftStartPos + new Vector3(enemyMargin * index, 0, 0);
-        }
-
-        /* 处理角色的部分函数 */
-        private enum CharacterType
-        {
-            Player,
-            Enemy
-        }
-
-        private Character CreateCharacter(Vector3 position, CharacterType type = CharacterType.Player)
-        {
-            var Prefab = type == CharacterType.Player ? AdventurerPrefab : EnemyPrefab;
-
-            return CreateCharacter(position, Prefab);
-        }
-
-        private Character CreateCharacter(Vector3 position, GameObject prefab)
-        {
-            var Obj = Instantiate(prefab, UI.transform);
-            Obj.transform.localPosition = position;
-            var character = Obj.GetComponent<Character>();
-            character.combatSystem = this; // 设置战斗系统为自身
-            return character;
         }
 
         public void KillCharacter(Character character)
         {
-            if (character is Adventurer adventurer) // 如果是玩家角色
-            {
-                playerCharacter = null; // 玩家角色为空
-            }
-            else if (character is Enemy enemy) // 如果是怪物角色
-            {
-                monsterCharacter.Remove(enemy); // 从怪物列表中移除
-            }
-            Destroy(character.gameObject); // 销毁角色对象
+            this.characterManager.KillCharacter(character);
+        }
+
+        public void LockDead()
+        {
+            this.characterManager.LockDead();
+        }
+
+        public void ReleaseDead()
+        {
+            this.characterManager.ReleaseDead();
         }
 
         /* 命令处理管道和触发器部分 */
-        private void RegisterProcessorForCharacter(Character character)
+        public void RegisterProcessorForCharacter(Character character)
         {
             foreach (var rule in rulesLibSO.GetRules())
             {
@@ -391,10 +350,24 @@ namespace Combat
             list.Remove((trigger.Priority, trigger.TimeStamp));
         }
 
-        private bool isProcessing = false;
-        private Queue<ICommand> commandQueue = new();
-
         public void ProcessCommand<T>(T command) where T : ICommand
+        {
+            ProcessOnly(ref command);
+
+            foreach (var trigger in GetTrigger<T>())
+            {
+                trigger.PreCheck(eventManager, command);
+            }
+
+            command.Execute();
+
+            foreach (var trigger in GetTrigger<T>())
+            {
+                trigger.PostCheck(eventManager, command);
+            }
+        }
+
+        public void ProcessCommand<T>(ref T command) where T : ICommand
         {
             ProcessOnly(ref command);
 

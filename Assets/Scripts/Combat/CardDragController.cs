@@ -184,7 +184,7 @@ namespace Combat
                 }
                 else if (targetType.IsEnemyTarget())
                 {
-                    return combatSystem.MonsterCharacter.Select(c => c as Character).ToList();
+                    return combatSystem.MonsterCharacters.Select(c => c as Character).ToList();
                 }
                 else if (targetType.IsCharacterTarget())
                 {
