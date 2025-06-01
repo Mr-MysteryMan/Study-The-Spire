@@ -13,10 +13,13 @@ public class CardManager : MonoBehaviour
     private List<ICardData> allCards;
 
     // 玩家金币
-    public int Gold { get; private set; } = 200;
+    public int gold { get; set; } = Setting.TreasureGoldNum;
 
     // 玩家血量
-    public int health { get; set; } = 100;
+    public int health { get; set; } = Setting.PlayerHp;
+
+    // 选择
+    public List<CharacterType> characterTypes { get; private set; } = new List<CharacterType>();
 
     private void Awake()
     {
@@ -31,57 +34,52 @@ public class CardManager : MonoBehaviour
 
         allCards = LocalCards.GetCards();
     }
-    public void AddHealth(int amount)
-    {
-        health += Mathf.Max(0, amount);
-        Debug.Log($"获得血量：+{amount}，当前血量：{health}");
-    }
-
 
     // 设置金币数
     public void SetGold(int amount)
     {
-        Gold = Mathf.Max(0, amount);
-        Debug.Log($"设置金币为：{Gold}");
+        gold = Mathf.Max(0, amount);
+        Debug.Log($"设置金币为：{gold}");
     }
 
     // 增加金币
     public void AddGold(int amount)
     {
-        Gold += Mathf.Max(0, amount);
-        Debug.Log($"获得金币：+{amount}，当前金币：{Gold}");
+        gold += Mathf.Max(0, amount);
+        Debug.Log($"获得金币：+{amount}，当前金币：{gold}");
     }
 
     // 消耗金币，返回是否成功
     public bool SpendGold(int amount)
     {
-        if (Gold >= amount)
+        if (gold >= amount)
         {
-            Gold -= amount;
-            Debug.Log($"花费金币：-{amount}，剩余金币：{Gold}");
+            gold -= amount;
+            Debug.Log($"花费金币：-{amount}，剩余金币：{gold}");
             return true;
         }
         else
         {
-            Debug.LogWarning($"金币不足，尝试消费 {amount}，当前金币：{Gold}");
+            Debug.LogWarning($"金币不足，尝试消费 {amount}，当前金币：{gold}");
             return false;
         }
     }
 
-    public static List<ICardData> randomCardData(int cardCount = 20) { // 测试用随机卡片数据
-            List<ICardData> cardData = new List<ICardData>();
+    public static List<ICardData> randomCardData(int cardCount = 20)
+    { // 测试用随机卡片数据
+        List<ICardData> cardData = new List<ICardData>();
 
-            for (int i = 0; i < cardCount; i++)
-            {
-                // 随机生成卡片数据
-                int cardType = Random.Range(0, 3); // 随机卡片类型
-                CardType type = (CardType)cardType; // 转换为枚举类型
-                int cost = Random.Range(1, 5); // 随机卡片费用
-                int value = Random.Range((cost - 1) * 8, cost * 10);
-                cardData.Add(new TypedCardData(type,value,cost)); // 随机生成卡片数据
-            }
+        for (int i = 0; i < cardCount; i++)
+        {
+            // 随机生成卡片数据
+            int cardType = Random.Range(0, 3); // 随机卡片类型
+            CardType type = (CardType)cardType; // 转换为枚举类型
+            int cost = Random.Range(1, 5); // 随机卡片费用
+            int value = Random.Range((cost - 1) * 8, cost * 10);
+            cardData.Add(new TypedCardData(type, value, cost)); // 随机生成卡片数据
+        }
 
-            return cardData;
+        return cardData;
     }
 
     // 添加一张卡牌到背包
@@ -119,7 +117,8 @@ public class CardManager : MonoBehaviour
         return allCards.Where(c => c.CardCategory == type);
     }
 
-    public IEnumerable<ICardData> GetCards(System.Func<ICardData, bool> predicate) {
+    public IEnumerable<ICardData> GetCards(System.Func<ICardData, bool> predicate)
+    {
         return allCards.Where(predicate);
     }
 
@@ -143,6 +142,11 @@ public class CardManager : MonoBehaviour
     public void ResetPlayerData(){
         Gold = 200;
         health = 100;
+    }
+    
+    public void SetCharacterTypes(List<CharacterType> types)
+    {
+        characterTypes = types;
     }
 
 }
