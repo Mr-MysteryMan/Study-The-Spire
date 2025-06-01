@@ -42,10 +42,7 @@ public class QuestionManager : MonoBehaviour
 
     void Start()
     {
-        if (QuestionStore.isInit == false)
-        {
-            QuestionStore.Init(); // 初始化题库
-        }
+        QuestionStore.Init(); // 初始化题库
         // 选取随机问题
         this.question = QuestionStore.GetRandomQuestion();
         // 初始化问题组件UI

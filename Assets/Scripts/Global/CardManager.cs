@@ -147,7 +147,12 @@ public class CardManager : MonoBehaviour
             Debug.Log(card.GetDebugInfo());
         }
     }
-
+    
+    public void ResetPlayerData(){
+        Gold = 200;
+        health = 100;
+    }
+    
     public void SetCharacterTypes(List<CharacterType> types)
     {
         characterTypes.Clear();
