@@ -139,6 +139,11 @@ public class CardManager : MonoBehaviour
         }
     }
     
+    public void ResetPlayerData(){
+        Gold = 200;
+        health = 100;
+    }
+    
     public void SetCharacterTypes(List<CharacterType> types)
     {
         characterTypes = types;

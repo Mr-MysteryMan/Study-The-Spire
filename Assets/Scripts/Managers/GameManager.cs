@@ -55,6 +55,7 @@ public class GameManager : MonoBehaviour
     {
         mapLayout.mapRoomDataList.Clear();
         mapLayout.linePositionList.Clear();
+        CardManager.Instance.ResetPlayerData();
     }
 
 }
