@@ -7,6 +7,6 @@ public class CoinDisplay : MonoBehaviour
     public TextMeshProUGUI coinText; // 拖拽 UI 文本组件到 Inspector
     void Update()
     {
-        coinText.text = "Money:" + GameManager.money;
+        coinText.text = "Money:" + CardManager.Instance.Gold;
     }
 }

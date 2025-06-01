@@ -5,5 +5,7 @@ namespace Combat
     public enum DamageType
     {
         Normal,
+        Actual, // 真实伤害，直接扣除生命值，不受护甲影响
+        Poison, // 中毒伤害，直接扣除生命值
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Cards.CardDatas;
 using UnityEngine;
 
 namespace Combat{
@@ -25,8 +26,8 @@ namespace Combat{
 
 
         // TODO对接卡牌管理逻辑
-        public static List<CardData> randomCardData(int cardCount = 20) { // 测试用随机卡片数据
-            List<CardData> cardData = new List<CardData>();
+        public static List<ICardData> randomCardData(int cardCount = 20) { // 测试用随机卡片数据
+            List<ICardData> cardData = new List<ICardData>();
 
             for (int i = 0; i < cardCount; i++)
             {
@@ -35,7 +36,7 @@ namespace Combat{
                 CardType type = (CardType)cardType; // 转换为枚举类型
                 int value = Random.Range(0, 100); // 随机卡片内容
                 int cost = Random.Range(1, 5); // 随机卡片费用
-                cardData.Add(new CardData(type,value,cost)); // 随机生成卡片数据
+                cardData.Add(new TypedCardData(type,value,cost)); // 随机生成卡片数据
             }
 
             return cardData;

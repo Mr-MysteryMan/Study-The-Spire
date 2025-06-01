@@ -1,43 +1,40 @@
 using System.Collections;
 using Combat;
+using Cards.CardEffect;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler, IPointerClickHandler
+public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler
 {
     [Header("卡片游戏组件")]
     //----------------------游戏组件---------------------//
     public GameObject cardObj;
     public Image background; // 卡片背景
-    public Text cardValueText; // 卡片数值文本
+    public Image image; // 卡片内容图片
 
     public Text cardCostText; // 卡片费用文本
+    public Text cardNameText; // 卡片名称文本
+    public Text cardDescText; // 卡片描述文本
 
     [Header("卡片基本信息")]
     //----------------------基本信息---------------------//
-    private CardData cardData;
+    private ICardData cardData;
 
-    public CardData CardData => cardData; // 卡片数据
+    public ICardData CardData => cardData; // 卡片数据
 
-    public CardType cardType => cardData.cardType; // 卡牌类型
+    public int CardCost => cardData.Cost; // 卡牌费用
 
-    public int cardValue => cardData.cardValue; // 卡牌数值
+    public int CardId => cardData.CardId; // 卡牌ID
 
-    public int cardCost => cardData.cost; // 卡牌费用
-
-    public int cardId => cardData.cardId; // 卡牌ID
-
-    public CardEffect effect; // 卡牌效果接口
-    public bool isDiscarded => cardData.isDiscarded; // 是否是弃牌
+    public IEffect Effect => cardData.Effect; // 卡牌效果接口
+    public bool IsDiscarded => cardData.IsDiscarded; // 是否是弃牌
     private Combat.CardManager manager; // 卡片管理器
 
     //----------------------更新方法---------------------//
 
-    public void updateCardStatus(CardData data) {
+    public void updateCardStatus(ICardData data) {
         cardData = data;
-        // 生成卡片效果
-        this.effect = getCardEffect(); // 生成卡片效果
         // 更新UI
         UpdateCardUI();
     }
@@ -82,18 +79,6 @@ public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler, IPo
         this.manager = manager; // 设置卡片管理器
     }
 
-    public void OnPointerClick(PointerEventData eventData) {
-        if (manager == null) return; // 如果没有卡片管理器, 则不执行
-        
-        var from = manager.getUser(this); // 获取使用者
-        var to = manager.getTarget(this); // 获取目标
-        if (from && to && manager.EnergyPoint >= this.cardCost) { // 如果有使用者和目标 且 能量足够
-            this.effect.work(from, to); // 执行卡牌效果
-            manager.reportUse(this); // 向卡片管理器报告使用
-            manager.setEnergy(manager.EnergyPoint - this.cardCost); // 扣除能量
-        }
-    }
-
     private IEnumerator AnimateTransform(Vector3 targetScale)
     {
         float timer = 0f;
@@ -115,13 +100,19 @@ public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler, IPo
 
     //----------------------更新UI---------------------//
     public void UpdateCardUI() {
-        // 背景
-        this.background.sprite = CardUI.GetCardBackground(cardType); // 设置卡片背景
-        // 数字
-        this.cardValueText.text = cardValue.ToString(); // 设置卡片数值文本
-        this.cardCostText.text = cardCost.ToString(); // 设置卡片数值颜色
+        // 按照CardCategory加载背景spirit
+        this.background.sprite = cardData.CardCategory switch {
+            CardCategory.Attack => Resources.Load<Sprite>("CardUI/Attack"),
+            CardCategory.Skill => Resources.Load<Sprite>("CardUI/Skill"),
+            CardCategory.Status => Resources.Load<Sprite>("CardUI/Status"),
+            _ => Resources.Load<Sprite>("CardUI/None"),
+        };
+        this.image.sprite = cardData.Sprite; // 设置卡片图片
+        this.cardCostText.text = cardData.Cost.ToString();// 加载卡片费用
+        this.cardNameText.text = cardData.CardName; // 加载卡片名称
+        this.cardDescText.text = cardData.Desc; // 加载卡片描述
         // 弃牌
-        if (isDiscarded) { //弃置时背景半透明
+        if (IsDiscarded) { //弃置时背景半透明
             Color color = this.background.color;
             color.a = 0.7f;
             this.background.color = color;
@@ -133,19 +124,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler, IPo
     }
 
     //----------------------卡牌效果---------------------//
-    public CardEffect getCardEffect() {
-        switch (cardType) {
-            case CardType.Attack:
-                return new AttackEffect(cardValue);
-            case CardType.Defense:
-                return new DefenseEffect(cardValue);
-            case CardType.Heal:
-                return new HealEffect(cardValue);
-            default:
-                return null;
-        }
+    public IEffect getCardEffect() {
+        return this.cardData.Effect; // 获取卡牌效果
     }
-}
-public interface CardEffect {
-    public void work(Character from, Character to);
 }

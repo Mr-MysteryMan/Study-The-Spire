@@ -2,178 +2,115 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
+public enum BackpackMode
+{
+    normal,
+    card,
+}
+
 public class BackpackPanelManager : MonoBehaviour
 {
-    private CardManager cardManager;
-    private Transform topCenter;
-    private Transform attackBtn, defenceBtn, healBtn, closeBtn;
-    private Transform attackIcon1, attackIcon2, attackSelect;
-    private Transform defenceIcon1, defenceIcon2, defenceSelect;
-    private Transform healIcon1, healIcon2, healSelect;
-    private Transform centerPanel;
-    private Transform scrollViewContent;
-    private Transform detailPanel;
-    private Transform bottomPanel;
-    private Transform bottomMenus;
-    private Transform detailBtn;
-    private CardType currentType;
-
-    // 卡牌展示用的预制体
     public GameObject BackpackUIItem;
+    public GameObject DetailPanel;
+    public CardSearchBar cardSearchBar;
+    public ObjectEventSO loadMapEvent;
+
+    private CardManager cardManager;
+    private Transform cardBtn, cardIcon1, cardIcon2, cardSelect;
+    private Transform closeBtn, scrollViewContent;
+    private Transform detailBtn, goldAmount;
+    private GameObject detailPanel;
+    private Text detailCostText, detailNameText, detailDescText;
+    private Image detailIconImage;
+
+    private GameObject selectedCardGO;
+    private ICardData selectedCard;
+
+    public BackpackMode curMode = BackpackMode.normal;
 
     void Start()
     {
         cardManager = CardManager.Instance;
-        Debug.Log(cardManager == null ? "CardManager 为 null!" : "CardManager 初始化成功");
         CacheUI();
-        InitClick();
-        ShowCardsByType(CardType.Attack);
+        InitEvents();
+        RefreshUI();
     }
 
     private void CacheUI()
     {
         var root = transform;
 
-        topCenter = root.Find("TopCenter");
-
-        attackBtn = topCenter.Find("Menu/Attack");
-        attackIcon1 = attackBtn.Find("icon1");
-        attackIcon2 = attackBtn.Find("icon2");
-        attackSelect = attackBtn.Find("Select");
-
-        defenceBtn = topCenter.Find("Menu/Defence");
-        defenceIcon1 = defenceBtn.Find("icon1");
-        defenceIcon2 = defenceBtn.Find("icon2");
-        defenceSelect = defenceBtn.Find("Select");
-
-        healBtn = topCenter.Find("Menu/Heal");
-        healIcon1 = healBtn.Find("icon1");
-        healIcon2 = healBtn.Find("icon2");
-        healSelect = healBtn.Find("Select");
+        cardBtn = root.Find("TopCenter/Menu/Card");
+        cardIcon1 = cardBtn.Find("icon1");
+        cardIcon2 = cardBtn.Find("icon2");
+        cardSelect = cardBtn.Find("Select");
 
         closeBtn = root.Find("RightTop/Close");
 
-        centerPanel = root.Find("Center");
-        scrollViewContent = centerPanel.Find("Scroll View/Viewport/Content");
-        detailPanel = centerPanel.Find("DetailPanel");
+        scrollViewContent = root.Find("Center/Scroll View/Viewport/Content");
 
-        bottomPanel = root.Find("Bottom");
-        bottomMenus = bottomPanel.Find("BottomMenus");
-        detailBtn = bottomMenus.Find("DetailBtn");
+        detailPanel = Instantiate(DetailPanel, root.Find("Center"));
+        detailPanel.SetActive(false);
 
-        detailPanel.gameObject.SetActive(false);
-        bottomMenus.Find("Gold/amount").GetComponent<Text>().text = cardManager.Gold.ToString();
+        detailCostText = detailPanel.transform.Find("Center/Cost/Text").GetComponent<Text>();
+        detailNameText = detailPanel.transform.Find("Top/Title").GetComponent<Text>();
+        detailIconImage = detailPanel.transform.Find("Center/Icon").GetComponent<Image>();
+        detailDescText = detailPanel.transform.Find("Bottom/Description").GetComponent<Text>();
+
+        detailBtn = root.Find("Bottom/BottomMenus/DetailBtn");
+        goldAmount = root.Find("Bottom/BottomMenus/Gold/amount");
+        goldAmount.GetComponent<Text>().text = $"{cardManager.Gold}";
     }
 
-    private void InitClick()
+    private void InitEvents()
     {
-        attackBtn.GetComponent<Button>().onClick.AddListener(OnClickAttack);
-        defenceBtn.GetComponent<Button>().onClick.AddListener(OnClickDefence);
-        healBtn.GetComponent<Button>().onClick.AddListener(OnClickHeal);
-        closeBtn.GetComponent<Button>().onClick.AddListener(OnClickClose);
-        detailBtn.GetComponent<Button>().onClick.AddListener(OnDetail);
+        cardBtn.GetComponent<Button>().onClick.AddListener(ShowCards);
+        closeBtn.GetComponent<Button>().onClick.AddListener(() => loadMapEvent.RaiseEvent(null, this));
+        detailBtn.GetComponent<Button>().onClick.AddListener(ShowCardDetail);
+        cardSearchBar.OnSearchKeywordChanged += OnSearchChanged;
     }
 
-    // 点击关闭按钮
-    private void OnClickClose()
+    private void ShowCards()
     {
-        gameObject.SetActive(false);
+        curMode = BackpackMode.card;
+        RefreshUI();
+        DisplayCardList(cardManager.GetAllCards());
     }
 
-    // 点击Attack分类
-    private void OnClickAttack()
+    private void RefreshUI()
     {
-        Debug.Log("进入attack卡牌界面");
-        ShowCardsByType(CardType.Attack);
-    }
+        cardIcon1.gameObject.SetActive(curMode != BackpackMode.card);
+        cardIcon2.gameObject.SetActive(curMode == BackpackMode.card);
+        cardSelect.gameObject.SetActive(curMode == BackpackMode.card);
+        cardSearchBar.gameObject.SetActive(curMode == BackpackMode.normal ? false : true);
 
-    // 点击Defence分类
-    private void OnClickDefence()
-    {
-        Debug.Log("进入defence卡牌界面");
-        ShowCardsByType(CardType.Defense);
-    }
-
-    // 点击Heal分类
-    private void OnClickHeal()
-    {
-        Debug.Log("进入heal卡牌界面");
-        ShowCardsByType(CardType.Heal);
-    }
-
-    // 点击查看详情按钮（后续扩展）
-    private void OnDetail()
-    {
-        if (selectedCard != null) {
-            ShowCardDetail(selectedCard);
-        }
-    }
-
-    // 展示指定类型的卡牌，并刷新 Scroll View
-    private void ShowCardsByType(CardType type)
-    {
-        currentType = type;
-        UpdateTopIcons(type);
-        RefreshCardList(type);
-    }
-
-    // 根据卡牌类型更新顶部按钮图标状态
-    private void UpdateTopIcons(CardType selectedType)
-    {
-        bool isAttack = selectedType == CardType.Attack;
-        bool isDefence = selectedType == CardType.Defense;
-        bool isHeal = selectedType == CardType.Heal;
-
-        attackIcon1.gameObject.SetActive(!isAttack);
-        attackIcon2.gameObject.SetActive(isAttack);
-        attackSelect.gameObject.SetActive(isAttack);
-
-        defenceIcon1.gameObject.SetActive(!isDefence);
-        defenceIcon2.gameObject.SetActive(isDefence);
-        defenceSelect.gameObject.SetActive(isDefence);
-
-        healIcon1.gameObject.SetActive(!isHeal);
-        healIcon2.gameObject.SetActive(isHeal);
-        healSelect.gameObject.SetActive(isHeal);
-    }
-
-    // 刷新Scroll View中的卡牌列表（根据卡牌类型）
-    private void RefreshCardList(CardType type)
-    {
-        foreach (Transform child in scrollViewContent)
-        {
+        foreach (Transform child in scrollViewContent){
             Destroy(child.gameObject);
         }
+    }
 
-        List<CardData> cards = cardManager.GetCardsByType(type);
+    private void DisplayCardList(List<ICardData> cards)
+    {
+        RefreshUI();
 
         foreach (var card in cards)
         {
-            GameObject itemGO = Instantiate(BackpackUIItem, scrollViewContent);
+            var itemGO = Instantiate(BackpackUIItem, scrollViewContent);
 
-            Image icon = itemGO.transform.Find("Top/Icon").GetComponent<Image>();
-            Sprite sprite = CardUI.GetCardBackground(type);
-            if (sprite) icon.sprite = sprite;
-            Text text = itemGO.transform.Find("Bottom/Text").GetComponent<Text>();
-            text.text = card.cardValue.ToString();
-
+            itemGO.transform.Find("Top/Icon").GetComponent<Image>().sprite = card.Sprite;
+            itemGO.transform.Find("Bottom/Text").GetComponent<Text>().text = card.CardName;
+            itemGO.transform.Find("Top/Cost/Text").GetComponent<Text>().text = card.Cost.ToString();
             itemGO.transform.Find("Select").gameObject.SetActive(false);
 
-            Button btn = itemGO.GetComponent<Button>();
-            if (btn != null) {
-                btn.onClick.AddListener(() => {
-                    OnCardClicked(itemGO, card);
-                });
-            }
+            itemGO.GetComponent<Button>().onClick.AddListener(() => OnCardClicked(itemGO, card));
         }
-        Debug.Log($"展示{type}类卡牌，共 {cards.Count} 张");
+
+        Debug.Log($"展示卡牌，共 {cards.Count} 张");
     }
 
-    private GameObject selectedCardGO = null;
-    private CardData selectedCard = null;
-
-    private void OnCardClicked(GameObject itemGO, CardData card) {
-        if (selectedCardGO != null) {
+    private void OnCardClicked(GameObject itemGO, ICardData card)
+    {
+        if (selectedCardGO != null){
             selectedCardGO.transform.Find("Select").gameObject.SetActive(false);
         }
 
@@ -182,23 +119,21 @@ public class BackpackPanelManager : MonoBehaviour
         selectedCardGO.transform.Find("Select").gameObject.SetActive(true);
     }
 
-    private void ShowCardDetail(CardData card) {
-        detailPanel.gameObject.SetActive(true);
+    private void ShowCardDetail()
+    {
+        if (selectedCard == null) return;
 
-        Text nameText = detailPanel.Find("Top/Title").GetComponent<Text>();
-        Image iconImage = detailPanel.Find("Center/Icon").GetComponent<Image>();
-        Text descText = detailPanel.Find("Bottom/Description").GetComponent<Text>();
-        Sprite icon = CardUI.GetCardBackground(card.cardType);
-        if (icon) iconImage.sprite = icon;
-        if (card.cardType == CardType.Attack) {
-            nameText.text = "攻击卡牌";
-            descText.text = $"该卡牌攻击属性为{card.cardValue}";
-        } else if (card.cardType == CardType.Defense) {
-            nameText.text = "防御卡牌";
-            descText.text = $"该卡牌防御属性为{card.cardValue}";
-        } else if (card.cardType == CardType.Heal)  {
-            nameText.text = "治愈卡牌";
-            descText.text = $"该卡牌治愈属性为{card.cardValue}";
-        }
+        detailCostText.text = selectedCard.Cost.ToString();
+        detailNameText.text = selectedCard.CardName;
+        detailIconImage.sprite = selectedCard.Sprite;
+        detailDescText.text = selectedCard.Desc;
+
+        detailPanel.SetActive(true);
+    }
+
+    private void OnSearchChanged(string keyword)
+    {
+        var filtered = CardFilterUtils.FilterCards(keyword, cardManager.GetAllCards());
+        DisplayCardList(filtered);
     }
 }

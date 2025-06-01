@@ -9,7 +9,7 @@ public class GameOverPanel : MonoBehaviour
 
     private void OnEnable()
     {
-        GetComponent<UIDocument>().rootVisualElement.Q<Button>("BackToMenuButton").clicked += BackToMenu;
+        GetComponent<UIDocument>().rootVisualElement.Q<Button>("BackToStartButton").clicked += BackToMenu;
     }
 
     private void BackToMenu()
