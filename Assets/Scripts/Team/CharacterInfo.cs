@@ -66,6 +66,12 @@ public class CharacterInfo : IPowered
         health = maxHealth / 2; // 复活时恢复一半生命值
     }
 
+    public void Reset()
+    {
+        this.IsDead = false;
+        Set(Create(characterType));
+    }
+
     public void Set(CharacterInfo info)
     {
         if (info == null || info.characterType != characterType)
