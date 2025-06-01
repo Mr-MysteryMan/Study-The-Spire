@@ -149,8 +149,8 @@ public class CardManager : MonoBehaviour
     }
     
     public void ResetPlayerData(){
-        Gold = 200;
-        health = 100;
+        gold = 200;
+        characterTypes.ForEach(c => c.Reset()) ;
     }
     
     public void SetCharacterTypes(List<CharacterType> types)
