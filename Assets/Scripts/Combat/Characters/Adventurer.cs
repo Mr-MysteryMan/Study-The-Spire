@@ -13,5 +13,24 @@ namespace Combat.Characters
     public class Adventurer : Character
     {
         public int Mana => combatSystem.CardManager.EnergyPoint; // 目前直接以CardManager的法力值作为角色的法力值。
+
+        public CharacterType CharacterType { get; private set; } // 角色类型
+
+        public void SetCharacterType(CharacterType type)
+        {
+            CharacterType = type;
+        }
+
+        public CharacterInfo ToInfo()
+        {
+            return new CharacterInfo(
+                type: this.CharacterType, // 角色类型可以根据实际情况设置
+                health: this.CurHp,
+                maxHealth: this.MaxHp,
+                attackPower: AttackPower,
+                healPower: HealPower,
+                defensePower: DefensePower
+            );
+        }
     }
 }

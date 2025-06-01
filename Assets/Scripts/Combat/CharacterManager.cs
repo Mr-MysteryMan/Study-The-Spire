@@ -23,7 +23,7 @@ namespace Combat
         private Character systemCharacter;
 
         // 角色列表，所有参与战斗的角色
-        private List<Character> playerCharacters;
+        private List<Adventurer> playerCharacters;
 
         private List<Enemy> monsterCharacters;
 
@@ -37,29 +37,29 @@ namespace Combat
 
         public List<Character> AllCharacters => new List<Character> { PlayerCharacter }.Concat(monsterCharacters).ToList(); // 所有角色列表
 
-        public void Init(Character systemCharacter, List<CharacterType> characters, int Hp, int MaxHp, EnemyType enemyType)
+        public void Init(Character systemCharacter, List<CharacterInfo> characters, EnemyType enemyType)
         {
             this.systemCharacter = systemCharacter;
-            playerCharacters = new List<Character>();
+            playerCharacters = new List<Adventurer>();
             monsterCharacters = new List<Enemy>();
-            CreateCharacters(characters, Hp, MaxHp, enemyType);
+            CreateCharacters(characters, enemyType);
         }
 
 
-        private void CreateCharacters(List<CharacterType> characters, int Hp, int MaxHp, EnemyType enemyType)
+        private void CreateCharacters(List<CharacterInfo> characters, EnemyType enemyType)
         {
             // 指定角色位置
             Vector3 centerPlayerPosition = new Vector3(-240, 20, 0); // 玩家位置
             Vector3 centerMonsterPos = new Vector3(240, 20, 0); // 敌人位置
 
             // 创建玩家角色
-            var playerCharacterInfos = GetCharacterInfos(characters, Hp, MaxHp);
-            foreach (var info in playerCharacterInfos)
+            foreach (var info in characters)
             {
-                var playerPosition = GetPosition(CharacterSide.Player, playerCharacters.Count, playerCharacterInfos.Count, centerPlayerPosition);
-                var playerPrefab = GetAdventurerPrefab(info.Type);
-                var player = CreateCharacter(playerPosition, playerPrefab);
-                player.SetInitHP(info.Hp, info.MaxHp); // 设置初始生命值
+                var playerPosition = GetPosition(CharacterSide.Player, playerCharacters.Count, characters.Count, centerPlayerPosition);
+                var playerPrefab = GetAdventurerPrefab(info.characterType);
+                var player = CreateCharacter(playerPosition, playerPrefab) as Adventurer;
+                player.SetInitHP(info.Health, info.MaxHealth); // 设置初始生命值
+                player.SetPowers(info.AttackPower, info.DefensePower, info.HealPower);
                 player.InitCharacter();
                 playerCharacters.Add(player); // 添加玩家角色
             }
@@ -73,50 +73,6 @@ namespace Combat
                 monster.InitCharacter();
                 monsterCharacters.Add(monster as Enemy); // 添加怪物角色
             }
-        }
-
-        private class CharacterInfo
-        {
-            public CharacterType Type;
-            public int Hp, MaxHp;
-
-            public CharacterInfo(CharacterType type, int hp, int maxHp)
-            {
-                Type = type;
-                Hp = hp;
-                MaxHp = maxHp;
-            }
-        }
-
-        private List<CharacterInfo> GetCharacterInfos(List<CharacterType> characters, int hp, int maxHp)
-        {
-            int n = characters.Count;
-            var characterInfos = new List<CharacterInfo>();
-
-            int _maxHp = maxHp / n;
-            int rem = maxHp % n;
-            List<int> maxHps = new List<int>(new int[n]);
-            for (int i = 0; i < n; i++)
-            {
-                maxHps[i] = _maxHp + (rem > 0 ? 1 : 0);
-                rem--;
-            }
-
-            int hpSum = 0;
-            for (int i = 0; i < n; i++)
-            {
-                int curHp = maxHps[i];
-                hpSum += curHp;
-                if (hpSum > hp)
-                {
-                    curHp -= hpSum - hp; // 调整当前生命值，确保总和不超过玩家的生命值
-                    characterInfos.Add(new CharacterInfo(characters[i], curHp, maxHps[i]));
-                    break;
-                }
-                characterInfos.Add(new CharacterInfo(characters[i], curHp, maxHps[i]));
-            }
-
-            return characterInfos;
         }
 
         /* 处理角色的部分函数 */
@@ -204,5 +160,10 @@ namespace Combat
 
         public bool IsLose() => playerCharacters.Count == 0 || playerCharacters.All(c => c.IsDead);
         public bool IsWin() => monsterCharacters.Count == 0 || monsterCharacters.All(c => c.IsDead);
+
+        public List<CharacterInfo> GetPlayerCharacterInfos()
+        {
+            return playerCharacters.Select(c => c.ToInfo()).ToList();
+        }
     }
 }

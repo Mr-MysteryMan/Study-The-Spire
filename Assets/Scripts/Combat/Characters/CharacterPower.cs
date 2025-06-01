@@ -7,9 +7,16 @@ namespace Combat.Characters
         Defense,
     }
 
+    public interface IPowered
+    {
+        int AttackPower { get; set; }
+        int HealPower { get; set; }
+        int DefensePower { get; set; }
+    }
+
     public static class CharacterPowerExtensions
     {
-        public static int GetPowerValue(this Character character, CharacterPowerType type)
+        public static int GetPowerValue(this IPowered character, CharacterPowerType type)
         {
             return type switch
             {
@@ -20,7 +27,7 @@ namespace Combat.Characters
             };
         }
 
-        public static void SetPowerValue(this Character character, CharacterPowerType type, int value)
+        public static void SetPowerValue(this IPowered character, CharacterPowerType type, int value)
         {
             switch (type)
             {

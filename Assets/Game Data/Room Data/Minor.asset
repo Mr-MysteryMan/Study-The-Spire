@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f353e9d87d70e3d4fb39aec1ad38fa51, type: 3}
-  m_Name: MinorEnemy
+  m_Name: Minor
   m_EditorClassIdentifier: 
   roomIcon: {fileID: 21300000, guid: cac9f704575bbe744b68791d16b1806a, type: 3}
   roomType: 1

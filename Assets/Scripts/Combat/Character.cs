@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Combat.Buffs;
+using Combat.Characters;
 using Combat.Command;
 using Combat.Command.Buff;
 using Combat.Events.Turn;
@@ -15,7 +16,7 @@ namespace Combat
 {
 
     // 角色类，表示游戏中的角色，包含生命值、护甲值等属性
-    public class Character : MonoBehaviour
+    public class Character : MonoBehaviour, IPowered
     {
         public GameObject HPbar;
         public VfxManager vfxManager;
@@ -42,10 +43,9 @@ namespace Combat
 
         [SerializeField] public BuffManager buffManager;
 
-        public int AttackPower; // 攻击力
-        public int DefensePower; // 防御力
-        public int HealPower; // 治疗力
-
+        public int AttackPower { get; set; } // 攻击力
+        public int DefensePower { get; set; } // 防御力
+        public int HealPower { get; set; } // 治疗力
         // 死亡前未被Destroy的标志
         public bool IsDead = false;
         public void SetDead() => this.IsDead = true;

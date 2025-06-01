@@ -86,23 +86,21 @@ namespace Combat
 
         private void InitCharacterManager()
         {
-            var globalCardManagerObject = GameObject.Find("CardManager");
+            var globalCardManagerObject = GameObject.Find("CardManager(Clone)");
             var globalCardManager = globalCardManagerObject == null ? null : globalCardManagerObject.GetComponent<GlobalCardManager>();
-            List<CharacterType> characterTypes;
+            List<CharacterInfo> characterInfos;
             int hp, maxHp;
             EnemyType enemyType;
             if (globalCardManager == null)
             {
-                characterTypes = new List<CharacterType>(){ CharacterType.Mage, CharacterType.Warrior};
+                characterInfos = new List<CharacterInfo>() { CharacterInfo.Create(CharacterType.Mage), CharacterInfo.Create(CharacterType.Warrior) }; // 初始化角色信息
                 hp = Setting.PlayerHp; // 设置玩家初始血量
                 maxHp = Setting.PlayerHp; // 设置玩家最大血量
                 enemyType = DefaultEnemyType;
             }
             else
             {
-                characterTypes = globalCardManager.characterTypes; // 从全局卡片管理器获取角色类型
-                hp = globalCardManager.health;
-                maxHp = globalCardManager.maxHealth;
+                characterInfos = globalCardManager.characterTypes; // 从全局卡片管理器获取角色类型
                 enemyType = GameObject.Find("SceneLoadManager").GetComponent<SceneLoadManager>().currentRoom.roomData.roomType switch
                 {
                     RoomType.MinorEnemy => EnemyType.Minor,
@@ -112,7 +110,7 @@ namespace Combat
                 };
             }
 
-            characterManager.Init(this.systemCharacter, characterTypes, hp, maxHp, enemyType);
+            characterManager.Init(this.systemCharacter, characterInfos, enemyType);
         }
 
 
@@ -139,7 +137,7 @@ namespace Combat
         {
             // 弹出宝藏窗口
             var treasure = Instantiate(TreasurePrefab);
-            treasure.GetComponent<Treasure>().init(PlayerCharacter.CurHp, () => backToMenuEvent.RaiseEvent(null, this)); // 设置宝物的生命值
+            treasure.GetComponent<Treasure>().init(characterManager.GetPlayerCharacterInfos(), () => backToMenuEvent.RaiseEvent(null, this)); // 设置宝物的生命值
         }
 
         private void Fail()
