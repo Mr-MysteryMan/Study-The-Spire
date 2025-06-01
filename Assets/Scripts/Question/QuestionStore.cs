@@ -57,27 +57,32 @@ public class QuestionStore : MonoBehaviour
     // -----------------------------确认退出----------------------------------
     ConfirmButton.GetComponent<Button>().onClick.AddListener(() =>
     {
+      SaveQuestionListConfig(); // 保存题库配置文件
       Destroy(QuestionStoreUI); // 销毁题库选择UI
     });
   }
 
   // -----------------------------仓库控制----------------------------------
   public static readonly List<string> questionListNames = new List<string> { "生活常识", "英语缩写", "历史知识", "二次元", "数学知识", "古典诗词", "计算机", "乐理", "游戏", "地理" }; // 所有问题列表名称
-  private static List<string> EnableQuestionListNames = new List<string>(); // 启用的问题列表名称
+  public static List<string> EnableQuestionListNames = new List<string>(); // 启用的问题列表名称
   public static Dictionary<string, QuestionList> questionStore = new Dictionary<string, QuestionList>(); // 可用题库
   public static bool isInit = false; // 是否初始化
 
   // 初始化, 全局只调用一次
   public static void Init()
   {
+    if (isInit) return; // 如果已经初始化则不再执行
+    LoadQuestionListConfig(); // 从配置文件加载题库
+    if (EnableQuestionListNames.Count < 3) // 如果启用的题库少于3个，则默认出现问题, 重新加载所有
+    {
+      EnableQuestionListNames = new List<string>(questionListNames);
+    }
     for (int i = 0; i < questionListNames.Count; i++)
     {
       string fileName = questionListNames[i];
-      QuestionList questionList = LoadQuestions(fileName);
-      if (questionList != null)
+      if (EnableQuestionListNames.Contains(fileName))
       {
-        questionStore.Add(fileName, questionList);
-        EnableQuestionListNames.Add(fileName);
+        questionStore.Add(fileName, LoadQuestions(fileName)); // 添加题库
       }
     }
     isInit = true;
@@ -148,6 +153,41 @@ public class QuestionStore : MonoBehaviour
       return null;
     }
   }
+
+  // 更新题库配置文件
+  public static void SaveQuestionListConfig()
+  {
+    string filePath = Path.Combine(Application.streamingAssetsPath, "question", "config.json");
+    QuestionListConfig config = new QuestionListConfig(EnableQuestionListNames);
+    string json = JsonUtility.ToJson(config, true);
+    try
+    {
+      File.WriteAllText(filePath, json);
+      Debug.Log("Saved question list config to: " + filePath);
+    }
+    catch (System.Exception e)
+    {
+      Debug.LogError("Failed to save question list config: " + e.Message);
+    }
+  }
+
+  // 从配置文件加载题库
+  public static void LoadQuestionListConfig()
+  {
+    string filePath = Path.Combine(Application.streamingAssetsPath, "question", "config.json");
+    if (File.Exists(filePath))
+    {
+      string json = File.ReadAllText(filePath);
+      QuestionListConfig config = JsonUtility.FromJson<QuestionListConfig>(json);
+      EnableQuestionListNames = config.questionListNames;
+      Debug.Log("Loaded question list config from: " + filePath);
+    }
+    else
+    {
+      Debug.LogWarning("Question list config file not found, using default question lists.");
+      EnableQuestionListNames = new List<string>(questionListNames); // 使用默认题库
+    }
+  }
 }
 
 [System.Serializable]
@@ -158,14 +198,26 @@ public class QuestionList {
     }
 }
 [System.Serializable]
-public class QuestionData {
-    public string question;
-    public string[] selection;
-    public int answer;
+public class QuestionData
+{
+  public string question;
+  public string[] selection;
+  public int answer;
 
-    public QuestionData(string question, string[] selection, int answer) {
-        this.question = question;
-        this.selection = selection;
-        this.answer = answer;
-    }
+  public QuestionData(string question, string[] selection, int answer)
+  {
+    this.question = question;
+    this.selection = selection;
+    this.answer = answer;
+  }
+}
+[System.Serializable]
+public class QuestionListConfig
+{
+  public List<string> questionListNames;
+
+  public QuestionListConfig(List<string> questionListNames)
+  {
+    this.questionListNames = questionListNames;
+  }
 }

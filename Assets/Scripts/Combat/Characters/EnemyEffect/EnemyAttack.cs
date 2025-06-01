@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Combat.Characters.EnemyEffect
@@ -8,9 +10,16 @@ namespace Combat.Characters.EnemyEffect
         public int Damage;
 
         public override EnemyEffectType EffectType => EnemyEffectType.Attack;
-        public override void Work(Character source, Character target)
+        public override CardEffectTarget TargetType => CardEffectTarget.AdventurerOne;
+
+        public override IEnumerator Work(Character source, List<Character> targets)
         {
-            source.Attack(target, Damage);
+            yield return source.vfxManager.PlayAttackForward(); // 播放攻击前特效
+            foreach (var target in targets)
+            {
+                source.Attack(target, Damage); // 执行攻击
+            }
+            yield return source.vfxManager.PlayAttackBack(); // 播放攻击后特效
         }
     }
 }

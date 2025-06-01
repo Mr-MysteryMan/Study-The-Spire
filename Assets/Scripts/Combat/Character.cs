@@ -1,10 +1,13 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Combat.Buffs;
+using Combat.Characters;
 using Combat.Command;
 using Combat.Command.Buff;
 using Combat.Events.Turn;
 using Combat.EventVariable;
+using Combat.VFX;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -13,9 +16,10 @@ namespace Combat
 {
 
     // 角色类，表示游戏中的角色，包含生命值、护甲值等属性
-    public class Character : MonoBehaviour
+    public class Character : MonoBehaviour, IPowered
     {
         public GameObject HPbar;
+        public VfxManager vfxManager;
 
         // 注意使用了ReactiveIntVariable之后，一次函数尽量只有一次赋值，避免触发多次事件。
         [SerializeField] private ReactiveIntVariable maxHp;
@@ -39,6 +43,20 @@ namespace Combat
 
         [SerializeField] public BuffManager buffManager;
 
+        public int AttackPower { get; set; } // 攻击力
+        public int DefensePower { get; set; } // 防御力
+        public int HealPower { get; set; } // 治疗力
+        // 死亡前未被Destroy的标志
+        public bool IsDead = false;
+        public void SetDead() => this.IsDead = true;
+
+        public void SetPowers(int attackPower, int defensePower, int healPower)
+        {
+            AttackPower = attackPower;
+            DefensePower = defensePower;
+            HealPower = healPower;
+        }
+
         public void SetInitHP(int maxHp, int curHp) // 设置初始化生命值数据
         {
             initCurHp = curHp;
@@ -56,7 +74,7 @@ namespace Combat
             ammor = new ReactiveIntVariable("Ammor", initAmmor, eventManager, this);
         }
 
-        public void Start()
+        public void InitCharacter()
         {
             Init(combatSystem);
             if (HPbar != null) // 存在血条时(非系统对象), 启动血条
@@ -65,52 +83,6 @@ namespace Combat
                 hPController.eventManager = this.combatSystem.GetComponent<EventManager>();
                 hPController.launch(this);
             }
-        }
-
-
-        // 攻击target,造成damage点伤害，会触发相应事件
-        public void Attack(Character target, int damage)
-        {
-            combatSystem.ProcessCommand(new AttackCommand(this, target, damage, DamageType.Normal));
-        }
-
-        // 为target加血，会触发相应事件
-        public void Heal(Character target, int heal)
-        {
-            combatSystem.ProcessCommand(new HealCommand(this, target, heal));
-        }
-
-        // 为自己加血，会触发相应事件
-        public void Heal(int heal)
-        {
-            combatSystem.ProcessCommand(new HealCommand(this, this, heal));
-        }
-
-        // 为target添加护甲值，会触发相应事件
-        public void AddAmmor(Character character, int ammor)
-        {
-            combatSystem.ProcessCommand(new AddAmmorCommand(this, character, ammor));
-        }
-
-        // 为自己添加护甲值，会触发相应事件
-        public void AddAmmor(int ammor)
-        {
-            combatSystem.ProcessCommand(new AddAmmorCommand(this, this, ammor));
-        }
-
-        public void AddBuff(Character target, IBuff buff, int count = 1)
-        {
-            combatSystem.ProcessCommand(new ApplyBuffCommand(this, target, buff, count));
-        }
-
-        public void DecreaseBuff(Character target, IBuff buff, int count = 1)
-        {
-            combatSystem.ProcessCommand(new ApplyBuffCommand(this, target, buff, -count));
-        }
-
-        public void RemoveBuff(Character target, Type type)
-        {
-            combatSystem.ProcessCommand(new RemoveBuffCommand(this, target, type));
         }
 
         // 当前生命值减少，只有简单的数值保证(damage>=0)

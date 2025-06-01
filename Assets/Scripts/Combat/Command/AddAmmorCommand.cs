@@ -4,7 +4,7 @@ namespace Combat.Command
         public Character Source { get; set; }
         public Character Target { get; set; }
 
-        public int AmmorAmount { get; set; }
+        public int AmmorAmount;
 
         public AddAmmorCommand(Character source, Character target, int ammorAmount) {
             Source = source;

@@ -41,17 +41,22 @@ public class REventController : MonoBehaviour
 
     public void alterBlood(int amount)
     {
-        if (cardManager.health + amount >= 0)
+        if (cardManager.CurAdvHealth + amount >= 0)
         {
-            cardManager.health = Mathf.Min(100, cardManager.health + amount);
-            Debug.Log($"变化血量：{amount}，当前血量：{cardManager.health}");
+            cardManager.CurAdvHealth = Mathf.Min(cardManager.CurAdvMaxHealth, cardManager.CurAdvHealth + amount);
+            Debug.Log($"变化血量：{amount}，当前血量：{cardManager.CurAdvHealth}");
         }
         else
         {
-            cardManager.health = 0;
+            cardManager.CurAdvHealth = 0;
             Debug.Log($"失去全部血量");
             //ObjectEventSO loadMenuEvent;
             //loadMenuEvent.RaiseEvent(null, this);
         }
+    }
+
+    public void respawnCharacter()
+    {
+        cardManager.RespawnCharacter();
     }
 }

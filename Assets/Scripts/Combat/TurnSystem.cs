@@ -1,5 +1,10 @@
 using UnityEngine;
 using Combat.Events.Turn;
+using System.Collections;
+using System.Collections.Generic;
+using Combat.Characters;
+using System.Linq;
+using System;
 
 namespace Combat
 {
@@ -32,19 +37,12 @@ namespace Combat
             combatSystem = GetComponent<CombatSystem>();
         }
 
-        private void Start()
-        {
-            // 初始化回合系统
-            InitTurnSystem();
-        }
-
-        private void InitTurnSystem()
+        public void InitTurnSystem()
         {
             turnNum = 0;
             whoseTurn = WhoseTurn.Player; // 默认玩家先手
             turnState = TurnState.Started; // 默认回合开始
             Debug.Log("回合系统初始化完成");
-            StartCombat();
         }
 
         public void StartCombat()
@@ -53,12 +51,16 @@ namespace Combat
             Debug.Log("战斗开始");
             combatSystem.EventManager.Publish(new CombatStartEvent());
             combatSystem.PlayerCharacter.OnCombatStart(); // 玩家角色开始战斗
-            foreach (var monster in combatSystem.MonsterCharacter)
+            combatSystem.LockDead();
+            foreach (var monster in combatSystem.MonsterCharacters)
             {
+                if (monster.IsDead) continue; // 如果怪物已经死亡，则跳过
                 monster.OnCombatStart(); // 敌人角色开始战斗
             }
+            combatSystem.ReleaseDead();
             StartPlayerTurn();
         }
+
 
         public void StartPlayerTurn()
         {
@@ -76,29 +78,57 @@ namespace Combat
             turnState = TurnState.Ended; // 回合结束
             combatSystem.EventManager.Publish(new TurnEndEvent(combatSystem.PlayerCharacter, turnNum));
             combatSystem.PlayerCharacter.OnTurnEnd();
-            StartEnemyTurn(); // 开始敌人回合
+            StartCoroutine(StartEnemyTurn()); // 开始敌人回合
         }
 
-        private void StartEnemyTurn()
+        private IEnumerator StartEnemyTurn()
         {
             whoseTurn = WhoseTurn.Enemy; // 敌人回合
             Debug.Log($"开始第 {turnNum} 回合, 敌人回合");
-            foreach (var monster in combatSystem.MonsterCharacter)
+            combatSystem.LockDead();
+            foreach (var monster in combatSystem.MonsterCharacters)
             {
+                if (monster.IsDead) continue; // 如果怪物已经死亡，则跳过
                 combatSystem.EventManager.Publish(new TurnStartEvent(monster, turnNum));
             }
+            combatSystem.ReleaseDead();
 
-            foreach (var monster in combatSystem.MonsterCharacter)
+            combatSystem.LockDead();
+            foreach (var monster in combatSystem.MonsterCharacters)
             {
+                if (monster.IsDead) continue;
                 monster.OnTurnStart();
             }
+            combatSystem.ReleaseDead();
 
-            foreach (var monster in combatSystem.MonsterCharacter)
+            combatSystem.LockDead();
+            foreach (var monster in combatSystem.MonsterCharacters)
             {
-                monster.Effect.Work(monster, monster.Effect.EffectType == Characters.EnemyEffect.EnemyEffectType.Attack ? combatSystem.PlayerCharacter : monster); // 触发敌人效果
+                if (monster.IsDead) continue;
+                yield return monster.Effect.Work(monster, GetTargets(monster.Effect.TargetType, monster)); // 触发敌人效果
             }
+            combatSystem.ReleaseDead();
 
             EndEnemyTurn(); // 结束敌人回合
+        }
+
+        private List<Character> GetTargets(CardEffectTarget effectTarget, Character character)
+        {
+            return effectTarget switch
+            {
+                CardEffectTarget.None => new List<Character>(),
+                CardEffectTarget.AdventurerOne => new List<Character> { combatSystem.PlayerCharacter },
+                CardEffectTarget.AdventurerAll => new List<Character> { combatSystem.PlayerCharacter },
+                CardEffectTarget.AdventurerSelf => new List<Character> { combatSystem.PlayerCharacter },
+
+                CardEffectTarget.EnemyOne => new List<Character> { character },
+                CardEffectTarget.EnemyAll => combatSystem.MonsterCharacters.Select(m => m as Character).ToList(),
+                CardEffectTarget.NotPlayable => new List<Character>(),
+
+                CardEffectTarget.CharacterOne => new List<Character> { character },
+                CardEffectTarget.CharacterAll => combatSystem.AllCharacters,
+                _ => throw new ArgumentOutOfRangeException(nameof(effectTarget), effectTarget, null)
+            };
         }
 
         private void EndEnemyTurn()
@@ -106,15 +136,21 @@ namespace Combat
             // 结束敌人回合
             Debug.Log("敌人回合结束");
             turnState = TurnState.Ended; // 回合结束
-            foreach (var monster in combatSystem.MonsterCharacter)
+            combatSystem.LockDead();
+            foreach (var monster in combatSystem.MonsterCharacters)
             {
+                if (monster.IsDead) continue; 
                 combatSystem.EventManager.Publish(new TurnEndEvent(monster, turnNum));
             }
+            combatSystem.ReleaseDead();
 
-            foreach (var monster in combatSystem.MonsterCharacter)
+            combatSystem.LockDead();
+            foreach (var monster in combatSystem.MonsterCharacters)
             {
+                if (monster.IsDead) continue;
                 monster.OnTurnEnd();
             }
+            combatSystem.ReleaseDead();
 
             StartPlayerTurn(); // 开始玩家回合
         }

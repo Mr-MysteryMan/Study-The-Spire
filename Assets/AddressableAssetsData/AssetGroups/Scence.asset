@@ -50,16 +50,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 821427e60df544646b681a6597878b83
-    m_Address: Assets/Scenes/Elite.unity
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c346f568a97935846a6c9967a1603b71
-    m_Address: Assets/Scenes/Boss.unity
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 35e5169be2db8084eb98ff675f6857df
     m_Address: Assets/Scenes/REvent.unity
     m_ReadOnly: 0

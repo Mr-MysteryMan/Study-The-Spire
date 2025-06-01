@@ -4,7 +4,7 @@ namespace Combat.Command
     {
         public Character Source { get; set; }
         public Character Target { get; set; }
-        public int HealAmount { get; set; }
+        public int HealAmount;
 
         public HealCommand(Character source, Character target, int healAmount)
         {
