@@ -10,17 +10,31 @@ public class RestRoom : MonoBehaviour
 
     private void HandleCorrectAnswer()
     {
-        Debug.Log($"�ش���ȷ��");
-        cardManager.health += 100;
-        //���ص�ͼ
+        if (cardManager.health > Setting.PlayerHp - 50)
+        {
+            cardManager.health = Setting.PlayerHp;
+        }
+        else
+        {
+            cardManager.health = 50;
+        }
+
+
+
         loadMapEvent.RaiseEvent(null, this);
     }
 
     private void HandleWrongAnswer()
     {
-        Debug.Log($"�ش����");
-        cardManager.health -= 50;
-        //���ص�ͼ
+        if (cardManager.health > 50)
+        {
+            cardManager.health -= 50;
+        }
+        else
+        {
+            cardManager.health = 1;
+        }
+
         loadMapEvent.RaiseEvent(null, this);
     }
 
