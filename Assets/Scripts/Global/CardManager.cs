@@ -140,7 +140,7 @@ public class CardManager : MonoBehaviour
     }
     
     public void ResetPlayerData(){
-        Gold = 200;
+        gold = 200;
         health = 100;
     }
     
