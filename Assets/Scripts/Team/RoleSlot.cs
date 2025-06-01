@@ -16,17 +16,24 @@ public class RoleSlot : MonoBehaviour
         ClearSlot();
     }
 
-    public void SetCharacter(CharacterData data) {
+    public void SetCharacter(CharacterData data)
+    {
         curCharacter = data;
         icon.sprite = data.ricon;
         icon.enabled = true;
     }
 
-    public void ClearSlot() {
+    public void ClearSlot()
+    {
         curCharacter = null;
         icon.sprite = null;
         icon.enabled = false;
     }
 
     public bool IsEmpty() => curCharacter == null;
+
+    public CharacterType GetCharacterType()
+    {
+        return curCharacter.type;
+    }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TeamPanelManager : MonoBehaviour
 {
@@ -9,14 +10,17 @@ public class TeamPanelManager : MonoBehaviour
     public CharacterCarouselUI leftPanel;
     public Transform slotContainer;
     public GameObject rightPrefab;
+    public Button close;
     private List<RoleSlot> roleSlots = new();
     private const int maxSlots = 3;
+    private List<CharacterType> types = new();
 
     private void Start()
     {
         GenerateCharacterData();
         GenerateRightSlots();
         leftPanel.Init(characters, AddCharacterToSlot);
+        close.onClick.AddListener(OnClose);
     }
 
     private void GenerateCharacterData()
@@ -34,6 +38,7 @@ public class TeamPanelManager : MonoBehaviour
         for (int i = 0; i < maxSlots; i++)
         {
             GameObject obj = Instantiate(rightPrefab, slotContainer);
+            obj.SetActive(true);
             var slot = obj.GetComponent<RoleSlot>();
             slot.Init(i, this);
             roleSlots.Add(slot);
@@ -47,6 +52,7 @@ public class TeamPanelManager : MonoBehaviour
             if (slot.IsEmpty())
             {
                 slot.SetCharacter(data);
+                types.Add(data.type);
                 break;
             }
         }
@@ -56,7 +62,14 @@ public class TeamPanelManager : MonoBehaviour
     {
         if (index >= 0 && index < maxSlots)
         {
+            types.Remove(roleSlots[index].GetCharacterType());
             roleSlots[index].ClearSlot();
+            
         }
+    }
+
+    private void OnClose()
+    {
+        CardManager.Instance.SetCharacterTypes(types);
     }
 }

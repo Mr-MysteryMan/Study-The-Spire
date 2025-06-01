@@ -13,10 +13,13 @@ public class CardManager : MonoBehaviour
     private List<ICardData> allCards;
 
     // 玩家金币
-    public int gold { get; private set; } = Setting.TreasureGoldNum;
+    public int gold { get; set; } = Setting.TreasureGoldNum;
 
     // 玩家血量
     public int health { get; set; } = Setting.PlayerHp;
+
+    // 选择
+    public List<CharacterType> characterTypes { get; private set; } = new List<CharacterType>();
 
     private void Awake()
     {
@@ -62,20 +65,21 @@ public class CardManager : MonoBehaviour
         }
     }
 
-    public static List<ICardData> randomCardData(int cardCount = 20) { // 测试用随机卡片数据
-            List<ICardData> cardData = new List<ICardData>();
+    public static List<ICardData> randomCardData(int cardCount = 20)
+    { // 测试用随机卡片数据
+        List<ICardData> cardData = new List<ICardData>();
 
-            for (int i = 0; i < cardCount; i++)
-            {
-                // 随机生成卡片数据
-                int cardType = Random.Range(0, 3); // 随机卡片类型
-                CardType type = (CardType)cardType; // 转换为枚举类型
-                int cost = Random.Range(1, 5); // 随机卡片费用
-                int value = Random.Range((cost - 1) * 8, cost * 10);
-                cardData.Add(new TypedCardData(type,value,cost)); // 随机生成卡片数据
-            }
+        for (int i = 0; i < cardCount; i++)
+        {
+            // 随机生成卡片数据
+            int cardType = Random.Range(0, 3); // 随机卡片类型
+            CardType type = (CardType)cardType; // 转换为枚举类型
+            int cost = Random.Range(1, 5); // 随机卡片费用
+            int value = Random.Range((cost - 1) * 8, cost * 10);
+            cardData.Add(new TypedCardData(type, value, cost)); // 随机生成卡片数据
+        }
 
-            return cardData;
+        return cardData;
     }
 
     // 添加一张卡牌到背包
@@ -113,7 +117,8 @@ public class CardManager : MonoBehaviour
         return allCards.Where(c => c.CardCategory == type);
     }
 
-    public IEnumerable<ICardData> GetCards(System.Func<ICardData, bool> predicate) {
+    public IEnumerable<ICardData> GetCards(System.Func<ICardData, bool> predicate)
+    {
         return allCards.Where(predicate);
     }
 
@@ -132,6 +137,11 @@ public class CardManager : MonoBehaviour
         {
             Debug.Log(card.GetDebugInfo());
         }
+    }
+    
+    public void SetCharacterTypes(List<CharacterType> types)
+    {
+        characterTypes = types;
     }
 
 }
