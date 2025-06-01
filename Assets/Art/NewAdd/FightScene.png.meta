@@ -132,7 +132,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      FightScene_0: -8393056745706921521
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
