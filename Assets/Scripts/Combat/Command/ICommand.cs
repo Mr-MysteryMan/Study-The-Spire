@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 
 namespace Combat.Command
 {
@@ -8,5 +9,11 @@ namespace Combat.Command
         public Character Target { get; }
 
         void Execute();
+    }
+
+    // 异步命令接口
+    public interface IAsyncCommand : ICommand
+    {
+        IEnumerator ExecuteAsync();
     }
 }
