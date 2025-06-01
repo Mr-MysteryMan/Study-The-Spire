@@ -11,6 +11,7 @@ public class SceneLoadManager : MonoBehaviour
     public AssetReference map;
     public AssetReference menu;
     public AssetReference backpack;
+    public AssetReference team;
 
     private Vector2Int currentRoomVector;
     private Room currentRoom;
@@ -118,6 +119,23 @@ public class SceneLoadManager : MonoBehaviour
             await UnloadSceneTask();
 
         currentScene = backpack;
+        await LoadSceneTask();
+    }
+    
+    public async void LoadTeam()
+    {
+        if (Camera.main == null || Camera.main != mainCamera)
+        {
+            if (Camera.main)
+            {
+                Camera.main.gameObject.SetActive(false);
+            }
+            mainCamera.gameObject.SetActive(true);
+        }
+        if (currentScene != null)
+            await UnloadSceneTask();
+
+        currentScene = team;
         await LoadSceneTask();
     }
 

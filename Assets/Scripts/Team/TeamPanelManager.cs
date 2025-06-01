@@ -14,7 +14,8 @@ public class TeamPanelManager : MonoBehaviour
     private List<RoleSlot> roleSlots = new();
     private const int maxSlots = 3;
     private List<CharacterType> types = new();
-
+    public ObjectEventSO loadMapEvent;
+    
     private void Start()
     {
         GenerateCharacterData();
@@ -71,5 +72,6 @@ public class TeamPanelManager : MonoBehaviour
     private void OnClose()
     {
         CardManager.Instance.SetCharacterTypes(types);
+        loadMapEvent.RaiseEvent(null, this);
     }
 }
