@@ -1,4 +1,5 @@
 using Combat;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -11,7 +12,7 @@ public class RestRoom : MonoBehaviour
     private void HandleCorrectAnswer()
     {
         Debug.Log($"�ش���ȷ��");
-        cardManager.health += 100;
+        cardManager.CurAdvHealth = cardManager.CurAdvMaxHealth;
         //���ص�ͼ
         loadMapEvent.RaiseEvent(null, this);
     }
@@ -19,7 +20,7 @@ public class RestRoom : MonoBehaviour
     private void HandleWrongAnswer()
     {
         Debug.Log($"�ش����");
-        cardManager.health -= 50;
+        cardManager.CurAdvHealth += cardManager.CurAdvMaxHealth / 4;
         //���ص�ͼ
         loadMapEvent.RaiseEvent(null, this);
     }

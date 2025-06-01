@@ -8,7 +8,8 @@ namespace Combat.EventListener
     {
         private CombatSystem combatSystem;
 
-        public GameoverListener(CombatSystem combatSystem) {
+        public GameoverListener(CombatSystem combatSystem)
+        {
             this.combatSystem = combatSystem;
         }
 
@@ -22,16 +23,15 @@ namespace Combat.EventListener
             eventManager.Unsubscribe<CharacterDeathEvent>(OnCharacterDeath);
         }
 
-        public void OnCharacterDeath(CharacterDeathEvent deathEvent) {
-            if (deathEvent.Victim is Adventurer){
-                if (combatSystem.PlayerCharacter == deathEvent.Victim) {
-                    // 玩家角色死亡，游戏结束
-                    combatSystem.EventManager.Publish(new CombatLoseEvent());
-                }
-            } else if (deathEvent.Victim is Enemy) {
-                if (combatSystem.MonsterCharacter.Count == 0) {
-                    combatSystem.EventManager.Publish(new CombatWinningEvent());
-                }
+        public void OnCharacterDeath(CharacterDeathEvent deathEvent)
+        {
+            if (combatSystem.characterManager.IsLose())
+            {
+                combatSystem.EventManager.Publish(new CombatLoseEvent());
+            }
+            else if (combatSystem.characterManager.IsWin())
+            {
+                combatSystem.EventManager.Publish(new CombatWinningEvent());
             }
         }
     }

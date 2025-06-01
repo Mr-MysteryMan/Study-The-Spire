@@ -1,19 +1,101 @@
 using Cards.CardEffect;
+using Combat;
 using UnityEngine;
 
+/// <summary>
+/// 卡牌效果目标枚举
+/// </summary>
 public enum CardEffectTarget
 {
+    /// <summary>
+    /// 无效目标
+    /// </summary>
     None,
+
+    /// <summary>
+    /// 己方自身
+    /// </summary>
     AdventurerSelf,
+
+    /// <summary>
+    /// 己方单体目标
+    /// </summary>
     AdventurerOne,
+
+    /// <summary>
+    /// 己方无特定目标，全体或随机
+    /// </summary>
     AdventurerAll,
+
+    /// <summary>
+    /// 敌方单体目标
+    /// </summary>
     EnemyOne,
+
+    /// <summary>
+    /// 敌方无特定目标，全体或随机
+    /// </summary>
     EnemyAll,
 
+    /// <summary>
+    /// 单体目标
+    /// </summary>
+
     CharacterOne,
+
+    /// <summary>
+    /// 无特定目标，全体或随机
+    /// </summary>
     CharacterAll,
 
+    /// <summary>
+    /// 不可释放
+    /// </summary>
     NotPlayable,
+}
+
+public static class CardEffectTargetExtensions
+{
+    public static bool IsValidTarget(this CardEffectTarget target)
+    {
+        return target != CardEffectTarget.None && target != CardEffectTarget.NotPlayable;
+    }
+
+    public static bool IsSingleTarget(this CardEffectTarget target)
+    {
+        return target == CardEffectTarget.AdventurerOne || target == CardEffectTarget.EnemyOne || target == CardEffectTarget.CharacterOne;
+    }
+
+    public static bool IsMultiTarget(this CardEffectTarget target)
+    {
+        return target == CardEffectTarget.AdventurerAll || target == CardEffectTarget.EnemyAll || target == CardEffectTarget.CharacterAll;
+    }
+
+    public static bool IsEnemyTarget(this CardEffectTarget target)
+    {
+        return target == CardEffectTarget.EnemyOne || target == CardEffectTarget.EnemyAll;
+    }
+
+    public static bool IsAdventurerTarget(this CardEffectTarget target)
+    {
+        return target == CardEffectTarget.AdventurerOne || target == CardEffectTarget.AdventurerAll || target == CardEffectTarget.AdventurerSelf;
+    }
+
+    public static bool IsCharacterTarget(this CardEffectTarget target)
+    {
+        return target == CardEffectTarget.CharacterOne || target == CardEffectTarget.CharacterAll;
+    }
+
+    public static bool IsDragToSelectTarget(this CardEffectTarget target)
+    {
+        return target == CardEffectTarget.AdventurerOne || target == CardEffectTarget.EnemyOne || target == CardEffectTarget.CharacterOne;
+    }
+
+    public static bool IsMoveToSelectTarget(this CardEffectTarget target)
+    {
+        return target == CardEffectTarget.AdventurerAll || target == CardEffectTarget.EnemyAll || target == CardEffectTarget.CharacterAll ||
+            target == CardEffectTarget.AdventurerSelf;
+    }
 }
 
 public enum CardCategory
@@ -24,6 +106,13 @@ public enum CardCategory
     Status,
 }
 
+public enum ModifyType
+{
+    All,
+    Attack,
+    Heal,
+    Denfense,
+}
 public interface ICardData
 {
     CardCategory CardCategory { get; } // 卡牌分类
@@ -42,6 +131,8 @@ public interface ICardData
 
     void Discard(); // 弃牌方法
     void Reset(); // 重置方法
+
+    ICardData Clone(); // 克隆方法
 }
 
 public abstract class CardData : ICardData
@@ -77,6 +168,7 @@ public abstract class CardData : ICardData
     {
         isDiscarded = false; // 重置为非弃牌
     }
+    public abstract ICardData Clone();
 }
 
 public class BasicCardData : CardData
@@ -84,17 +176,15 @@ public class BasicCardData : CardData
     public BasicCardData(string name, string desc, int cardCost, CardCategory cardCategory, CardEffectTarget cardEffectTarget, Sprite sprite, IEffect effect)
     {
         this.cardCost = cardCost; // 设置卡牌费用
-        this.effect = effect;
         this.cardName = name; // 设置卡牌名称
-        this.cardDesc = desc; // 设置卡牌描述
         this.cardCategory = cardCategory; // 设置卡牌分类
         this.cardEffectTarget = cardEffectTarget; // 设置卡牌效果目标
         this.sprite = sprite; // 设置卡牌图片
+        this.desc = desc;
     }
 
     private int cardCost; // 卡牌费用
     private string cardName; // 卡牌名称
-    private string cardDesc; // 卡牌描述
     private IEffect effect; // 卡牌效果
 
     private CardCategory cardCategory; // 卡牌分类
@@ -102,15 +192,31 @@ public class BasicCardData : CardData
     private CardEffectTarget cardEffectTarget; // 卡牌效果目标
 
     private Sprite sprite; // 卡牌图片
+
+    private string desc; // 卡牌描述
     public override CardCategory CardCategory => cardCategory; // 卡牌分类属性
     public override CardEffectTarget CardEffectTarget => cardEffectTarget; // 卡牌效果目标属性
     public override Sprite Sprite => sprite; // 卡牌图片属性
-    public override string Desc => cardDesc; // 卡牌描述属性
-
     public override int Cost => cardCost; // 卡牌费用属性
-
-    public override IEffect Effect => effect;
     public override string CardName => cardName; // 卡牌名称属性
+    public override IEffect Effect => effect; // 卡牌效果属性
+    public override string Desc => desc; // 卡牌描述属性
+
+    public override ICardData Clone()
+    {
+        return new BasicCardData(cardName, desc, cardCost, cardCategory, cardEffectTarget, sprite, effect);
+    }
+}
+
+public interface IBasicModifiable
+{
+    void BasicModifyAdd(float factor, ModifyType modifyType);
+    void BasicModifyMul(float factor, ModifyType modifyType);
+}
+
+public interface ICharacterModifiable
+{
+    void CharacterModify(Character character);
 }
 
 public static class CardDataExtensions
