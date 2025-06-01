@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,7 +22,7 @@ public class REventManager : MonoBehaviour
         Debug.Log($"loadMapEvent: {loadMapEvent}");
         if (controller == null)
         {
-            Debug.LogError("REventController.Instance 是 null！请确认场景中有挂载 REventController 的 GameObject。");
+            Debug.LogError("REventController.Instance 是 null！");
             return;
         }
         butA.onClick.AddListener(optionA);
@@ -31,18 +32,23 @@ public class REventManager : MonoBehaviour
 
     void optionA()
     {
-        Debug.Log($"controller: {controller}");
-        controller.alterMoney(20);
+        //Debug.Log($"controller: {controller}");
+        System.Random rand = new System.Random();
+        int randMoney = rand.Next(-50, 51);
+        controller.alterMoney(randMoney);
         loadMapEvent.RaiseEvent(null, this);
     }
 
     void optionB()
     {
-        //controller.alterBlood(-10);
+        System.Random rand = new System.Random();
+        int randBlood = rand.Next(-30, 31);
+        controller.alterBlood(randBlood);
+        loadMapEvent.RaiseEvent(null, this);
     }
     
     void optionExit()
     {
-        //controller.alterMoney(20);
+        loadMapEvent.RaiseEvent(null, this);
     }
 }
