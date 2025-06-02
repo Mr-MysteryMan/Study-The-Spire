@@ -14,7 +14,7 @@ public class RestRoomShowHP : MonoBehaviour
     private Character character;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    // ÓÉCharacterÆô¶¯
+    // ï¿½ï¿½Characterï¿½ï¿½ï¿½ï¿½
     public void OnEnable()
     {
         cardManager = CardManager.Instance;
@@ -22,6 +22,6 @@ public class RestRoomShowHP : MonoBehaviour
         Debug.Log(maxHpText.text);
         Debug.Log(curHpText.text);
         maxHpText.text = Setting.PlayerHp.ToString();
-        curHpText.text = cardManager.health.ToString();
+        curHpText.text = cardManager.Health.ToString();
     }
 }
