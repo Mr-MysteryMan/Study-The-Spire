@@ -10,7 +10,7 @@ namespace Combat.Characters.EnemyEffect
         public int Damage;
 
         public override EnemyEffectType EffectType => EnemyEffectType.Attack;
-        public override CardEffectTarget TargetType => CardEffectTarget.AllyOne;
+        public override CardEffectTarget TargetType => CardEffectTarget.AllySelf;
 
         public override IEnumerator Work(Character source, List<Character> targets)
         {

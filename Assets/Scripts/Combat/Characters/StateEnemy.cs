@@ -4,8 +4,11 @@ using Combat.Characters.EnemyEffect.UIController;
 using Combat.StateMachine.States;
 using UnityEngine;
 
-namespace Combat.Characters {
-    public class StateEnemy : Enemy {
+namespace Combat.Characters
+{
+    [RequireComponent(typeof(StateMachine.StateMachine))]
+    public class StateEnemy : Enemy
+    {
         public StateMachine.StateMachine stateMachine;
         public EffectStateMakerSO effectStateMakerSO;
 

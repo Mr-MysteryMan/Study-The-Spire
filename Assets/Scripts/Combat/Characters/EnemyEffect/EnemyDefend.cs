@@ -10,7 +10,7 @@ namespace Combat.Characters.EnemyEffect
         public int AmmorAmount;
 
         public override EnemyEffectType EffectType => EnemyEffectType.Defend;
-        public override CardEffectTarget TargetType => CardEffectTarget.EnemyOne;
+        public override CardEffectTarget TargetType => CardEffectTarget.AllySelf;
 
         public override IEnumerator Work(Character source, List<Character> targets)
         {
