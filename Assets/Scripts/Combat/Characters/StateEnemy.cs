@@ -1,42 +1,35 @@
 using Cards.CardEffect;
 using Combat.Characters.EnemyEffect;
 using Combat.Characters.EnemyEffect.UIController;
+using Combat.StateMachine;
 using Combat.StateMachine.States;
 using UnityEngine;
 
 namespace Combat.Characters
 {
-    [RequireComponent(typeof(StateMachine.StateMachine))]
     public class StateEnemy : Enemy
     {
-        public StateMachine.StateMachine stateMachine;
-        public EffectStateMakerSO effectStateMakerSO;
+        public EffectStateBaseSO stateMachine;
+        public TypeToIconLib IconLib;
 
         [SerializeField] private EnemyIndentController enemyIndentController;
 
-        public override Sprite Indent => ((EffectState)stateMachine.CurrentState).effect.Icon;
-        public override ITypedEffect Effect => ((EffectState)stateMachine.CurrentState).effect;
+        public override Sprite Indent => IconLib.GetIcon(Effect.EffectType);
+        public override IEnemyEffect Effect => stateMachine.Effect;
 
         public override void OnCombatStart()
         {
             base.OnCombatStart();
-            stateMachine.Init(effectStateMakerSO.State);
+            stateMachine.Init();
+            stateMachine.OnEnter();
             enemyIndentController.Indent = Indent;
-        }
-
-        void Awake()
-        {
-            stateMachine = GetComponent<StateMachine.StateMachine>();
         }
 
         public override void OnTurnEnd()
         {
             base.OnTurnEnd();
-            if (stateMachine.CurrentState is EffectState)
-            {
-                stateMachine.TransitionToNextState();
-                enemyIndentController.Indent = Indent;
-            }
+            stateMachine.MoveToNextState();
+            enemyIndentController.Indent = Indent;
         }
     }
 }

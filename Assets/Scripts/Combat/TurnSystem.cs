@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Combat.Characters;
 using System.Linq;
 using System;
+using Combat.Characters.EnemyEffect;
 
 namespace Combat
 {
@@ -51,13 +52,13 @@ namespace Combat
             Debug.Log("战斗开始");
             combatSystem.EventManager.Publish(new CombatStartEvent());
             combatSystem.PlayerCharacter.OnCombatStart(); // 玩家角色开始战斗
-            combatSystem.LockDead();
+            
+            var MonsterCharacters = combatSystem.MonsterCharacters.Where(m => !m.IsDead).ToList();
             foreach (var monster in combatSystem.MonsterCharacters)
             {
                 if (monster.IsDead) continue; // 如果怪物已经死亡，则跳过
                 monster.OnCombatStart(); // 敌人角色开始战斗
             }
-            combatSystem.ReleaseDead();
             StartPlayerTurn();
         }
 
