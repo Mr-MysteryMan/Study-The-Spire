@@ -404,7 +404,6 @@ public class ShopPanelManager : MonoBehaviour
         }
     }
 
-
     private void OnItemClicked(GameObject itemGO, ItemData itemData)
     {
         if (selectedItemGO != null)

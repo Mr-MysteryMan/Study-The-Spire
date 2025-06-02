@@ -36,11 +36,18 @@ public class CharacterCarouselUI : MonoBehaviour
         UpdateView();
     }
 
+    private static readonly Dictionary<CharacterType, string> CharacterTypeNames = new Dictionary<CharacterType, string>
+    {
+        { CharacterType.Warrior, "战士" },
+        { CharacterType.Knight, "骑士" },
+        { CharacterType.Mage, "法师" }
+    };
+
     private void UpdateView()
     {
         var data = characters[curIndex];
         icon.sprite = data.licon;
-        nameText.text = data.type.ToString();
+        nameText.text = CharacterTypeNames[data.type];
     }
 
     private void OnClick()
