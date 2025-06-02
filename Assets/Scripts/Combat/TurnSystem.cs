@@ -117,9 +117,9 @@ namespace Combat
             return effectTarget switch
             {
                 CardEffectTarget.None => new List<Character>(),
-                CardEffectTarget.AdventurerOne => new List<Character> { combatSystem.PlayerCharacter },
-                CardEffectTarget.AdventurerAll => new List<Character> { combatSystem.PlayerCharacter },
-                CardEffectTarget.AdventurerSelf => new List<Character> { combatSystem.PlayerCharacter },
+                CardEffectTarget.AllyOne => new List<Character> { combatSystem.PlayerCharacter },
+                CardEffectTarget.AllyAll => new List<Character> { combatSystem.PlayerCharacter },
+                CardEffectTarget.AllySelf => new List<Character> { combatSystem.PlayerCharacter },
 
                 CardEffectTarget.EnemyOne => new List<Character> { character },
                 CardEffectTarget.EnemyAll => combatSystem.MonsterCharacters.Select(m => m as Character).ToList(),

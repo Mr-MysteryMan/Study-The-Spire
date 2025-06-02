@@ -15,17 +15,17 @@ public enum CardEffectTarget
     /// <summary>
     /// 己方自身
     /// </summary>
-    AdventurerSelf,
+    AllySelf,
 
     /// <summary>
     /// 己方单体目标
     /// </summary>
-    AdventurerOne,
+    AllyOne,
 
     /// <summary>
     /// 己方无特定目标，全体或随机
     /// </summary>
-    AdventurerAll,
+    AllyAll,
 
     /// <summary>
     /// 敌方单体目标
@@ -63,12 +63,12 @@ public static class CardEffectTargetExtensions
 
     public static bool IsSingleTarget(this CardEffectTarget target)
     {
-        return target == CardEffectTarget.AdventurerOne || target == CardEffectTarget.EnemyOne || target == CardEffectTarget.CharacterOne;
+        return target == CardEffectTarget.AllyOne || target == CardEffectTarget.EnemyOne || target == CardEffectTarget.CharacterOne;
     }
 
     public static bool IsMultiTarget(this CardEffectTarget target)
     {
-        return target == CardEffectTarget.AdventurerAll || target == CardEffectTarget.EnemyAll || target == CardEffectTarget.CharacterAll;
+        return target == CardEffectTarget.AllyAll || target == CardEffectTarget.EnemyAll || target == CardEffectTarget.CharacterAll;
     }
 
     public static bool IsEnemyTarget(this CardEffectTarget target)
@@ -76,9 +76,9 @@ public static class CardEffectTargetExtensions
         return target == CardEffectTarget.EnemyOne || target == CardEffectTarget.EnemyAll;
     }
 
-    public static bool IsAdventurerTarget(this CardEffectTarget target)
+    public static bool IsAllyTarget(this CardEffectTarget target)
     {
-        return target == CardEffectTarget.AdventurerOne || target == CardEffectTarget.AdventurerAll || target == CardEffectTarget.AdventurerSelf;
+        return target == CardEffectTarget.AllyOne || target == CardEffectTarget.AllyAll || target == CardEffectTarget.AllySelf;
     }
 
     public static bool IsCharacterTarget(this CardEffectTarget target)
@@ -88,13 +88,13 @@ public static class CardEffectTargetExtensions
 
     public static bool IsDragToSelectTarget(this CardEffectTarget target)
     {
-        return target == CardEffectTarget.AdventurerOne || target == CardEffectTarget.EnemyOne || target == CardEffectTarget.CharacterOne;
+        return target == CardEffectTarget.AllyOne || target == CardEffectTarget.EnemyOne || target == CardEffectTarget.CharacterOne;
     }
 
     public static bool IsMoveToSelectTarget(this CardEffectTarget target)
     {
-        return target == CardEffectTarget.AdventurerAll || target == CardEffectTarget.EnemyAll || target == CardEffectTarget.CharacterAll ||
-            target == CardEffectTarget.AdventurerSelf;
+        return target == CardEffectTarget.AllyAll || target == CardEffectTarget.EnemyAll || target == CardEffectTarget.CharacterAll ||
+            target == CardEffectTarget.AllySelf;
     }
 }
 
