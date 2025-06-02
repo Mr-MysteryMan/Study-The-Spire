@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 195984985}
   - component: {fileID: 195984984}
   - component: {fileID: 195984986}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Menu Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -172,8 +172,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1280, y: 720}
-  m_SizeDelta: {x: 2560, y: 1440}
+  m_AnchoredPosition: {x: 1275.7734, y: 720}
+  m_SizeDelta: {x: 2551.5469, y: 1440}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &195984986
 MonoBehaviour:
@@ -189,7 +189,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   newGameEvent: {fileID: 11400000, guid: 8ee0a1248cc1b5b4d9b931b2ab5c7737, type: 2}
   continueEvent: {fileID: 11400000, guid: 1497776431bc3864b90992361839efb0, type: 2}
-  nodebookPre: {fileID: 2185275500001572685, guid: cf9d7fa5b3c41b2499c4617b370e6c0a, type: 3}
+  notebookPrefab: {fileID: 2185275500001572685, guid: cf9d7fa5b3c41b2499c4617b370e6c0a, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

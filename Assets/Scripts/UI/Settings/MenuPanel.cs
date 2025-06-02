@@ -9,7 +9,6 @@ public class MenuPanel : MonoBehaviour
 
     public ObjectEventSO newGameEvent;
     public ObjectEventSO continueEvent;
-    public GameObject nodebookPre;
 
     private void OnEnable()
     {
@@ -21,7 +20,7 @@ public class MenuPanel : MonoBehaviour
         newGameButton.clicked += OnNewGameButtonClicked;
         quitButton.clicked += OnQuitButtonClicked;
         continueButton.clicked += onContinueButtonClicked;
-        nodebookButton.clicked += onNodeBookonClicked;
+        nodebookButton.clicked += onNoteBookOnClicked;
     }
 
     private void OnQuitButtonClicked()
@@ -40,9 +39,11 @@ public class MenuPanel : MonoBehaviour
         continueEvent.RaiseEvent(null, this);
     }
 
-    private void onNodeBookonClicked()
+
+    // -------------------------------渲染题目笔记本-------------------------------
+    public GameObject notebookPrefab; // 笔记本预制件
+    private void onNoteBookOnClicked()
     {
-        Instantiate(nodebookPre);
-        
+        Instantiate(notebookPrefab); // 实例化笔记本预制件
     }
 }
