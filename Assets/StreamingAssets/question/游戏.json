@@ -1,0 +1,254 @@
+{
+  "questions": [
+    {
+      "question": "《魔兽世界》中联盟主城？",
+      "selection": ["幽暗", "奥格", "铁炉堡", "银月城"],
+      "answer": 2
+    },
+    {
+      "question": "《英雄联盟》中提莫位置？",
+      "selection": ["上单", "中单", "打野", "辅助"],
+      "answer": 3
+    },
+    {
+      "question": "《守望先锋》天使武器？",
+      "selection": ["脉冲步枪", "火箭发射器", "福音之棍", "守护天使"],
+      "answer": 2
+    },
+    {
+      "question": "《Dota 2》中圣堂刺客定位？",
+      "selection": ["力量", "敏捷", "智力", "全能"],
+      "answer": 1
+    },
+    {
+      "question": "《绝地求生》中空投标识？",
+      "selection": ["飞机", "白烟", "黑烟", "红烟"],
+      "answer": 2
+    },
+    {
+      "question": "《堡垒之夜》建筑资源？",
+      "selection": ["木材", "石头", "金属", "水晶"],
+      "answer": 0
+    },
+    {
+      "question": "《我的世界》中钻石镐合成需？",
+      "selection": ["1个", "3个", "5个", "7个"],
+      "answer": 1
+    },
+    {
+      "question": "《塞尔达传说》系列主角？",
+      "selection": ["林克", "塞尔达", "加农", "扎尔达"],
+      "answer": 0
+    },
+    {
+      "question": "《最终幻想》系列常客？",
+      "selection": ["骑士", "法师", "盗贼", "召唤师"],
+      "answer": 3
+    },
+    {
+      "question": "《质量效应》主角姓？",
+      "selection": ["Shepard", "Anderson", "Kaidan", " Ashley"],
+      "answer": 0
+    },
+    {
+      "question": "《上古卷轴5》中龙裔？",
+      "selection": ["阿尔托", "米拉科", "杜玛", "龙裔"],
+      "answer": 3
+    },
+    {
+      "question": "《巫师3》中猎魔人？",
+      "selection": ["杰洛特", "叶奈法", "特莉丝", "昆特"],
+      "answer": 0
+    },
+    {
+      "question": "《黑暗之魂》中初始选？",
+      "selection": ["直剑", "弯刀", "大剑", "法杖"],
+      "answer": 0
+    },
+    {
+      "question": "《血源诅咒》中难度？",
+      "selection": ["简单", "中等", "困难", "极难"],
+      "answer": 3
+    },
+    {
+      "question": "《战神》中奎托斯武器？",
+      "selection": ["刀", "剑", "斧", "锤"],
+      "answer": 2
+    },
+    {
+      "question": "《刺客信条》中标志动作？",
+      "selection": ["跳跃", "攀爬", "信仰之跃", "暗杀"],
+      "answer": 2
+    },
+    {
+      "question": "《看门狗》中可操纵？",
+      "selection": ["汽车", "飞机", "城市", "人群"],
+      "answer": 2
+    },
+    {
+      "question": "《荒野大镖客》中主角？",
+      "selection": ["约翰", "亚瑟", "查尔斯", "达奇"],
+      "answer": 1
+    },
+    {
+      "question": "《巫师3》中昆特牌？",
+      "selection": ["赌博", "游戏", "交易", "收集"],
+      "answer": 1
+    },
+    {
+      "question": "《辐射》系列中瓶盖？",
+      "selection": ["食物", "水", "货币", "燃料"],
+      "answer": 2
+    },
+    {
+      "question": "《生化危机》中保护伞？",
+      "selection": ["军队", "公司", "组织", "政府"],
+      "answer": 1
+    },
+    {
+      "question": "《怪物猎人》中太刀？",
+      "selection": ["单手", "双手", "远程", "投掷"],
+      "answer": 1
+    },
+    {
+      "question": "《命运》中泰坦职业？",
+      "selection": ["猎人", "法师", "战士", "圣骑士"],
+      "answer": 2
+    },
+    {
+      "question": "《全境封锁》中病毒？",
+      "selection": ["流感", "黑死病", "小型", "绿毒"],
+      "answer": 3
+    },
+    {
+      "question": "《星际争霸》中人族？",
+      "selection": ["人类", "异虫", "星灵", "外星人"],
+      "answer": 0
+    },
+    {
+      "question": "《光环》系列中光环？",
+      "selection": ["武器", "星球", "遗迹", "神器"],
+      "answer": 3
+    },
+    {
+      "question": "《质量效应》中突锐？",
+      "selection": ["人类", "机械", "外星人", "机器人"],
+      "answer": 2
+    },
+    {
+      "question": "《战神》中米米尔？",
+      "selection": ["敌对", "盟友", "中立", "商人"],
+      "answer": 1
+    },
+    {
+      "question": "《塞尔达传说》中加农？",
+      "selection": ["朋友", "敌人", "中立", "盟友"],
+      "answer": 1
+    },
+    {
+      "question": "《最终幻想》中陆行鸟？",
+      "selection": ["坐骑", "宠物", "召唤兽", "敌人"],
+      "answer": 0
+    },
+    {
+      "question": "《魔兽世界》中萨满？",
+      "selection": ["联盟", "部落", "中立", "全部"],
+      "answer": 1
+    },
+    {
+      "question": "《英雄联盟》中提百万？",
+      "selection": ["英雄", "皮肤", "道具", "模式"],
+      "answer": 1
+    },
+    {
+      "question": "《守望先锋》中猎空？",
+      "selection": ["防御", "攻击", "辅助", "坦克"],
+      "answer": 1
+    },
+    {
+      "question": "《Dota 2》中圣堂刺客技能？",
+      "selection": ["折光", "闪烁", "魅影", "空灵"],
+      "answer": 0
+    },
+    {
+      "question": "《绝地求生》中安全区？",
+      "selection": ["白色", "蓝色", "红色", "绿色"],
+      "answer": 1
+    },
+    {
+      "question": "《堡垒之夜》中跳舞？",
+      "selection": ["表情", "动作", "技能", "互动"],
+      "answer": 1
+    },
+    {
+      "question": "《我的世界》中苦力怕？",
+      "selection": ["被动", "中立", "敌对", "友好"],
+      "answer": 2
+    },
+    {
+      "question": "《塞尔达传说》中林克？",
+      "selection": ["法师", "战士", "盗贼", "弓箭手"],
+      "answer": 1
+    },
+    {
+      "question": "《最终幻想》中克劳德？",
+      "selection": ["战士", "法师", "盗贼", "召唤师"],
+      "answer": 0
+    },
+    {
+      "question": "《质量效应》中薛帕德？",
+      "selection": ["男性", "女性", "未知", "可自选"],
+      "answer": 3
+    },
+    {
+      "question": "《上古卷轴5》中龙语？",
+      "selection": ["英语", "德语", "拉丁语", "自定义"],
+      "answer": 3
+    },
+    {
+      "question": "《巫师3》中白狼？",
+      "selection": ["杰洛特", "叶奈法", "特莉丝", "丹德里恩"],
+      "answer": 0
+    },
+    {
+      "question": "《黑暗之魂》中太阳战士？",
+      "selection": ["骑士", "法师", "盗贼", "咒术师"],
+      "answer": 0
+    },
+    {
+      "question": "《血源诅咒》中猎杀？",
+      "selection": ["动物", "怪物", "人类", "Boss"],
+      "answer": 1
+    },
+    {
+      "question": "《战神》中洛基？",
+      "selection": ["敌人", "盟友", "中立", "BOSS"],
+      "answer": 1
+    },
+    {
+      "question": "《刺客信条》中袖剑？",
+      "selection": ["武器", "工具", "装饰", "陷阱"],
+      "answer": 0
+    },
+    {
+      "question": "《看门狗》中黑客？",
+      "selection": ["主角", "敌人", "中立", "NPC"],
+      "answer": 0
+    },
+    {
+      "question": "《荒野大镖客》中马？",
+      "selection": ["坐骑", "宠物", "工具", "武器"],
+      "answer": 0
+    },
+    {
+      "question": "《巫师3》中威伦？",
+      "selection": ["城市", "地区", "国家", "大陆"],
+      "answer": 1
+    },
+    {
+      "question": "《辐射》系列中学院？",
+      "selection": ["组织", "地点", "势力", "公司"],
+      "answer": 1
+    }
+  ]
+}

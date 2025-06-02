@@ -278,6 +278,10 @@ MonoBehaviour:
   - {fileID: 1925232452898316671}
   - {fileID: 4957223880598524697}
   image: {fileID: 8271589692702665444}
+  question:
+    question: 
+    selection: []
+    answer: 0
 --- !u!1 &7509601707342562270
 GameObject:
   m_ObjectHideFlags: 0

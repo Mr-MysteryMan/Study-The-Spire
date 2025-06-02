@@ -102,7 +102,7 @@ public class ShopPanelManager : MonoBehaviour
 
         bottomPanel = root.Find("Bottom");
         bottomMenus = bottomPanel.Find("BottomMenus");
-        bottomMenus.Find("ShowGold/Text").GetComponent<Text>().text = $"Gold {cardManager.Gold}";
+        bottomMenus.Find("ShowGold/Text").GetComponent<Text>().text = $"Gold {cardManager.gold}";
         goldTextParent = bottomMenus.Find("ShowGold");
         // detailBtn = bottomMenus.Find("DetailBtn");
 
@@ -193,7 +193,7 @@ public class ShopPanelManager : MonoBehaviour
 
     private void UpdateGoldDisplayWithEffect(int amount) {
         // 更新显示文本
-        bottomMenus.Find("ShowGold/Text").GetComponent<Text>().text = $"Gold {cardManager.Gold}";
+        bottomMenus.Find("ShowGold/Text").GetComponent<Text>().text = $"Gold {cardManager.gold}";
 
         // 创建浮动文字动画
         if (goldFloatTextPrefab != null && goldTextParent != null) {

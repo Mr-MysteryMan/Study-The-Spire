@@ -1,0 +1,499 @@
+{
+  "questions": [
+    {
+      "question": "勾股定理适用于哪类三角形？",
+      "selection": ["锐角", "钝角", "等边", "直角"],
+      "answer": 3
+    },
+    {
+      "question": "三角形内角和是多少度？",
+      "selection": ["90", "180", "360", "270"],
+      "answer": 1
+    },
+    {
+      "question": "一个正方形的对角线互相？",
+      "selection": ["相交", "垂直", "平行", "不交"],
+      "answer": 1
+    },
+    {
+      "question": "圆的面积计算公式？",
+      "selection": ["2πr", "πr²", "πd²", "πr"],
+      "answer": 1
+    },
+    {
+      "question": "两条直线平行的充要条件是？",
+      "selection": ["斜率相等", "长度相等", "互相垂直", "距离相等"],
+      "answer": 0
+    },
+    {
+      "question": "欧几里得算法用于计算？",
+      "selection": ["积", "最大公约数", "最小公倍数", "平均数"],
+      "answer": 1
+    },
+    {
+      "question": "复数单位i的平方为？",
+      "selection": ["0", "1", "-1", "i"],
+      "answer": 2
+    },
+    {
+      "question": "勾股定理中c²=a²+b²，c为？",
+      "selection": ["斜边", "直角边", "半径", "高"],
+      "answer": 0
+    },
+    {
+      "question": "两点间距离公式来源于？",
+      "selection": ["欧氏几何", "解析几何", "球面几何", "非欧几何"],
+      "answer": 1
+    },
+    {
+      "question": "泰勒公式用于？",
+      "selection": ["积分", "近似函数", "求导", "方程求根"],
+      "answer": 1
+    },
+    {
+      "question": "函数f(x)=x²是？",
+      "selection": ["奇函数", "偶函数", "周期函数", "线性函数"],
+      "answer": 1
+    },
+    {
+      "question": "一个集合的子集个数为？",
+      "selection": ["2^n", "n!", "n²", "n+1"],
+      "answer": 0
+    },
+    {
+      "question": "微积分的基本定理连接？",
+      "selection": ["代数与几何", "导数与积分", "数列与函数", "集合与映射"],
+      "answer": 1
+    },
+    {
+      "question": "极限定义涉及哪个ε-δ语言？",
+      "selection": ["欧拉", "牛顿", "柯西", "笛卡尔"],
+      "answer": 2
+    },
+    {
+      "question": "1+2+3+…+n的和公式？",
+      "selection": ["n(n+1)/2", "n²", "n!", "2n+1"],
+      "answer": 0
+    },
+    {
+      "question": "函数y=1/x在x=0处？",
+      "selection": ["连续", "间断", "可导", "无定义"],
+      "answer": 3
+    },
+    {
+      "question": "行列式的值表示？",
+      "selection": ["面积", "体积", "线性相关性", "平面性"],
+      "answer": 2
+    },
+    {
+      "question": "洛必达法则用于计算？",
+      "selection": ["导数", "积分", "极限", "微分"],
+      "answer": 2
+    },
+    {
+      "question": "皮克定理用于？",
+      "selection": ["平面图", "凸包面积", "格点多边形面积", "极坐标"],
+      "answer": 2
+    },
+    {
+      "question": "费马小定理中a^p ≡ a mod p，p为？",
+      "selection": ["合数", "偶数", "质数", "整数"],
+      "answer": 2
+    },
+    {
+      "question": "二项式定理展开形式涉及？",
+      "selection": ["排列", "组合数", "幂级数", "等差数列"],
+      "answer": 1
+    },
+    {
+      "question": "欧拉公式：e^(ix)=？",
+      "selection": ["cosx", "sinx", "cosx+isinx", "tanx"],
+      "answer": 2
+    },
+    {
+      "question": "高斯引理用于？",
+      "selection": ["积分", "数论", "概率", "几何"],
+      "answer": 1
+    },
+    {
+      "question": "柯西不等式适用于？",
+      "selection": ["数列", "矩阵", "向量", "函数"],
+      "answer": 2
+    },
+    {
+      "question": "圆周角等于？",
+      "selection": ["半圆", "中心角一半", "直角", "圆弧一半"],
+      "answer": 1
+    },
+    {
+      "question": "布尔代数中运算包括？",
+      "selection": ["加减", "逻辑与或非", "乘除", "模运算"],
+      "answer": 1
+    },
+    {
+      "question": "线性变换保持？",
+      "selection": ["距离", "夹角", "原点", "面积"],
+      "answer": 2
+    },
+    {
+      "question": "三角恒等式中sin²x+cos²x=？",
+      "selection": ["1", "0", "2", "sinx"],
+      "answer": 0
+    },
+    {
+      "question": "拉普拉斯展开用于？",
+      "selection": ["导数", "行列式计算", "极限", "级数"],
+      "answer": 1
+    },
+    {
+      "question": "欧拉函数φ(n)定义为？",
+      "selection": ["小于n的偶数个数", "质数个数", "互素正整数个数", "n的因数"],
+      "answer": 2
+    },
+    {
+      "question": "拉格朗日中值定理前提？",
+      "selection": ["间断", "连续", "奇函数", "奇点"],
+      "answer": 1
+    },
+    {
+      "question": "导数的几何意义？",
+      "selection": ["面积", "速度", "斜率", "高度"],
+      "answer": 2
+    },
+    {
+      "question": "贝叶斯定理属于？",
+      "selection": ["代数", "几何", "概率论", "数论"],
+      "answer": 2
+    },
+    {
+      "question": "函数单调性由什么判断？",
+      "selection": ["函数值", "导数符号", "极限", "积分"],
+      "answer": 1
+    },
+    {
+      "question": "行列式|A|=0表示？",
+      "selection": ["可逆", "满秩", "奇异", "正定"],
+      "answer": 2
+    },
+    {
+      "question": "拉普拉斯变换用于？",
+      "selection": ["微分方程", "线性方程", "不等式", "极限"],
+      "answer": 0
+    },
+    {
+      "question": "柯西中值定理推广了？",
+      "selection": ["泰勒", "拉格朗日", "费马", "微积分"],
+      "answer": 1
+    },
+    {
+      "question": "黄金分割比约为？",
+      "selection": ["1.6", "1.618", "1.5", "2.0"],
+      "answer": 1
+    },
+    {
+      "question": "“0阶导数”代表？",
+      "selection": ["速度", "函数值", "加速度", "常数项"],
+      "answer": 1
+    },
+    {
+      "question": "抛物线y²=4ax焦点为？",
+      "selection": ["(a,0)", "(0,a)", "(2a,0)", "(0,2a)"],
+      "answer": 0
+    },
+    {
+      "question": "二次型对角化使用？",
+      "selection": ["特征值", "导数", "积分", "勾股定理"],
+      "answer": 0
+    },
+    {
+      "question": "正态分布钟形曲线中心是？",
+      "selection": ["众数", "均值", "方差", "期望"],
+      "answer": 1
+    },
+    {
+      "question": "余弦定理适用于？",
+      "selection": ["直角", "任意三角形", "等腰", "钝角"],
+      "answer": 1
+    },
+    {
+      "question": "复数模长等于？",
+      "selection": ["实部", "虚部", "平方和开根", "和的一半"],
+      "answer": 2
+    },
+    {
+      "question": "概率密度函数积分为？",
+      "selection": ["1", "0", "无穷", "平均值"],
+      "answer": 0
+    },
+    {
+      "question": "函数极值点导数？",
+      "selection": ["为0", "为1", "为∞", "不存在"],
+      "answer": 0
+    },
+    {
+      "question": "皮亚诺公理定义了？",
+      "selection": ["复数", "自然数", "实数", "虚数"],
+      "answer": 1
+    },
+    {
+      "question": "n阶行列式展开含？",
+      "selection": ["n项", "n!", "n²", "2^n"],
+      "answer": 1
+    },
+    {
+      "question": "加权平均的权值总和是？",
+      "selection": ["1", "0", "最大值", "最小值"],
+      "answer": 0
+    },
+    {
+      "question": "笛卡尔积是？",
+      "selection": ["集合并", "集合差", "集合对", "集合乘"],
+      "answer": 3
+    },
+    {
+      "question": "对称矩阵的特征值一定？",
+      "selection": ["虚数", "负数", "实数", "无穷"],
+      "answer": 2
+    },
+    {
+      "question": "整数集合的最小元是？",
+      "selection": ["0", "1", "无", "-∞"],
+      "answer": 3
+    },
+    {
+      "question": "黎曼和用于定义？",
+      "selection": ["导数", "积分", "极限", "级数"],
+      "answer": 1
+    },
+    {
+      "question": "多项式次数等于？",
+      "selection": ["项数", "最高次数", "最低次数", "常数项"],
+      "answer": 1
+    },
+    {
+      "question": "二阶常微分方程未知函数？",
+      "selection": ["两个", "一阶", "二阶", "三阶"],
+      "answer": 2
+    },
+    {
+      "question": "函数奇偶性满足？",
+      "selection": ["f(-x)=f(x)", "f(-x)=-f(x)", "f(0)=0", "导数为0"],
+      "answer": 0
+    },
+    {
+      "question": "特征方程解是？",
+      "selection": ["特征值", "特征向量", "秩", "维度"],
+      "answer": 0
+    },
+    {
+      "question": "非齐次线性方程组有解当？",
+      "selection": ["行列式为0", "秩相等", "变量多", "向量线性无关"],
+      "answer": 1
+    },
+    {
+      "question": "数列极限存在时称其为？",
+      "selection": ["发散", "单调", "收敛", "波动"],
+      "answer": 2
+    },
+    {
+      "question": "向量点积结果是？",
+      "selection": ["向量", "标量", "矩阵", "集合"],
+      "answer": 1
+    },
+    {
+      "question": "函数反函数存在需满足？",
+      "selection": ["连续", "严格单调", "可导", "奇偶性"],
+      "answer": 1
+    },
+    {
+      "question": "可导一定？",
+      "selection": ["连续", "单调", "凸", "奇函数"],
+      "answer": 0
+    },
+    {
+      "question": "矩阵乘法满足？",
+      "selection": ["交换律", "结合律", "对称性", "可逆性"],
+      "answer": 1
+    },
+    {
+      "question": "等比数列通项公式？",
+      "selection": ["a+nd", "a·r^n", "a·r^(n-1)", "a-rn"],
+      "answer": 2
+    },
+    {
+      "question": "反证法的关键在于？",
+      "selection": ["构造例子", "矛盾推出", "归纳", "演绎"],
+      "answer": 1
+    },
+    {
+      "question": "概率加法公式用于？",
+      "selection": ["乘法事件", "互斥事件", "独立事件", "条件事件"],
+      "answer": 1
+    },
+    {
+      "question": "等边三角形每角度数？",
+      "selection": ["30", "45", "60", "90"],
+      "answer": 2
+    },
+    {
+      "question": "三角形两边之和？",
+      "selection": ["大于第三边", "小于第三边", "等于", "不确定"],
+      "answer": 0
+    },
+    {
+      "question": "导数的定义极限形式？",
+      "selection": ["Δy/Δx", "dy/dx", "lim(Δx→0)", "积分函数"],
+      "answer": 2
+    },
+    {
+      "question": "双曲函数sinhx定义为？",
+      "selection": ["(e^x-e^-x)/2", "sinx", "(e^x+e^-x)/2", "coshx"],
+      "answer": 0
+    },
+    {
+      "question": "连续函数在闭区间上？",
+      "selection": ["无界", "有界", "奇异", "周期"],
+      "answer": 1
+    },
+    {
+      "question": "柯西收敛准则用于？",
+      "selection": ["函数列", "极限", "级数", "导数"],
+      "answer": 2
+    },
+    {
+      "question": "模n同余中，a≡b(mod n)意味着？",
+      "selection": ["a=b", "a和b互质", "a-b能被n整除", "a与n互质"],
+      "answer": 2
+    },
+    {
+      "question": "布尔函数输出值？",
+      "selection": ["任意实数", "非负数", "0或1", "整数"],
+      "answer": 2
+    },
+    {
+      "question": "赫希-乌拉姆定理应用于？",
+      "selection": ["图论", "拓扑", "数列", "集合论"],
+      "answer": 0
+    },
+    {
+      "question": "开区间(0,1)是？",
+      "selection": ["有限集", "闭集", "无限集", "空集"],
+      "answer": 2
+    },
+    {
+      "question": "自然对数的底是？",
+      "selection": ["π", "2", "e", "√2"],
+      "answer": 2
+    },
+    {
+      "question": "正余弦函数周期为？",
+      "selection": ["π", "2π", "4π", "1"],
+      "answer": 1
+    },
+    {
+      "question": "概率为负数说明？",
+      "selection": ["不可能", "错误", "稀有", "必然"],
+      "answer": 1
+    },
+    {
+      "question": "函数极限值可能？",
+      "selection": ["多个", "唯一", "无穷多", "复数"],
+      "answer": 1
+    },
+    {
+      "question": "复数乘法遵循？",
+      "selection": ["实部相加", "共轭", "模乘角加", "模相加"],
+      "answer": 2
+    },
+    {
+      "question": "有理数集合在实数中？",
+      "selection": ["稠密", "稀疏", "有限", "空"],
+      "answer": 0
+    },
+    {
+      "question": "条件概率公式是？",
+      "selection": ["P(A∩B)", "P(B|A)", "P(A|B)=P(A∩B)/P(B)", "P(A)+P(B)"],
+      "answer": 2
+    },
+    {
+      "question": "概率论的创始人是？",
+      "selection": ["欧拉", "高斯", "帕斯卡", "牛顿"],
+      "answer": 2
+    },
+    {
+      "question": "“无穷集合有子集等势”是谁提出？",
+      "selection": ["康托尔", "欧几里得", "黎曼", "伽罗瓦"],
+      "answer": 0
+    },
+    {
+      "question": "直线与圆相交最多几点？",
+      "selection": ["1", "2", "3", "无限"],
+      "answer": 1
+    },
+    {
+      "question": "布尔代数由哪位提出？",
+      "selection": ["图灵", "贝叶斯", "布尔", "笛卡尔"],
+      "answer": 2
+    },
+    {
+      "question": "乘法分配律为a(b+c)=？",
+      "selection": ["ab+ac", "a+b+c", "abc", "ab+bc"],
+      "answer": 0
+    },
+    {
+      "question": "斐波那契数列首两项？",
+      "selection": ["1和1", "0和1", "1和2", "2和3"],
+      "answer": 1
+    },
+    {
+      "question": "勒贝格积分比黎曼更？",
+      "selection": ["简单", "复杂", "一般", "广义"],
+      "answer": 3
+    },
+    {
+      "question": "导函数连续不代表函数？",
+      "selection": ["连续", "可导", "可积", "二阶可导"],
+      "answer": 3
+    },
+    {
+      "question": "双曲线x²/a² - y²/b² = 1的渐近线？",
+      "selection": ["x=±a", "y=±b", "y=±(b/a)x", "x=0"],
+      "answer": 2
+    },
+    {
+      "question": "sinx导数是？",
+      "selection": ["cosx", "-cosx", "sinx", "-sinx"],
+      "answer": 0
+    },
+    {
+      "question": "复平面模表示？",
+      "selection": ["距离原点", "夹角", "向量方向", "虚轴"],
+      "answer": 0
+    },
+    {
+      "question": "集合A包含B表示？",
+      "selection": ["A=B", "B⊂A", "A⊂B", "A≠B"],
+      "answer": 1
+    },
+    {
+      "question": "二次函数图像是？",
+      "selection": ["抛物线", "直线", "圆", "双曲线"],
+      "answer": 0
+    },
+    {
+      "question": "实数与整数集的关系？",
+      "selection": ["无交集", "子集", "真子集", "整数是实数"],
+      "answer": 3
+    },
+    {
+      "question": "零矩阵的秩是？",
+      "selection": ["0", "1", "n", "无限"],
+      "answer": 0
+    },
+    {
+      "question": "函数最大值定义为？",
+      "selection": ["极限", "最小点", "全域最大", "导数为0点"],
+      "answer": 2
+    }
+  ]
+}

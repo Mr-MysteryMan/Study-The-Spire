@@ -13,9 +13,9 @@ namespace Combat.Trigger {
         }
 
         public void PostCheck(EventManager manager, AttackCommand command) {
-            if (command.Target.CurHp <= 0) {
-                var eventArgs = new Events.CharacterDeathEvent(command.Target, command.Source);
-                manager.Publish(eventArgs);
+            if (command.Target.CurHp <= 0)
+            {
+                // 因为攻击而死
             }
         }
     }
