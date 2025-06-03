@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Combat.Characters.EnemyEffect;
 using UnityEngine;
 
 namespace Combat.StateMachine.States
@@ -15,23 +16,58 @@ namespace Combat.StateMachine.States
 
         [SerializeField] private List<Transition> transitions = new List<Transition>(); // 转移列表
 
-        private Basic.BasicProbEffectState state = new Basic.BasicProbEffectState();
-        protected override IEffectState EffectState => state;
-        public int TransitionCount => transitions?.Count ?? 0;
+        private IEffectState state;
         public List<Transition> Transitions => transitions;
-        protected override void _Init()
-        {
-            this.transitions.ForEach(t => t.targetState.Init());
-            this.state.Init(transitions.ConvertAll(t => new Basic.BasicProbEffectState.Transition
-            {
-                targetState = t.targetState,
-                probabilityWeight = t.probabilityWeight
-            }));
-        }
+
+        public override IEnemyEffect Effect => state.Effect;
 
         public void AddTransition(EffectStateBaseSO targetState, float probabilityWeight)
         {
             transitions.Add(new Transition { targetState = targetState, probabilityWeight = probabilityWeight });
         }
+
+        public override IState GetNextState()
+        {
+            return state.GetNextState();
+        }
+
+        private IEffectState ChoseState()
+        {
+            if (Transitions.Count == 0)
+            {
+                throw new System.InvalidOperationException("转移列表不能为空");
+            }
+
+            // 计算总权重
+            float totalWeight = 0f;
+            foreach (var t in Transitions)
+                totalWeight += t.probabilityWeight;
+
+            if (totalWeight <= 0)
+            {
+                throw new System.InvalidOperationException("总权重必须大于0");
+            }
+
+            // 生成随机点并选择目标状态
+            float randomPoint = Random.Range(0f, totalWeight);
+            float currentWeight = 0f;
+
+            foreach (var t in Transitions)
+            {
+                currentWeight += t.probabilityWeight;
+                if (randomPoint <= currentWeight)
+                    return t.targetState;
+            }
+
+            throw new System.InvalidOperationException("没有找到符合条件的目标状态");
+        }
+
+        public override void OnEnter()
+        {
+            state = ChoseState();
+            state.OnEnter();
+        }
+
+        public override void OnExit() { }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using Combat.Characters.EnemyEffect;
 using UnityEngine;
 
 namespace Combat.StateMachine.States
@@ -9,14 +10,29 @@ namespace Combat.StateMachine.States
         [SerializeField] public EffectStateBaseSO trueState;
         [SerializeField] public EffectStateBaseSO falseState;
         [SerializeField] private Func<bool> condition;
-        private Basic.BasicConditionEffectState state = new Basic.BasicConditionEffectState();
-        protected override IEffectState EffectState => state;
+        private IEffectState state;
 
-        protected override void _Init()
+        public override IEnemyEffect Effect => state.Effect;
+
+        public override IState GetNextState()
         {
-            trueState.Init();
-            falseState.Init();
-            this.state.Init(trueState, falseState, condition);
+            return state.GetNextState();
         }
+
+        public override void OnEnter()
+        {
+            if (condition())
+            {
+                state = trueState;
+                trueState.OnEnter();
+            }
+            else
+            {
+                state = falseState;
+                falseState.OnEnter();
+            }
+        }
+
+        public override void OnExit() { }
     }
 }

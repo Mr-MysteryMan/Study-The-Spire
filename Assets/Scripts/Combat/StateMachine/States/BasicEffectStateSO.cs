@@ -7,14 +7,18 @@ namespace Combat.StateMachine.States
     public class BasicEffectStateSO : EffectStateBaseSO
     {
         [SerializeField] private TypedEffectInfo typedEffect;
-        private Basic.BasicEffectState state = new Basic.BasicEffectState();
-        protected override IEffectState EffectState => state;
 
         public EffectStateBaseSO NextState;
 
-        protected override void _Init()
+        public override IEnemyEffect Effect => typedEffect.GetEnemyEffect();
+
+        public override IState GetNextState()
         {
-            this.state.Init(Effect, NextState);
+            return NextState;
         }
+
+        public override void OnEnter() { }
+
+        public override void OnExit() { }
     }
 }
