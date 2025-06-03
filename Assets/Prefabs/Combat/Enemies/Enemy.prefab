@@ -213,7 +213,7 @@ MonoBehaviour:
   combatSystem: {fileID: 0}
   buffManager: {fileID: 8854006647397062437}
   IsDead: 0
-  stateMachine: {fileID: 0}
+  stateMachine: {fileID: 11400000, guid: 3258ae9bd3d08e14f89977d9b492506b, type: 2}
   IconLib: {fileID: 11400000, guid: c6d8d34033c651f4c8f44d099da37102, type: 2}
   enemyIndentController: {fileID: 1244039703389261783}
 --- !u!1001 &3227431257556569886

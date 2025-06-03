@@ -10,9 +10,11 @@ namespace Combat.StateMachine.States
         private Basic.BasicEffectState state = new Basic.BasicEffectState();
         protected override IEffectState EffectState => state;
 
-        public override void Init()
+        public EffectStateBaseSO NextState;
+
+        protected override void _Init()
         {
-            this.state.Init(Effect);
+            this.state.Init(Effect, NextState);
         }
     }
 }

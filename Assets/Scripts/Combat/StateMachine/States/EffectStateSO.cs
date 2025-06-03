@@ -23,7 +23,15 @@ namespace Combat.StateMachine.States
             EffectState.SetNextState(nextState);
         }
 
-        public abstract void Init();
+        private bool isInitialized = false;
+        public void Init()
+        {
+            if (isInitialized) return;
+            isInitialized = true;
+            _Init();
+        }
+
+        protected abstract void _Init();
 
         protected abstract IEffectState EffectState { get; }
     }

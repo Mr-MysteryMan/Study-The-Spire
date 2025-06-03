@@ -10,7 +10,7 @@ namespace Combat.StateMachine.States
         private Basic.LinearEffectState state = new Basic.LinearEffectState();
         protected override IEffectState EffectState => state;
 
-        public override void Init()
+        protected override void _Init()
         {
             this.states.ForEach(s => s.Init());
             this.state.Init(states.ConvertAll(s => s as IEffectState));

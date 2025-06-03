@@ -17,6 +17,10 @@ PrefabInstance:
       value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 1122327753460133912, guid: 64b40806dfa432542b20bb0941f929fe, type: 3}
+      propertyPath: stateMachine
+      value: 
+      objectReference: {fileID: 11400000, guid: 0f59f4ca29485a14dbd3b67517d5097d, type: 2}
+    - target: {fileID: 1122327753460133912, guid: 64b40806dfa432542b20bb0941f929fe, type: 3}
       propertyPath: effectStateMakerSO
       value: 
       objectReference: {fileID: 11400000, guid: 0b0a768508633684fa63bf98e05ff75e, type: 2}
