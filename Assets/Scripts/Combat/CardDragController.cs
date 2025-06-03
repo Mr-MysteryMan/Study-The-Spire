@@ -101,7 +101,7 @@ namespace Combat
                     {
                         newCanExecute = false;
                     }
-                    else if (newTarget is Adventurer && currentCard.CardData.CardEffectTarget.IsAdventurerTarget())
+                    else if (newTarget is Adventurer && currentCard.CardData.CardEffectTarget.IsAllyTarget())
                     {
                         newCanExecute = true;
                     }
@@ -178,7 +178,7 @@ namespace Combat
             CardEffectTarget targetType = currentCard.CardData.CardEffectTarget;
             if (targetType.IsMultiTarget())
             {
-                if (targetType.IsAdventurerTarget())
+                if (targetType.IsAllyTarget())
                 {
                     return new List<Character> { combatSystem.PlayerCharacter };
                 }

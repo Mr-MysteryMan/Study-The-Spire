@@ -7,7 +7,7 @@ namespace Cars.CardDatas
 {
     public class QuestionCardData : OneValueCardData
     {
-        public QuestionCardData(int cardValue, int cardCost) : base("回答", cardValue, cardCost, CardCategory.Skill, CardEffectTarget.AdventurerSelf,
+        public QuestionCardData(int cardValue, int cardCost) : base("回答", cardValue, cardCost, CardCategory.Skill, CardEffectTarget.AllySelf,
         sprite: CardResources.QuestionCardSprite)
         { }
 

@@ -14,14 +14,14 @@ public class RestRoomShowHP : MonoBehaviour
     private Character character;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    // ÓÉCharacterÆô¶¯
+    // ï¿½ï¿½Characterï¿½ï¿½ï¿½ï¿½
     public void OnEnable()
     {
         cardManager = CardManager.Instance;
         Debug.Log("TEXT:");
         Debug.Log(maxHpText.text);
         Debug.Log(curHpText.text);
-        maxHpText.text = Setting.PlayerHp.ToString();
-        curHpText.text = cardManager.health.ToString();
+        maxHpText.text = cardManager.MaxHealth.ToString();
+        curHpText.text = cardManager.Health.ToString();
     }
 }

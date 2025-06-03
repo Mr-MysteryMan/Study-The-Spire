@@ -43,7 +43,7 @@ namespace Cards.CardDatas
 
     public class GainStrength : OneValueCardData
     {
-        public GainStrength(int cardValue, int CardCost) : base("强壮", cardValue, CardCost, CardCategory.Skill, CardEffectTarget.AdventurerSelf,
+        public GainStrength(int cardValue, int CardCost) : base("强壮", cardValue, CardCost, CardCategory.Skill, CardEffectTarget.AllySelf,
         sprite: Resources.Load<Sprite>("CardUI/AttackCardSprite"))
         { }
 

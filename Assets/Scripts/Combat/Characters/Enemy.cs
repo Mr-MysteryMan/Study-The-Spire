@@ -8,6 +8,6 @@ namespace Combat.Characters
     {
         public abstract Sprite Indent { get; }
 
-        public abstract ITypedEffect Effect {get;}
+        public abstract IEnemyEffect Effect {get;}
     }
 }

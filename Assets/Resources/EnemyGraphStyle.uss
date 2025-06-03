@@ -1,0 +1,38 @@
+.graphView {
+    background-color: #2d2d30;
+}
+
+.node {
+    background-color: #35383b;
+    border-radius: 6px;
+    border-width: 1px;
+    border-color: #5a5a5e;
+}
+
+.node:selected {
+    border-color: #4e94fb;
+}
+
+.text-element {
+    -unity-font-style: bold;
+    color: #e0e0e0;
+}
+
+.port .connector {
+    background-color: #bbbbbb;
+}
+
+.selfLoopEdge {
+    --connector-color: #ffcf40;       /* 视觉区分 */
+    stroke-width: 3px;
+}
+
+.backwardEdge {
+    --connector-color: #e06c75;       /* 反向（右→左） */
+    stroke-dasharray: 6 4;
+}
+
+.entryNode {
+    border-color: #4e94fb;
+    border-width: 3px;
+}

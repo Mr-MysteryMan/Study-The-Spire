@@ -223,7 +223,7 @@ Transform:
   m_GameObject: {fileID: 428653940}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 100, y: -0.17255467, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1126,8 +1126,10 @@ MonoBehaviour:
     m_SubObjectGUID: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
+  currentRoom: {fileID: 0}
   updateRoomEvent: {fileID: 11400000, guid: b7b569aa7e8c3c3479306903064ddf61, type: 2}
   afterRoomLoadedEvent: {fileID: 11400000, guid: b6053c9baa42c204492e5b15b7dc7078, type: 2}
+  GameOverPanel: {fileID: 428653940}
   mainCamera: {fileID: 685595755}
 --- !u!4 &1874029907
 Transform:

@@ -81,8 +81,8 @@ namespace Cards.CardDatas
             return cardType switch
             {
                 CardType.Attack => CardEffectTarget.EnemyOne,// 攻击效果目标
-                CardType.Defense => CardEffectTarget.AdventurerSelf,// 防御效果目标
-                CardType.Heal => CardEffectTarget.AdventurerSelf,// 治疗效果目标
+                CardType.Defense => CardEffectTarget.AllySelf,// 防御效果目标
+                CardType.Heal => CardEffectTarget.AllySelf,// 治疗效果目标
                 _ => throw new System.ArgumentOutOfRangeException(nameof(cardType), cardType, null) // 异常处理
             };
         }
