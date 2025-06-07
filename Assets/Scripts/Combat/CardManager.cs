@@ -57,7 +57,7 @@ namespace Combat
 
         [SerializeField] private RectTransform uiRectTransform;
 
-        enum CardSource
+        public enum CardSource
         {
             GlobalCardManager,
             RandomCardData,
@@ -65,6 +65,11 @@ namespace Combat
         }
 
         [SerializeField] private CardSource cardSource = CardSource.GlobalCardManager;
+
+        public void AddEnergy(int energy)
+        {
+            this.setEnergy(this.EnergyPoint + energy); // 增加能量点
+        }
 
         public void init(CombatSystem combatSystem, Character character)
         {
@@ -87,7 +92,7 @@ namespace Combat
             this.combatSystem = combatSystem; // 设置战斗系统
         }
 
-        public void ResetNewCards()
+        private void ResetNewCards()
         {
             foreach (var cardData in NewCardData)
             {
@@ -107,9 +112,7 @@ namespace Combat
                 {
                     if (DiscardCardData.Count > 0) // 如果有弃牌
                     {
-                        NewCardData.AddRange(DiscardCardData); // 将弃牌添加到新卡片列表
-                        DiscardCardData.Clear(); // 清空弃牌列表
-                        ResetNewCards();
+                        MoveDiscardToDrawPile();
                     }
                     else
                     {
@@ -150,6 +153,16 @@ namespace Combat
             }
         }
 
+        public void MoveDiscardToDrawPile()
+        {
+            if (DiscardCardData.Count > 0)
+            {
+                NewCardData.AddRange(DiscardCardData); // 将弃牌添加到新卡片数据列表
+                DiscardCardData.Clear(); // 清空弃牌数据列表
+                ResetNewCards(); // 重置新卡片数据
+            }
+        }
+
         public void discardCard(Card card)
         {
             if (HandCardData.Exists(x => x == card.CardData))
@@ -160,6 +173,21 @@ namespace Combat
             }
             // 销毁卡片对象
             DestroyImmediate(card.cardObj); // 销毁卡片对象
+        }
+
+        public void DiscardCards(List<ICardData> cardDatas)
+        {
+            foreach (var cardData in cardDatas)
+            {
+                if (HandCardData.Contains(cardData))
+                {
+                    cardData.Discard(); // 弃掉卡片
+                    DiscardCardData.Add(cardData); // 将卡片添加到弃牌数据列表
+                    HandCardData.Remove(cardData); // 从手牌数据列表中移除已弃掉的卡片
+                }
+            }
+            // 更新卡片位置
+            updateCardPosition();
         }
 
         public void discardAll()

@@ -78,7 +78,18 @@ namespace Combat
             combatSystem.PlayerCharacter.OnTurnStart();
         }
 
-        public void EndPlayerTurn()
+        /// <summary>
+        /// 结束玩家回合并再开始一个新的玩家回合
+        /// 即跳过敌人回合，获得一个新的回合
+        /// </summary>
+        public void EndAndStartNewPlayerTurn()
+        {
+            _EndPlayerTurn();
+            StartPlayerTurn();
+        }
+
+        // 仅结束玩家回合
+        private void _EndPlayerTurn()
         {
             if (turnState != TurnState.Started || whoseTurn != WhoseTurn.Player)
             {
@@ -90,6 +101,11 @@ namespace Combat
             turnState = TurnState.Ended; // 回合结束
             combatSystem.EventManager.Publish(new TurnEndEvent(combatSystem.PlayerCharacter, turnNum));
             combatSystem.PlayerCharacter.OnTurnEnd();
+        }
+
+        public void EndPlayerTurn()
+        {
+            _EndPlayerTurn(); // 结束玩家回合
             StartCoroutine(StartEnemyTurn()); // 开始敌人回合
         }
 
