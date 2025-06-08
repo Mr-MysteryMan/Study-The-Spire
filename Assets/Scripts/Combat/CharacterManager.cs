@@ -23,24 +23,25 @@ namespace Combat
         private Character systemCharacter;
 
         // 角色列表，所有参与战斗的角色
-        private List<Adventurer> playerCharacters;
-
+        private List<Adventurer> allPlayerCharacters;
+        private List<Adventurer> AlivePlayerCharacters => allPlayerCharacters.Where(c => !c.IsDead).ToList(); // 活着的玩家角色列表
         private List<Enemy> monsterCharacters;
 
         public Character SystemCharacter => systemCharacter; // 系统角色
-        public Character PlayerCharacter => playerCharacters.First(); // 玩家角色
+        public Character PlayerCharacter => AlivePlayerCharacters.First(); // 玩家角色
         public List<Enemy> MonsterCharacters => monsterCharacters; // 怪物角色
 
         private List<Character> DeathPendingCharacters = new List<Character>(); // 死亡待处理角色列表
         public int DeathPending = 0;
 
+        public List<Adventurer> GetAllPlayerCharacters() => allPlayerCharacters;
 
         public List<Character> AllCharacters => new List<Character> { PlayerCharacter }.Concat(monsterCharacters).ToList(); // 所有角色列表
 
         public void Init(Character systemCharacter, List<CharacterInfo> characters, EnemyType enemyType)
         {
             this.systemCharacter = systemCharacter;
-            playerCharacters = new List<Adventurer>();
+            this.allPlayerCharacters = new List<Adventurer>();
             monsterCharacters = new List<Enemy>();
             CreateCharacters(characters, enemyType);
         }
@@ -53,15 +54,16 @@ namespace Combat
             Vector3 centerMonsterPos = new Vector3(240, 20, 0); // 敌人位置
 
             // 创建玩家角色
-            foreach (var info in characters)
+            foreach (var info in characters.Where(c => !c.IsDead))
             {
-                var playerPosition = GetPosition(CharacterSide.Player, playerCharacters.Count, characters.Count, centerPlayerPosition);
+                var playerPosition = GetPosition(CharacterSide.Player, allPlayerCharacters.Count, characters.Count, centerPlayerPosition);
                 var playerPrefab = GetAdventurerPrefab(info.characterType);
                 var player = CreateCharacter(playerPosition, playerPrefab) as Adventurer;
-                player.SetInitHP(info.Health, info.MaxHealth); // 设置初始生命值
+                player.SetInitHP(info.MaxHealth, info.Health); // 设置初始生命值
                 player.SetPowers(info.AttackPower, info.DefensePower, info.HealPower);
                 player.InitCharacter();
-                playerCharacters.Add(player); // 添加玩家角色
+                player.InitOriInfo(info); // 初始化原始角色信息
+                allPlayerCharacters.Add(player); // 添加玩家角色
             }
 
             // 创建怪物角色
@@ -131,7 +133,7 @@ namespace Combat
         {
             if (character is Adventurer adventurer) // 如果是玩家角色
             {
-                playerCharacters.Remove(adventurer);
+                adventurer.SetDead(); // 设置角色为死亡状态
             }
             else if (character is Enemy enemy) // 如果是怪物角色
             {
@@ -158,12 +160,12 @@ namespace Combat
             DeathPendingCharacters.Clear();
         }
 
-        public bool IsLose() => playerCharacters.Count == 0 || playerCharacters.All(c => c.IsDead);
+        public bool IsLose() => AlivePlayerCharacters.Count == 0;
         public bool IsWin() => monsterCharacters.Count == 0 || monsterCharacters.All(c => c.IsDead);
 
         public List<CharacterInfo> GetPlayerCharacterInfos()
         {
-            return playerCharacters.Select(c => c.ToInfo()).ToList();
+            return allPlayerCharacters.Select(c => c.ToInfo()).ToList();
         }
     }
 }

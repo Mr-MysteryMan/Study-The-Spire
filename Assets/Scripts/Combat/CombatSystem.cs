@@ -147,7 +147,7 @@ namespace Combat
         {
             // 弹出宝藏窗口
             var treasure = Instantiate(TreasurePrefab);
-            treasure.GetComponent<Treasure>().init(characterManager.GetPlayerCharacterInfos(), () => backToMenuEvent.RaiseEvent(null, this)); // 设置宝物的生命值
+            treasure.GetComponent<Treasure>().init(characterManager.GetAllPlayerCharacters(), () => backToMenuEvent.RaiseEvent(null, this)); // 设置宝物的生命值
         }
 
         private void Fail()

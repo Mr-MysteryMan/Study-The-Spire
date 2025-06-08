@@ -1,7 +1,7 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/Scripts/UI/USS/GamePlayUSS.uss?fileID=7433441132597879392&amp;guid=c5a2d81604854ca0961b9d14b08f49e1&amp;type=3#GamePlayUSS" />
-    <engine:VisualElement name="BackGround" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Art/NewPic2/IMG_4422.png?fileID=2800000&amp;guid=f924548c9e4114f49aeb117e7630d412&amp;type=3#IMG_4422&quot;); font-size: 25px; color: rgb(255, 255, 255);">
-        <engine:VisualElement name="VisualElement" style="flex-grow: 1; height: 1021px; width: 1025px; background-image: url(&quot;project://database/Assets/Art/NewPic/logo.png?fileID=2800000&amp;guid=53fcd92a045498c4bb05c9a3e6ed3811&amp;type=3#logo&quot;); -unity-background-scale-mode: scale-and-crop;" />
+    <engine:VisualElement name="BackGround" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Art/NewPic2/IMG_4422.png?fileID=2800000&amp;guid=f924548c9e4114f49aeb117e7630d412&amp;type=3#IMG_4422&quot;); font-size: 25px; color: rgb(255, 255, 255); padding-left: 8%;">
+        <engine:VisualElement name="VisualElement" style="flex-grow: 1; height: 1021px; width: 824px; background-image: url(&quot;project://database/Assets/Art/NewPic/logo.png?fileID=2800000&amp;guid=53fcd92a045498c4bb05c9a3e6ed3811&amp;type=3#logo&quot;); -unity-background-scale-mode: scale-to-fit; align-self: stretch; justify-content: flex-end; padding-left: 252px;" />
     </engine:VisualElement>
     <engine:VisualElement name="VisualElement" style="flex-grow: 1; position: absolute; height: 892px; width: 707px; top: 341px; left: 997px;">
         <engine:VisualElement name="Buttons" style="flex-grow: 1;">
