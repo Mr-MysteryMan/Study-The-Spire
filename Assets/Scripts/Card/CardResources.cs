@@ -15,6 +15,8 @@ namespace Cards
 
         public static Sprite QuestionCardSprite => Resources.Load<Sprite>("CardUI/QuestionCardSprite");
 
+        public static Sprite DrawCardSprite => Resources.Load<Sprite>("CardUI/DrawCardSprite");
+
         public static GameObject QuestionPrefab => Resources.Load<GameObject>("CardPrefabs/Question");
     }
 }

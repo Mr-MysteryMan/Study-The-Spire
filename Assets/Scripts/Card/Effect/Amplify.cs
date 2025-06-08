@@ -7,9 +7,20 @@ using UnityEngine;
 using Cards.Modifier;
 using CardStackType = Combat.CardManager.CardStackType;
 using Combat;
+using Cards.CardEffect.Auxiliary;
 
 namespace Cards.CardEffect
 {
+    namespace Auxiliary
+    {
+        public static class CardSourceExtensions
+        {
+            public static List<ICardData> Apply(this List<ICardData> cards, Func<List<ICardData>, List<ICardData>> filter)
+            {
+                return filter(cards);
+            }
+        }
+    }
     class AmplifyCardEffect : IEffect, ISyncEffect
     {
         private float amplifyAmount;
@@ -33,7 +44,11 @@ namespace Cards.CardEffect
 
         public void WorkSync(Character source, List<Character> targets)
         {
-            List<ICardData> cards = cardFilter(source.combatSystem.CardManager.GetCardStack(cardSource));
+            List<ICardData> cards =
+                source.combatSystem.CardManager.GetCardStack(cardSource)
+                    .Where(card => card.IsModifiable()) // 只选择可修改的卡片
+                    .ToList()
+                    .Apply(cardFilter); // 应用过滤器
             foreach (var card in cards)
             {
                 source.ModifyCard(card, amplifyAmount);

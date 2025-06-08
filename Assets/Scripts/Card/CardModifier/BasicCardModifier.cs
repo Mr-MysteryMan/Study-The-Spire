@@ -34,6 +34,21 @@ namespace Cards.Modifier
 
     public static class BasicCardModifier
     {
+        /// <summary>
+        /// 检查卡牌数据是否可被修改
+        /// </summary>
+        public static bool IsModifiable(this ICardData cardData)
+        {
+            if (cardData is IBasicModifiable modifiable)
+            {
+                return true; // 如果实现了 IBasicModifiable 接口，则认为是可修改的
+            }
+            // 否则，检查是否有 BasicModifyAttribute 特性标记的字段
+            Type type = cardData.GetType();
+            var modifiableFields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                .Where(f => f.GetCustomAttributes(typeof(ModifyAttribute.Basic), true) != null && f.FieldType == typeof(int));
+            return modifiableFields.Any();
+        }
         private static void Modify(this ICardData cardData, float factor, ModifyType modifyType, Func<int, float, int> func)
         {
             Type type = cardData.GetType();

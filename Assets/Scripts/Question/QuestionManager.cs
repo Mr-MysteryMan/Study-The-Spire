@@ -53,6 +53,8 @@ public class QuestionManager : MonoBehaviour
             string ans = AnswerBox[i].GetComponent<TextBox>().text; // 获取选项文本
             AnswerBox[i].GetComponent<Button>().onClick.AddListener(() => OnAnswerSelected(ans));
         }
+
+        Debug.Log("问题管理器已初始化，问题：" + question.question + "，答案：" + question.selection[question.answer]);
     }
 
     // 传入回调函数

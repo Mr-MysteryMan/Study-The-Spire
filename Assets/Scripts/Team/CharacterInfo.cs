@@ -47,9 +47,9 @@ public class CharacterInfo : IPowered
     {
         return type switch
         {
-            CharacterType.Warrior => new CharacterInfo(type, 40, 40, 5, 0, 2),
-            CharacterType.Mage => new CharacterInfo(type, 30, 30, 3, 5, 0),
-            CharacterType.Knight => new CharacterInfo(type, 50, 50, 4, 2, 1),
+            CharacterType.Warrior => new CharacterInfo(type, 40, 40, 2, 0, 1),
+            CharacterType.Mage => new CharacterInfo(type, 30, 30, 1, 3, 0),
+            CharacterType.Knight => new CharacterInfo(type, 50, 50, 1, 0, 3),
             _ => throw new System.ArgumentException("Unknown character type", nameof(type)),
         };
     }
