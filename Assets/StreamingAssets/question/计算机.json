@@ -1,0 +1,429 @@
+{
+  "questions": [
+    {
+      "question": "冯·诺依曼体系的核心是？",
+      "selection": ["控制器", "运算器", "存储器", "输入输出设备"],
+      "answer": 2
+    },
+    {
+      "question": "计算机的CPU指的是？",
+      "selection": ["中央处理器", "主机", "显示器", "键盘"],
+      "answer": 0
+    },
+    {
+      "question": "ROM指的是？",
+      "selection": ["随机存储器", "只读存储器", "高速缓存", "辅助存储器"],
+      "answer": 1
+    },
+    {
+      "question": "RAM指的是？",
+      "selection": ["随机存储器", "只读存储器", "高速缓存", "辅助存储器"],
+      "answer": 0
+    },
+    {
+      "question": "ASCII码用于表示？",
+      "selection": ["图形", "声音", "字符", "视频"],
+      "answer": 2
+    },
+    {
+      "question": "Unicode码用于表示？",
+      "selection": ["图形", "声音", "字符", "视频"],
+      "answer": 2
+    },
+    {
+      "question": "IPv4地址的位数是？",
+      "selection": ["32位", "64位", "128位", "256位"],
+      "answer": 0
+    },
+    {
+      "question": "IPv6地址的位数是？",
+      "selection": ["32位", "64位", "128位", "256位"],
+      "answer": 2
+    },
+    {
+      "question": "TCP协议是？",
+      "selection": [
+        "传输控制协议",
+        "用户数据报协议",
+        "互联网协议",
+        "文件传输协议"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "UDP协议是？",
+      "selection": [
+        "传输控制协议",
+        "用户数据报协议",
+        "互联网协议",
+        "文件传输协议"
+      ],
+      "answer": 1
+    },
+    {
+      "question": "HTTP协议的默认端口是？",
+      "selection": ["80", "443", "8080", "21"],
+      "answer": 0
+    },
+    {
+      "question": "HTTPS协议的默认端口是？",
+      "selection": ["80", "443", "8080", "21"],
+      "answer": 1
+    },
+    {
+      "question": "FTP协议的默认端口是？",
+      "selection": ["80", "443", "8080", "21"],
+      "answer": 3
+    },
+    {
+      "question": "DNS协议的默认端口是？",
+      "selection": ["80", "443", "8080", "21"],
+      "answer": 3
+    },
+    {
+      "question": "SQL注入属于哪种攻击？",
+      "selection": ["DDoS攻击", "XSS攻击", "CSRF攻击", "注入攻击"],
+      "answer": 3
+    },
+    {
+      "question": "XSS攻击指的是？",
+      "selection": [
+        "分布式拒绝服务攻击",
+        "跨站脚本攻击",
+        "跨站请求伪造",
+        "注入攻击"
+      ],
+      "answer": 1
+    },
+    {
+      "question": "DDoS攻击指的是？",
+      "selection": [
+        "分布式拒绝服务攻击",
+        "跨站脚本攻击",
+        "跨站请求伪造",
+        "注入攻击"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "CSRF攻击指的是？",
+      "selection": [
+        "分布式拒绝服务攻击",
+        "跨站脚本攻击",
+        "跨站请求伪造",
+        "注入攻击"
+      ],
+      "answer": 2
+    },
+    {
+      "question": "对称加密算法的例子是？",
+      "selection": ["RSA", "AES", "MD5", "SHA"],
+      "answer": 1
+    },
+    {
+      "question": "非对称加密算法的例子是？",
+      "selection": ["RSA", "AES", "MD5", "SHA"],
+      "answer": 0
+    },
+    {
+      "question": "哈希算法的例子是？",
+      "selection": ["RSA", "AES", "MD5", "SHA"],
+      "answer": 3
+    },
+    {
+      "question": "哈希算法MD5的输出长度是？",
+      "selection": ["128位", "256位", "512位", "1024位"],
+      "answer": 0
+    },
+    {
+      "question": "哈希算法SHA-256的输出长度是？",
+      "selection": ["128位", "256位", "512位", "1024位"],
+      "answer": 1
+    },
+    {
+      "question": "操作系统Linux的内核是？",
+      "selection": ["Windows", "macOS", "Linux", "Unix"],
+      "answer": 2
+    },
+    {
+      "question": "操作系统Windows的内核是？",
+      "selection": ["Windows", "macOS", "Linux", "Unix"],
+      "answer": 0
+    },
+    {
+      "question": "操作系统macOS的内核是？",
+      "selection": ["Windows", "macOS", "Linux", "Unix"],
+      "answer": 1
+    },
+    {
+      "question": "进程和线程的关系是？",
+      "selection": [
+        "进程是线程的集合",
+        "线程是进程的集合",
+        "无关系",
+        "互斥关系"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "死锁的必要条件之一是？",
+      "selection": ["互斥", "循环等待", "不可抢占", "占有并等待"],
+      "answer": 3
+    },
+    {
+      "question": "数据库的三级模式是？",
+      "selection": [
+        "外模式，内模式，模式",
+        "概念模式，内模式，模式",
+        "外模式，概念模式，内模式",
+        "模式，内模式，用户模式"
+      ],
+      "answer": 2
+    },
+    {
+      "question": "数据库的E-R模型指的是？",
+      "selection": [
+        "实体-关系模型",
+        "实体-属性模型",
+        "关系-属性模型",
+        "实体-联系模型"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "关系数据库的标准语言是？",
+      "selection": ["SQL", "HTML", "CSS", "JavaScript"],
+      "answer": 0
+    },
+    {
+      "question": "SQL中的DDL是指？",
+      "selection": [
+        "数据定义语言",
+        "数据操作语言",
+        "数据控制语言",
+        "数据查询语言"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "SQL中的DML是指？",
+      "selection": [
+        "数据定义语言",
+        "数据操作语言",
+        "数据控制语言",
+        "数据查询语言"
+      ],
+      "answer": 1
+    },
+    {
+      "question": "SQL中的DCL是指？",
+      "selection": [
+        "数据定义语言",
+        "数据操作语言",
+        "数据控制语言",
+        "数据查询语言"
+      ],
+      "answer": 2
+    },
+    {
+      "question": "SQL中的DQL是指？",
+      "selection": [
+        "数据定义语言",
+        "数据操作语言",
+        "数据控制语言",
+        "数据查询语言"
+      ],
+      "answer": 3
+    },
+    {
+      "question": "软件开发的瀑布模型是？",
+      "selection": ["迭代模型", "增量模型", "瀑布模型", "螺旋模型"],
+      "answer": 2
+    },
+    {
+      "question": "软件开发的敏捷模型是？",
+      "selection": ["迭代模型", "增量模型", "瀑布模型", "螺旋模型"],
+      "answer": 0
+    },
+    {
+      "question": "软件开发的 spiral 模型是？",
+      "selection": ["迭代模型", "增量模型", "瀑布模型", "螺旋模型"],
+      "answer": 3
+    },
+    {
+      "question": "面向对象编程的四大特性是？",
+      "selection": [
+        "封装，继承，多态，抽象",
+        "封装，继承，多态，接口",
+        "封装，继承，抽象，接口",
+        "继承，多态，抽象，接口"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "编译程序将源代码转换为？",
+      "selection": ["机器语言", "汇编语言", "高级语言", "自然语言"],
+      "answer": 0
+    },
+    {
+      "question": "解释程序直接执行？",
+      "selection": ["机器语言", "汇编语言", "高级语言", "自然语言"],
+      "answer": 2
+    },
+    {
+      "question": "常见的编程范式有？",
+      "selection": [
+        "过程式，面向对象",
+        "过程式，函数式",
+        "面向对象，函数式",
+        "过程式，面向对象，函数式"
+      ],
+      "answer": 3
+    },
+    {
+      "question": "算法的时间复杂度表示？",
+      "selection": ["最好情况", "最坏情况", "平均情况", "所有情况"],
+      "answer": 1
+    },
+    {
+      "question": "算法的空间复杂度表示？",
+      "selection": ["最好情况", "最坏情况", "平均情况", "所有情况"],
+      "answer": 1
+    },
+    {
+      "question": "数据结构中栈的特点是？",
+      "selection": ["先进先出", "后进先出", "先进后出", "后进后出"],
+      "answer": 1
+    },
+    {
+      "question": "数据结构中队列的特点是？",
+      "selection": ["先进先出", "后进先出", "先进后出", "后进后出"],
+      "answer": 0
+    },
+    {
+      "question": "二叉搜索树的左子树上所有结点的值？",
+      "selection": [
+        "大于根结点的值",
+        "小于根结点的值",
+        "等于根结点的值",
+        "无规律"
+      ],
+      "answer": 1
+    },
+    {
+      "question": "二叉搜索树的右子树上所有结点的值？",
+      "selection": [
+        "大于根结点的值",
+        "小于根结点的值",
+        "等于根结点的值",
+        "无规律"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "图形界面操作系统先驱是？",
+      "selection": ["Windows", "macOS", "Xerox Alto", "Linux"],
+      "answer": 2
+    },
+    {
+      "question": "第一个成功商用的AI程序是？",
+      "selection": ["ELIZA", "DENDRAL", "MYCIN", "SHRDLU"],
+      "answer": 0
+    },
+    {
+      "question": "机器学习中的监督学习是？",
+      "selection": [
+        "有标签数据学习",
+        "无标签数据学习",
+        "强化学习",
+        "无监督学习"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "机器学习中的无监督学习是？",
+      "selection": ["有标签数据学习", "无标签数据学习", "强化学习", "监督学习"],
+      "answer": 1
+    },
+    {
+      "question": "机器学习中的强化学习是？",
+      "selection": ["有标签数据学习", "无标签数据学习", "试错学习", "监督学习"],
+      "answer": 2
+    },
+    {
+      "question": "深度学习使用的模型是？",
+      "selection": ["决策树", "支持向量机", "神经网络", "线性回归"],
+      "answer": 2
+    },
+    {
+      "question": "计算机视觉任务是？",
+      "selection": ["语音识别", "图像识别", "自然语言处理", "机器翻译"],
+      "answer": 1
+    },
+    {
+      "question": "自然语言处理任务是？",
+      "selection": ["语音识别", "图像识别", "机器翻译", "文本分类"],
+      "answer": 3
+    },
+    {
+      "question": "云计算的三种服务模型是？",
+      "selection": [
+        "IaaS, PaaS, SaaS",
+        "IaaS, PaaS, DaaS",
+        "PaaS, SaaS, DaaS",
+        "IaaS, SaaS, DaaS"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "物联网的英文缩写是？",
+      "selection": ["IoT", "AI", "VR", "AR"],
+      "answer": 0
+    },
+    {
+      "question": "人工智能的英文缩写是？",
+      "selection": ["IoT", "AI", "VR", "AR"],
+      "answer": 1
+    },
+    {
+      "question": "虚拟现实的英文缩写是？",
+      "selection": ["IoT", "AI", "VR", "AR"],
+      "answer": 2
+    },
+    {
+      "question": "增强现实的英文缩写是？",
+      "selection": ["IoT", "AI", "VR", "AR"],
+      "answer": 3
+    },
+    {
+      "question": "区块链的技术基础是？",
+      "selection": [
+        "加密算法",
+        "分布式网络",
+        "共识机制",
+        "加密算法，分布式网络，共识机制"
+      ],
+      "answer": 3
+    },
+    {
+      "question": "量子计算机利用的是？",
+      "selection": ["量子比特", "经典比特", "量子叠加", "量子比特，量子叠加"],
+      "answer": 3
+    },
+    {
+      "question": "计算机病毒的特点是？",
+      "selection": ["可传播性", "潜伏性", "破坏性", "可传播性，潜伏性，破坏性"],
+      "answer": 3
+    },
+    {
+      "question": "计算机网络的拓扑结构有？",
+      "selection": [
+        "星型，总线型",
+        "星型，环型",
+        "总线型，环型",
+        "星型，总线型，环型"
+      ],
+      "answer": 3
+    }
+  ]
+}
