@@ -767,7 +767,7 @@ MonoBehaviour:
   CardDeck: {fileID: 273858339}
   EnergySpotText: {fileID: 1478292857}
   uiRectTransform: {fileID: 518319095}
-  cardSource: 2
+  cardSource: 0
 --- !u!114 &1160243201
 MonoBehaviour:
   m_ObjectHideFlags: 0
