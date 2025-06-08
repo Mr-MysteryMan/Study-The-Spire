@@ -149,12 +149,12 @@ namespace Combat
             }
             if (PendingCardData.Contains(cardData))
             {
-                return CardStackType.All; // 在待处理卡片中
+                return CardStackType.Pending; // 在待处理卡片中
             }
             throw new System.Exception($"Card {cardData.CardName} not found in any card stack.");
         }
 
-        private void RemoveFromHand(ICardData cardData)
+        private void RemoveFromHand(ICardData cardData, bool destroy = true)
         {
             if (FindCard(cardData) == CardStackType.Hand)
             {
@@ -162,7 +162,10 @@ namespace Combat
                 if (card != null)
                 {
                     cards.Remove(card.cardObj); // 从卡片列表中移除
-                    Destroy(card.cardObj);
+                    if (destroy)
+                    {
+                        Destroy(card.cardObj);
+                    }
                     HandCardData.Remove(cardData); // 从手牌数据列表中移除
                 }
             }
@@ -193,7 +196,7 @@ namespace Combat
             };
         }
 
-        public void MoveTo(ICardData cardData, CardStackType type)
+        public void MoveTo(ICardData cardData, CardStackType type, bool destroy = true)
         {
             if (cardData == null)
             {
@@ -209,7 +212,7 @@ namespace Combat
 
             if (currentType == CardStackType.Hand)
             {
-                RemoveFromHand(cardData); // 从手牌中移除
+                RemoveFromHand(cardData, destroy); // 从手牌中移除
             }
             else
             {
@@ -287,7 +290,7 @@ namespace Combat
             Assert.IsTrue(this.HandCardData.Contains(card.CardData));
             if (this.EnergyPoint < card.CardCost) yield break;
             this.setEnergy(this.EnergyPoint - card.CardCost);
-            MoveTo(card.CardData, CardStackType.Pending);
+            MoveTo(card.CardData, CardStackType.Pending, destroy: false);
             yield return card.Effect.Work(source, targets);
             MoveTo(card.CardData, CardStackType.Discard);
             updateCardPosition();
