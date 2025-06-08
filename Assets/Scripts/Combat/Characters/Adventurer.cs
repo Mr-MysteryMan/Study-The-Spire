@@ -14,7 +14,13 @@ namespace Combat.Characters
     {
         public int Mana => combatSystem.CardManager.EnergyPoint; // 目前直接以CardManager的法力值作为角色的法力值。
 
+        private CharacterInfo oriCharacterInfo; // 原始角色信息，用于战斗结束后设置全局的状态
         public CharacterType CharacterType { get; private set; } // 角色类型
+
+        public void InitOriInfo(CharacterInfo info)
+        {
+            this.oriCharacterInfo = info;
+        }
 
         public void SetCharacterType(CharacterType type)
         {
@@ -31,6 +37,11 @@ namespace Combat.Characters
                 healPower: HealPower,
                 defensePower: DefensePower
             );
+        }
+
+        public void SetToGlobalStatus()
+        {
+            oriCharacterInfo.Set(this.ToInfo());
         }
     }
 }

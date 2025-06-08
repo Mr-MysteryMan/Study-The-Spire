@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Combat.Characters;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +16,7 @@ public class Treasure : MonoBehaviour
     private static CardManager cardManager;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
-    public void init(List<CharacterInfo> infos, OnClosed onClosed)
+    public void init(List<Adventurer> infos, OnClosed onClosed)
     {
         if (cardManager == null) // 如果卡片管理器为空
             cardManager = CardManager.Instance; // 获取卡片管理器实例
@@ -72,14 +73,13 @@ public class Treasure : MonoBehaviour
     public event OnClosed onClosed;
 
     // 应用宝物效果
-    public static void work(int GoldNum, ICardData cardData, List<CharacterInfo> infos)
+    public static void work(int GoldNum, ICardData cardData, List<Adventurer> advs)
     {
         cardManager.AddGold(GoldNum); // 设置金币
         cardManager.AddCard(cardData); // 添加卡片
-        for (int i = 0; i < infos.Count; i++)
+        foreach (var adv in advs)
         {
-            CharacterInfo info = infos[i];
-            cardManager.characterTypes[i].Set(info);
+            adv.SetToGlobalStatus();
         }
     }
 }
