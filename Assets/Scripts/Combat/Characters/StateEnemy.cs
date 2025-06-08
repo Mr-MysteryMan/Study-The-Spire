@@ -1,39 +1,43 @@
 using Cards.CardEffect;
 using Combat.Characters.EnemyEffect;
 using Combat.Characters.EnemyEffect.UIController;
+using Combat.StateMachine;
 using Combat.StateMachine.States;
 using UnityEngine;
 
-namespace Combat.Characters {
-    public class StateEnemy : Enemy {
-        public StateMachine.StateMachine stateMachine;
-        public EffectStateMakerSO effectStateMakerSO;
+namespace Combat.Characters
+{
+    public class StateEnemy : Enemy
+    {
+        public EnemyStateGraphSO stateMachine;
+        public TypeToIconLib IconLib;
 
         [SerializeField] private EnemyIndentController enemyIndentController;
 
-        public override Sprite Indent => ((EffectState)stateMachine.CurrentState).effect.Icon;
-        public override ITypedEffect Effect => ((EffectState)stateMachine.CurrentState).effect;
+        private IEffectState curState;
+
+        public override Sprite Indent => IconLib.GetIcon(Effect.EffectType);
+        public override IEnemyEffect Effect => curState.Effect;
 
         public override void OnCombatStart()
         {
             base.OnCombatStart();
-            stateMachine.Init(effectStateMakerSO.State);
+            curState = stateMachine.entry;
+            curState.OnEnter();
             enemyIndentController.Indent = Indent;
-        }
-
-        void Awake()
-        {
-            stateMachine = GetComponent<StateMachine.StateMachine>();
         }
 
         public override void OnTurnEnd()
         {
             base.OnTurnEnd();
-            if (stateMachine.CurrentState is EffectState)
+            var state = curState.MoveToNextState();
+            if (state is not IEffectState effectState)
             {
-                stateMachine.TransitionToNextState();
-                enemyIndentController.Indent = Indent;
+                Debug.LogError($"状态 {curState} 的下一个状态不是 IEffectState 类型，无法继续移动到下一个状态。");
+                return;
             }
+            curState = effectState;
+            enemyIndentController.Indent = Indent;
         }
     }
 }

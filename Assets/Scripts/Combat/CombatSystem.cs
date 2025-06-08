@@ -15,6 +15,7 @@ using System.Collections;
 using UnityEngine.Assertions;
 using GlobalCardManager = CardManager;
 using static Combat.Characters.EnemyLib;
+using UnityEngine.EventSystems;
 
 namespace Combat
 {
@@ -68,6 +69,8 @@ namespace Combat
         public List<Enemy> MonsterCharacters => characterManager.MonsterCharacters; // 怪物角色列表
         public List<Character> AllCharacters => characterManager.AllCharacters; // 所有角色列表
 
+        [SerializeField] private EventSystem eventSystem;
+
         void Awake()
         {
             Initialize();
@@ -100,6 +103,8 @@ namespace Combat
                 hp = Setting.PlayerHp; // 设置玩家初始血量
                 maxHp = Setting.PlayerHp; // 设置玩家最大血量
                 enemyType = DefaultEnemyType;
+                // 如果是单场景测试，则启用事件系统（否则使用全局事件系统）
+                eventSystem.gameObject.SetActive(true);
             }
             else
             {
