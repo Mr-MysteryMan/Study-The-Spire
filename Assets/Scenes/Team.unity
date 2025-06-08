@@ -1518,7 +1518,7 @@ MonoBehaviour:
   slotContainer: {fileID: 355900932}
   rightPrefab: {fileID: 7453333734493159308, guid: e56845b42e9d953409261628cea44c05, type: 3}
   close: {fileID: 963368873}
-  loadMapEvent: {fileID: 0}
+  loadMapEvent: {fileID: 11400000, guid: 4ac504bad1ee2e74dbebadd6dcf3852d, type: 2}
 --- !u!1 &1887995417
 GameObject:
   m_ObjectHideFlags: 0
