@@ -195,6 +195,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadMenuEvent: {fileID: 11400000, guid: cbaffc975a798f14cb3cc4011286ae54, type: 2}
+  gameManager: {fileID: 1756335650}
 --- !u!114 &428653942
 MonoBehaviour:
   m_ObjectHideFlags: 0
