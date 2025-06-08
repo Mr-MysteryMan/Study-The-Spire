@@ -22,12 +22,12 @@ namespace Cards.CardDatas
             this.sprite = sprite; // 设置卡牌图片
         }
 
-        private int cardCost; // 卡牌费用
-        private string cardName; // 卡牌名称
+        protected int cardCost; // 卡牌费用
+        protected string cardName; // 卡牌名称
 
-        private CardCategory cardCategory; // 卡牌分类
+        protected CardCategory cardCategory; // 卡牌分类
 
-        private CardEffectTarget cardEffectTarget; // 卡牌效果目标
+        protected CardEffectTarget cardEffectTarget; // 卡牌效果目标
 
         private Sprite sprite; // 卡牌图片
         public override CardCategory CardCategory => cardCategory; // 卡牌分类属性

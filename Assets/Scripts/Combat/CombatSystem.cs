@@ -69,6 +69,8 @@ namespace Combat
         public List<Enemy> MonsterCharacters => characterManager.MonsterCharacters; // 怪物角色列表
         public List<Character> AllCharacters => characterManager.AllCharacters; // 所有角色列表
 
+        public object CommandManager { get; internal set; }
+
         [SerializeField] private EventSystem eventSystem;
 
         void Awake()

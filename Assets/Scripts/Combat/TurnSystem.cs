@@ -25,6 +25,10 @@ namespace Combat
 
         private WhoseTurn whoseTurn = WhoseTurn.Player; // 当前回合的操作者
 
+        public WhoseTurn WhoseTurn => whoseTurn; // 当前回合的操作者
+
+        public TurnEndButtonController button;
+
         private enum TurnState
         {
             Started, // 回合开始
@@ -52,7 +56,7 @@ namespace Combat
             Debug.Log("战斗开始");
             combatSystem.EventManager.Publish(new CombatStartEvent());
             combatSystem.PlayerCharacter.OnCombatStart(); // 玩家角色开始战斗
-            
+
             var MonsterCharacters = combatSystem.MonsterCharacters.Where(m => !m.IsDead).ToList();
             foreach (var monster in combatSystem.MonsterCharacters)
             {
@@ -66,25 +70,49 @@ namespace Combat
         public void StartPlayerTurn()
         {
             whoseTurn = WhoseTurn.Player; // 玩家回合
+            turnState = TurnState.Started;
+            button.UpdateButtonState(); // 更新按钮状态
             turnNum++;
             Debug.Log($"开始第 {turnNum} 回合, 玩家回合");
             combatSystem.EventManager.Publish(new TurnStartEvent(combatSystem.PlayerCharacter, turnNum));
             combatSystem.PlayerCharacter.OnTurnStart();
         }
 
-        public void EndPlayerTurn()
+        /// <summary>
+        /// 结束玩家回合并再开始一个新的玩家回合
+        /// 即跳过敌人回合，获得一个新的回合
+        /// </summary>
+        public void EndAndStartNewPlayerTurn()
         {
+            _EndPlayerTurn();
+            StartPlayerTurn();
+        }
+
+        // 仅结束玩家回合
+        private void _EndPlayerTurn()
+        {
+            if (turnState != TurnState.Started || whoseTurn != WhoseTurn.Player)
+            {
+                Debug.LogWarning("当前回合未开始或已结束，无法结束玩家回合");
+                return;
+            }
             // 结束玩家回合
             Debug.Log("玩家回合结束");
             turnState = TurnState.Ended; // 回合结束
             combatSystem.EventManager.Publish(new TurnEndEvent(combatSystem.PlayerCharacter, turnNum));
             combatSystem.PlayerCharacter.OnTurnEnd();
+        }
+
+        public void EndPlayerTurn()
+        {
+            _EndPlayerTurn(); // 结束玩家回合
             StartCoroutine(StartEnemyTurn()); // 开始敌人回合
         }
 
         private IEnumerator StartEnemyTurn()
         {
             whoseTurn = WhoseTurn.Enemy; // 敌人回合
+            turnState = TurnState.Started; // 回合开始
             Debug.Log($"开始第 {turnNum} 回合, 敌人回合");
 
             // 复制怪物列表，避免在迭代时修改集合导致异常
@@ -124,7 +152,7 @@ namespace Combat
                 CardEffectTarget.None => new List<Character>(),
                 CardEffectTarget.AllyOne => new List<Character> { characterSelf },
                 CardEffectTarget.AllyAll => combatSystem.MonsterCharacters.Select(m => m as Character).ToList(),
-                CardEffectTarget.AllySelf => new List<Character> { characterSelf }, 
+                CardEffectTarget.AllySelf => new List<Character> { characterSelf },
 
                 CardEffectTarget.EnemyOne => new List<Character> { combatSystem.PlayerCharacter },
                 CardEffectTarget.EnemyAll => new List<Character> { combatSystem.PlayerCharacter },
@@ -145,7 +173,7 @@ namespace Combat
             var Monsters = combatSystem.MonsterCharacters.Where(m => !m.IsDead).ToList();
             foreach (var monster in Monsters)
             {
-                if (monster.IsDead) continue; 
+                if (monster.IsDead) continue;
                 combatSystem.EventManager.Publish(new TurnEndEvent(monster, turnNum));
             }
 
