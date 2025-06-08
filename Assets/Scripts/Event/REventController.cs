@@ -43,7 +43,7 @@ public class REventController : MonoBehaviour
     {
         if (cardManager.CurAdvHealth + amount >= 0)
         {
-            cardManager.CurAdvHealth = Mathf.Min(cardManager.CurAdvMaxHealth, cardManager.CurAdvHealth + amount);
+            cardManager.CurAdvHealth = Mathf.Max(cardManager.CurAdvMaxHealth, cardManager.CurAdvHealth + amount);
             Debug.Log($"变化血量：{amount}，当前血量：{cardManager.CurAdvHealth}");
         }
         else
