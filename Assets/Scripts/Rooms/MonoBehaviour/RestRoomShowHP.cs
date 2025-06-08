@@ -21,7 +21,7 @@ public class RestRoomShowHP : MonoBehaviour
         Debug.Log("TEXT:");
         Debug.Log(maxHpText.text);
         Debug.Log(curHpText.text);
-        maxHpText.text = cardManager.CurAdvMaxHealth.ToString();
-        curHpText.text = cardManager.CurAdvHealth.ToString();
+        maxHpText.text = cardManager.MaxHealth.ToString();
+        curHpText.text = cardManager.Health.ToString();
     }
 }
