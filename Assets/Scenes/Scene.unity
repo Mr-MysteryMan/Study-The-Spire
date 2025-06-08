@@ -917,7 +917,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Back To Menu
+  m_text: "\u8FD4\u56DE\u4E3B\u83DC\u5355"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d285d106dc564d64f89cb5dbec0d0033, type: 2}
   m_sharedMaterial: {fileID: -7380523363373174598, guid: d285d106dc564d64f89cb5dbec0d0033, type: 2}
