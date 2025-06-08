@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Cards.CardEffect.Cycle
 {
-    public class DrawCardEffect : IEffect
+    public class DrawCardEffect : IEffect, ISyncEffect
     {
         private int cardAmount;
 
@@ -17,13 +17,18 @@ namespace Cards.CardEffect.Cycle
         public IEnumerator Work(Character source, List<Character> targets)
         {
             yield return new WaitForSeconds(0.2f);
+            WorkSync(source, targets);
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        public void WorkSync(Character source, List<Character> targets)
+        {
             // 执行抽牌逻辑
             source.combatSystem.ProcessCommand(new Combat.Command.Cards.DrawCardCommand(source, source, cardAmount));
-            yield return new WaitForSeconds(0.2f);
         }
     }
 
-    public class DiscardRandomCardEffect : IEffect
+    public class DiscardRandomCardEffect : IEffect, ISyncEffect
     {
         private int cardAmount;
 
@@ -35,6 +40,12 @@ namespace Cards.CardEffect.Cycle
         public IEnumerator Work(Character source, List<Character> targets)
         {
             yield return new WaitForSeconds(0.2f);
+            WorkSync(source, targets);
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        public void WorkSync(Character source, List<Character> targets)
+        {
             // 执行随机弃牌逻辑
             List<ICardData> cards = source.combatSystem.CardManager.GetCardStack(Combat.CardManager.CardStackType.Hand);
             if (cards.Count < cardAmount)
@@ -55,7 +66,6 @@ namespace Cards.CardEffect.Cycle
                 tempCards.RemoveAt(idx);
             }
             source.combatSystem.ProcessCommand(new Combat.Command.Cards.DiscardCardCommand(source, source, randomCards));
-            yield return new WaitForSeconds(0.2f);
         }
     }
 

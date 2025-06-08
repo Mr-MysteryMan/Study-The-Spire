@@ -34,6 +34,7 @@ namespace Combat
             Hand, // 手牌
             Discard, // 弃牌
             DrawPile, // 抽牌堆
+            Pending,
             All,
         }
 
@@ -44,6 +45,7 @@ namespace Combat
                 CardStackType.Hand => HandCardData,
                 CardStackType.Discard => DiscardCardData,
                 CardStackType.DrawPile => NewCardData,
+                CardStackType.Pending => PendingCardData,
                 CardStackType.All => NewCardData.Concat(HandCardData).Concat(DiscardCardData).Concat(PendingCardData).ToList(),
                 _ => new List<ICardData>()
             };
@@ -131,25 +133,102 @@ namespace Combat
             updateCardPosition();
         }
 
-        private void MoveToPending(Card card)
+        private CardStackType FindCard(ICardData cardData)
         {
-            var cardData = card.CardData; // 获取卡片数据
-            cards.Remove(card.cardObj);
             if (HandCardData.Contains(cardData))
             {
-                HandCardData.Remove(cardData); // 从手牌数据列表中移除
-                PendingCardData.Add(cardData); // 添加到待处理卡片数据列表
+                return CardStackType.Hand; // 在手牌中
+            }
+            if (DiscardCardData.Contains(cardData))
+            {
+                return CardStackType.Discard; // 在弃牌中
+            }
+            if (NewCardData.Contains(cardData))
+            {
+                return CardStackType.DrawPile; // 在抽牌堆中
+            }
+            if (PendingCardData.Contains(cardData))
+            {
+                return CardStackType.All; // 在待处理卡片中
+            }
+            throw new System.Exception($"Card {cardData.CardName} not found in any card stack.");
+        }
+
+        private void RemoveFromHand(ICardData cardData)
+        {
+            if (FindCard(cardData) == CardStackType.Hand)
+            {
+                var card = cards.Find(c => c.GetComponent<Card>().CardData == cardData)?.GetComponent<Card>();
+                if (card != null)
+                {
+                    cards.Remove(card.cardObj); // 从卡片列表中移除
+                    Destroy(card.cardObj);
+                    HandCardData.Remove(cardData); // 从手牌数据列表中移除
+                }
             }
         }
 
-        private void DiscardPending(Card card)
+        private void AddToHand(ICardData cardData)
         {
-            var cardData = card.CardData; // 获取卡片数据
-            if (PendingCardData.Contains(cardData))
+            if (FindCard(cardData) == CardStackType.Hand)
             {
-                cardData.Discard(); // 弃掉卡片
-                PendingCardData.Remove(cardData); // 从待处理卡片数据列表中移除
-                DiscardCardData.Add(cardData); // 将卡片添加到弃牌数据列表
+                return;
+            }
+            CreateCard(cardData);
+            updateCardPosition();
+        }
+
+        /// <summary>
+        /// 获取指定类型的卡片列表
+        /// </summary>
+        private List<ICardData> GetCardList(CardStackType type)
+        {
+            return type switch
+            {
+                CardStackType.Hand => HandCardData,
+                CardStackType.Discard => DiscardCardData,
+                CardStackType.DrawPile => NewCardData,
+                CardStackType.Pending => PendingCardData,
+                _ => throw new System.Exception($"不合法的卡片堆类型: {type}")
+            };
+        }
+
+        public void MoveTo(ICardData cardData, CardStackType type)
+        {
+            if (cardData == null)
+            {
+                Debug.LogWarning("尝试移动空卡片数据");
+                return;
+            }
+
+            CardStackType currentType = FindCard(cardData);
+            if (currentType == type)
+            {
+                return; // 如果卡片已经在目标堆中，则不进行任何操作
+            }
+
+            if (currentType == CardStackType.Hand)
+            {
+                RemoveFromHand(cardData); // 从手牌中移除
+            }
+            else
+            {
+                List<ICardData> currentList = GetCardList(currentType);
+                currentList.Remove(cardData); // 从当前堆中移除卡片数据
+            }
+
+            if (type == CardStackType.Hand)
+            {
+                AddToHand(cardData); // 添加到手牌
+            }
+            else
+            {
+                List<ICardData> targetList = GetCardList(type);
+                targetList.Add(cardData); // 添加到目标堆中
+                if (type == CardStackType.DrawPile)
+                {
+                    cardData.Reset(); // 如果是抽牌堆，重置卡片数据
+                }
             }
         }
 
@@ -179,12 +258,7 @@ namespace Combat
         {
             foreach (var cardData in cardDatas)
             {
-                if (HandCardData.Contains(cardData))
-                {
-                    cardData.Discard(); // 弃掉卡片
-                    DiscardCardData.Add(cardData); // 将卡片添加到弃牌数据列表
-                    HandCardData.Remove(cardData); // 从手牌数据列表中移除已弃掉的卡片
-                }
+                MoveTo(cardData, CardStackType.Discard); // 将卡片移动到弃牌堆
             }
             // 更新卡片位置
             updateCardPosition();
@@ -213,9 +287,9 @@ namespace Combat
             Assert.IsTrue(this.HandCardData.Contains(card.CardData));
             if (this.EnergyPoint < card.CardCost) yield break;
             this.setEnergy(this.EnergyPoint - card.CardCost);
-            MoveToPending(card);
+            MoveTo(card.CardData, CardStackType.Pending);
             yield return card.Effect.Work(source, targets);
-            DiscardPending(card); // 弃掉已使用的卡片
+            MoveTo(card.CardData, CardStackType.Discard);
             updateCardPosition();
         }
 

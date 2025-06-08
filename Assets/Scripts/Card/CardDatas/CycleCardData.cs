@@ -63,11 +63,11 @@ namespace Cards.CardDatas.Cycle
 
         public override string Desc => $"丢弃随机1张牌并抽取{cardValue}张牌";
 
-        public override IEffect Effect => new ListEffect(new List<IEffect>
+        public override IEffect Effect => new ListSyncEffect
         {
             new DiscardRandomCardEffect(1),
             new DrawCardEffect(cardValue)
-        });
+        };
 
         public override ICardData Clone()
         {
