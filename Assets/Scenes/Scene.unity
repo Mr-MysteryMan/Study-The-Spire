@@ -1066,7 +1066,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc7902c18fa63d147b3cb04b7976eb4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pixelCursorTexture: {fileID: 2800000, guid: 9afb120e50d854241963e3f861f4b466, type: 3}
+  pixelCursorTexture: {fileID: 2800000, guid: 95888c5977d091d49ba12c9110a4ffb8, type: 3}
   hotSpot: {x: 0, y: 0}
 --- !u!4 &1825418900
 Transform:
