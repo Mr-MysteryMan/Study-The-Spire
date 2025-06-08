@@ -240,8 +240,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -806, y: -669.16943}
-  m_SizeDelta: {x: 49.0473, y: 59.36}
+  m_AnchoredPosition: {x: -801.7, y: -671.1}
+  m_SizeDelta: {x: 52.5187, y: 45.4744}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &205641749
 MonoBehaviour:
@@ -263,7 +263,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f34607a2337e1fa4da91f3aef1cb73c3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4217838d18d06c04fbb38361be7b975f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -315,7 +315,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 8.992, y: -5.162}
+  m_AnchoredPosition: {x: 8.995, y: -5.174}
   m_SizeDelta: {x: 27.2446, y: 9.9256}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &334111034
@@ -1274,7 +1274,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2.5, y: 1}
+  m_Size: {x: 15, y: 10}
   m_EdgeRadius: 0
 --- !u!212 &1607009744
 SpriteRenderer:
