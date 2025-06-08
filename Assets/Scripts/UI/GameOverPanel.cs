@@ -15,5 +15,6 @@ public class GameOverPanel : MonoBehaviour
     private void BackToMenu()
     {
         loadMenuEvent.RaiseEvent(null, this);
+        this.gameObject.SetActive(false);
     }
 }

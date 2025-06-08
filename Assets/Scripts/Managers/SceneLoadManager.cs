@@ -19,6 +19,8 @@ public class SceneLoadManager : MonoBehaviour
     public ObjectEventSO updateRoomEvent;
     public ObjectEventSO afterRoomLoadedEvent;
 
+    public GameObject GameOverPanel;
+
     public Camera mainCamera;
 
     private void Awake()
