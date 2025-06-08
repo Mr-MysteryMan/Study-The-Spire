@@ -27,26 +27,26 @@ PrefabInstance:
     - target: {fileID: 1531842398176447018, guid: 64b40806dfa432542b20bb0941f929fe, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 1372335161102834277, guid: 47ff2f5458c715048a415b2aae0a8f2f, type: 3}
+      objectReference: {fileID: 8319739539710772614, guid: d1463bd10e71da841b49a9f8916ae588, type: 3}
     - target: {fileID: 1540578467712052202, guid: 64b40806dfa432542b20bb0941f929fe, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 153.9943
+      value: 199.841
       objectReference: {fileID: 0}
     - target: {fileID: 1540578467712052202, guid: 64b40806dfa432542b20bb0941f929fe, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 171.9178
+      value: 176.694
       objectReference: {fileID: 0}
     - target: {fileID: 1540578467712052202, guid: 64b40806dfa432542b20bb0941f929fe, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -1.6044998
+      value: -16
       objectReference: {fileID: 0}
     - target: {fileID: 1540578467712052202, guid: 64b40806dfa432542b20bb0941f929fe, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 1.0679016
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4284497372401680258, guid: 64b40806dfa432542b20bb0941f929fe, type: 3}
       propertyPath: m_PresetInfoIsWorld
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6828191006110395520, guid: 64b40806dfa432542b20bb0941f929fe, type: 3}
       propertyPath: m_Pivot.x

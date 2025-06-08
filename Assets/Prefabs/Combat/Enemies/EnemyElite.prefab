@@ -24,9 +24,21 @@ PrefabInstance:
       propertyPath: effectStateMakerSO
       value: 
       objectReference: {fileID: 11400000, guid: 0b0a768508633684fa63bf98e05ff75e, type: 2}
+    - target: {fileID: 1531842398176447018, guid: 64b40806dfa432542b20bb0941f929fe, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -6055645184144104861, guid: d1463bd10e71da841b49a9f8916ae588, type: 3}
+    - target: {fileID: 1828777068964625936, guid: 64b40806dfa432542b20bb0941f929fe, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1828777068964625936, guid: 64b40806dfa432542b20bb0941f929fe, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4284497372401680258, guid: 64b40806dfa432542b20bb0941f929fe, type: 3}
       propertyPath: m_PresetInfoIsWorld
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6828191006110395520, guid: 64b40806dfa432542b20bb0941f929fe, type: 3}
       propertyPath: m_Pivot.x
