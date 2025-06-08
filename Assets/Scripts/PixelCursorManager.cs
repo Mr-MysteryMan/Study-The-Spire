@@ -10,9 +10,15 @@ public class PixelCursorManager : MonoBehaviour
 
     private void Start()
     {
-        // 启动时设置像素风光标
+        pixelCursorTexture = Resources.Load<Texture2D>("Cursors/mouse");
+        if (pixelCursorTexture == null)
+        {
+            Debug.LogError("光标贴图未加载！");
+        }
+
         ApplyPixelCursor();
     }
+
 
     private void OnApplicationFocus(bool hasFocus)
     {

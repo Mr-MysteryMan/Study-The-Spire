@@ -54,6 +54,7 @@
     <type fullname="ObjectEventSO" preserve="all" />
     <type fullname="Page" preserve="all" />
     <type fullname="ParticleController" preserve="all" />
+    <type fullname="PixelCursorManager" preserve="all" />
     <type fullname="QuestionManager" preserve="all" />
     <type fullname="QuestionStore" preserve="all" />
     <type fullname="RestRoom" preserve="all" />
