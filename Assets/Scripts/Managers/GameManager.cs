@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public MapLayoutSO mapLayout;
-    
+
     public void UpdateMapLayoutData(object value)
     {
         Debug.Log("Updating data with value: " + value);
@@ -25,7 +25,8 @@ public class GameManager : MonoBehaviour
             if (room.column < currentRoom.column)
             {
                 room.roomState = RoomState.Passed;
-            } else if (room.column > currentRoom.column)
+            }
+            else if (room.column > currentRoom.column)
             {
                 room.roomState = RoomState.Locked;
             }
@@ -50,12 +51,11 @@ public class GameManager : MonoBehaviour
             linkedRoom.roomState = RoomState.Attainable;
         }
     }
-    
+
     public void OnNewGameEvent()
     {
         mapLayout.mapRoomDataList.Clear();
         mapLayout.linePositionList.Clear();
         CardManager.Instance.ResetPlayerData();
     }
-
 }
