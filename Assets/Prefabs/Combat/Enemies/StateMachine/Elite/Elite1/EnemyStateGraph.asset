@@ -24,13 +24,13 @@ MonoBehaviour:
   - node: {fileID: 11400000, guid: 14727f595959afb489b1538fdc5f1e11, type: 2}
     position: {x: 2418, y: 912}
   - node: {fileID: 11400000, guid: 4a6a1c3e30c4f424e892628b9a9c6ec8, type: 2}
-    position: {x: 2418, y: 1115.5}
-  - node: {fileID: 11400000, guid: 0320bfe05e2d647428f4d2b097057b8e, type: 2}
-    position: {x: 2418, y: 1298.5}
+    position: {x: 2418, y: 1115.3333}
   - node: {fileID: 11400000, guid: e095c9d22c363d34ca38a0b20fb496a0, type: 2}
-    position: {x: 1842, y: 1027.5}
+    position: {x: 1842, y: 1027.3333}
   - node: {fileID: 11400000, guid: e095e6fc27546fe43850e9bab908058a, type: 2}
-    position: {x: 2418, y: 1498.5}
+    position: {x: 2418, y: 1498}
   - node: {fileID: 11400000, guid: f26576e3b4df2d24893e464a2d45f23e, type: 2}
-    position: {x: 2676, y: 1498.5}
+    position: {x: 2676, y: 1498}
+  - node: {fileID: 11400000, guid: 0320bfe05e2d647428f4d2b097057b8e, type: 2}
+    position: {x: 2418, y: 1298}
   editorFolderPath: Assets\Prefabs\Combat\Enemies\StateMachine\Elite\Elite1

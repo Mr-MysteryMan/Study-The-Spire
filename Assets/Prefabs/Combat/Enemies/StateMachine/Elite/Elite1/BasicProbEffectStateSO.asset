@@ -19,5 +19,5 @@ MonoBehaviour:
     probabilityWeight: 1
   - targetState: {fileID: 11400000, guid: 0320bfe05e2d647428f4d2b097057b8e, type: 2}
     probabilityWeight: 1
-  - targetState: {fileID: 0}
+  - targetState: {fileID: 11400000, guid: e095e6fc27546fe43850e9bab908058a, type: 2}
     probabilityWeight: 1

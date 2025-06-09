@@ -15,4 +15,4 @@ MonoBehaviour:
   typedEffect:
     EffectType: 0
     Value: 25
-  NextState: {fileID: 0}
+  NextState: {fileID: 11400000, guid: 22deaa731cf72fa46b9747a37ccde9b2, type: 2}

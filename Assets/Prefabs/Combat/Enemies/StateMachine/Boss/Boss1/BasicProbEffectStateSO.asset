@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: BasicProbEffectStateSO
   m_EditorClassIdentifier: 
   transitions:
-  - targetState: {fileID: 0}
+  - targetState: {fileID: 11400000, guid: 75e0541c865772c4ab640cdcbc5494b2, type: 2}
     probabilityWeight: 2
-  - targetState: {fileID: 0}
+  - targetState: {fileID: 11400000, guid: bb9398f27b33e474f898d4a283bfdb13, type: 2}
     probabilityWeight: 1
-  - targetState: {fileID: 0}
+  - targetState: {fileID: 11400000, guid: 2edba5520ac8d6945941f2a3178c6340, type: 2}
     probabilityWeight: 1
