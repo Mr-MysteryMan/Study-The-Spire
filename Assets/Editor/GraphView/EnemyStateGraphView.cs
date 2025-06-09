@@ -132,6 +132,67 @@ namespace EnemyStateMachine.Editor
             return output.ConnectTo(input);
         }
 
+        private void SerializeProbNode(BasicProbEffectStateSO probSO, ProbEffectStateNode probNode)
+        {
+            var soSer = new SerializedObject(probSO);
+            var listProp = soSer.FindProperty("transitions");
+
+            for (int i = 0; i < listProp.arraySize; ++i)
+            {
+                var elem = listProp.GetArrayElementAtIndex(i);
+                var tgtProp = elem.FindPropertyRelative("targetState");
+
+                /* 找端口对应的 edge（若断开则清空引用） */
+                var port = probNode.GetPortByIndex(i);
+                var edge = port.connections.FirstOrDefault();
+                tgtProp.objectReferenceValue =
+                    edge != null
+                    ? ((IStateNode)edge.input.node).TargetSO
+                    : null;
+            }
+            soSer.ApplyModifiedProperties();
+        }
+
+        private void SerializeBasicNode(BasicEffectStateSO basicSO, EffectStateNode basicNode)
+        {
+            var soSer = new SerializedObject(basicSO);
+            var nextProp = soSer.FindProperty("NextState");
+
+            /* 找端口对应的 edge（若断开则清空引用） */
+            var outPort = basicNode.GetPort("Next");
+            var edge = outPort.connections.FirstOrDefault();
+            nextProp.objectReferenceValue =
+                edge != null
+                ? ((IStateNode)edge.input.node).TargetSO
+                : null;
+
+            soSer.ApplyModifiedProperties();
+        }
+
+        private void SerializeConditionNode(BasicConditionEffectStateSO conditionSO, EffectStateNode conditionNode)
+        {
+            var soSer = new SerializedObject(conditionSO);
+            var trueProp = soSer.FindProperty("trueState");
+            var falseProp = soSer.FindProperty("falseState");
+
+            var truePort = conditionNode.GetPort("True");
+            var falsePort = conditionNode.GetPort("False");
+
+            var trueEdge = truePort.connections.FirstOrDefault();
+            var falseEdge = falsePort.connections.FirstOrDefault();
+
+            trueProp.objectReferenceValue =
+                trueEdge != null
+                ? ((IStateNode)trueEdge.input.node).TargetSO
+                : null;
+            falseProp.objectReferenceValue =
+                falseEdge != null
+                ? ((IStateNode)falseEdge.input.node).TargetSO
+                : null;
+            
+            soSer.ApplyModifiedProperties();
+        }
+
         public void Serialize(EnemyStateGraphSO graph)
         {
             /* ---------- 0. 保存位置 & 记录 Undo ---------- */
@@ -150,26 +211,26 @@ namespace EnemyStateMachine.Editor
             /* ---------- 2. 写回 Prob 节点 Transition 的连接 ---------- */
             foreach (var kv in nodeLookup)
             {
-                if (kv.Key is not BasicProbEffectStateSO probSO) continue;
+                var so = kv.Key;
+                var node = kv.Value;
 
-                var probNode = (ProbEffectStateNode)kv.Value;
-                var soSer = new SerializedObject(probSO);
-                var listProp = soSer.FindProperty("transitions");
-
-                for (int i = 0; i < listProp.arraySize; ++i)
+                switch (so)
                 {
-                    var elem = listProp.GetArrayElementAtIndex(i);
-                    var tgtProp = elem.FindPropertyRelative("targetState");
+                    case BasicProbEffectStateSO probSO:
+                        SerializeProbNode(probSO, (ProbEffectStateNode)node);
+                        break;
 
-                    /* 找端口对应的 edge（若断开则清空引用） */
-                    var port = probNode.GetPortByIndex(i);
-                    var edge = port.connections.FirstOrDefault();
-                    tgtProp.objectReferenceValue =
-                        edge != null
-                        ? ((IStateNode)edge.input.node).TargetSO
-                        : null;
+                    case BasicEffectStateSO basicSO:
+                        SerializeBasicNode(basicSO, (EffectStateNode)node);
+                        break;
+
+                    case BasicConditionEffectStateSO condSO:
+                        SerializeConditionNode(condSO, (EffectStateNode)node);
+                        break;
+
+                    default:
+                        continue; // 其他类型不处理
                 }
-                soSer.ApplyModifiedProperties();
             }
 
             /* ---------- 3. 保存节点位置 ---------- */
