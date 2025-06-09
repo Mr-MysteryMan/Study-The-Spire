@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4284497372401680258, guid: bff855922a8903b43a7d26229b53d669, type: 3}
       propertyPath: m_PresetInfoIsWorld
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6828191006110395520, guid: bff855922a8903b43a7d26229b53d669, type: 3}
       propertyPath: m_Pivot.x
@@ -99,6 +99,14 @@ PrefabInstance:
     - target: {fileID: 6932865689625951777, guid: bff855922a8903b43a7d26229b53d669, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7788220300496292379, guid: bff855922a8903b43a7d26229b53d669, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -6226974996543278558, guid: 6f381b5f6cd86584fb19549b8f834275, type: 3}
+    - target: {fileID: 7797517003374619611, guid: bff855922a8903b43a7d26229b53d669, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8887891203348593607, guid: bff855922a8903b43a7d26229b53d669, type: 3}
       propertyPath: m_Name
