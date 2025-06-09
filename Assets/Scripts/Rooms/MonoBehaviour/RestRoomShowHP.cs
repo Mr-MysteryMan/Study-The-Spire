@@ -27,7 +27,8 @@ public class RestRoomShowHP : MonoBehaviour
         float healthPercentage = (float)cardManager.Health / cardManager.MaxHealth;
 
         int totalSprites = healthSprites.Length;
-        int spriteIndex = Mathf.FloorToInt(healthPercentage * totalSprites);
+        int spriteIndex = Mathf.FloorToInt(healthPercentage * (totalSprites - 1));
+        spriteIndex = Mathf.Clamp(spriteIndex, 0, totalSprites - 1); // 确保索引在范围内
 
         sprite = GetComponent<SpriteRenderer>();
         sprite.sprite = healthSprites[spriteIndex];

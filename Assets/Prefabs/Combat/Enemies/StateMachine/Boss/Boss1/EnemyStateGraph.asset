@@ -23,6 +23,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2edba5520ac8d6945941f2a3178c6340, type: 2}
   - {fileID: 11400000, guid: 22deaa731cf72fa46b9747a37ccde9b2, type: 2}
   nodeMetas:
+  - node: {fileID: 11400000, guid: bf9ece932ea43cf4da50607d47138353, type: 2}
+    position: {x: -558.6667, y: -181.33333}
+  - node: {fileID: 11400000, guid: 10edb686e9191bc4d83df6e925934dd7, type: 2}
+    position: {x: -320.66666, y: -181.33333}
   - node: {fileID: 11400000, guid: 2b8746676ce8ddd4aa6deacdb8bc6050, type: 2}
     position: {x: -32.666668, y: -181.33333}
   - node: {fileID: 11400000, guid: c055c0c510bee314d89e4f73b76658dd, type: 2}
@@ -35,8 +39,4 @@ MonoBehaviour:
     position: {x: 54, y: 345.3333}
   - node: {fileID: 11400000, guid: 22deaa731cf72fa46b9747a37ccde9b2, type: 2}
     position: {x: -558.6667, y: 36}
-  - node: {fileID: 11400000, guid: 10edb686e9191bc4d83df6e925934dd7, type: 2}
-    position: {x: -320.66666, y: -181.33333}
-  - node: {fileID: 11400000, guid: bf9ece932ea43cf4da50607d47138353, type: 2}
-    position: {x: -558.6667, y: -181.33333}
   editorFolderPath: Assets\Prefabs\Combat\Enemies\StateMachine\Boss\Boss1
