@@ -102,7 +102,7 @@ public class ShopPanelManager : MonoBehaviour
 
         bottomPanel = root.Find("Bottom");
         bottomMenus = bottomPanel.Find("BottomMenus");
-        bottomMenus.Find("ShowGold/Text").GetComponent<Text>().text = $"Gold {cardManager.gold}";
+        bottomMenus.Find("ShowGold/Text").GetComponent<Text>().text = $"{cardManager.gold}";
         goldTextParent = bottomMenus.Find("ShowGold");
         // detailBtn = bottomMenus.Find("DetailBtn");
 
