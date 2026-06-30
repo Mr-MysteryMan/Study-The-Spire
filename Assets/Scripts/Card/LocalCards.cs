@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using Cards.CardDatas;
+using Cards.CardDatas.Cycle;
+using Cars.CardDatas;
 
 namespace Cards
 {
@@ -12,11 +14,18 @@ namespace Cards
             new TypedCardData(CardType.Defense, 8, 1),
             new TypedCardData(CardType.Defense, 8, 1),
 
+
+
             new ApplyWeak(2, 0),
             new ApplyVulnerable(2, 0),
             new ApplyFragil(2, 0),
             new ApplyPoison(4, 1),
-            new GainStrength(2, 1)
+            new GainStrength(2, 1),
+
+            new QuestionCardData(5, 2),
+
+            new DrawCardData(3, 1),
+            new DiscardAndDrawCardData(5, 1),
         };
 
         public static List<ICardData> GetCards()

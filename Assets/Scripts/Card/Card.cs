@@ -15,7 +15,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler
 
     public Text cardCostText; // 卡片费用文本
     public Text cardNameText; // 卡片名称文本
-    public Text cardDescText; // 卡片描述文本
+    public TMPro.TMP_Text cardDescText; // 卡片描述文本
 
     [Header("卡片基本信息")]
     //----------------------基本信息---------------------//
@@ -102,10 +102,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler
     public void UpdateCardUI() {
         // 按照CardCategory加载背景spirit
         this.background.sprite = cardData.CardCategory switch {
-            CardCategory.Attack => Resources.Load<Sprite>("CardUI/Attack"),
-            CardCategory.Skill => Resources.Load<Sprite>("CardUI/Skill"),
-            CardCategory.Status => Resources.Load<Sprite>("CardUI/Status"),
-            _ => Resources.Load<Sprite>("CardUI/None"),
+            _ => Resources.Load<Sprite>("CardUI/CardBackGround"),
         };
         this.image.sprite = cardData.Sprite; // 设置卡片图片
         this.cardCostText.text = cardData.Cost.ToString();// 加载卡片费用

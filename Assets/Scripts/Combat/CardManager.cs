@@ -1,5 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Cards;
+using Cards.Modifier;
 using Combat.Characters;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -24,44 +27,75 @@ namespace Combat
         public List<ICardData> HandCardData; // 手牌数据列表
         public List<ICardData> DiscardCardData; // 弃牌数据列表
 
+        public List<ICardData> PendingCardData; // 待处理卡片数据列表
+
+        public enum CardStackType
+        {
+            Hand, // 手牌
+            Discard, // 弃牌
+            DrawPile, // 抽牌堆
+            Pending,
+            All,
+        }
+
+        public List<ICardData> GetCardStack(CardStackType type)
+        {
+            return type switch
+            {
+                CardStackType.Hand => HandCardData,
+                CardStackType.Discard => DiscardCardData,
+                CardStackType.DrawPile => NewCardData,
+                CardStackType.Pending => PendingCardData,
+                CardStackType.All => NewCardData.Concat(HandCardData).Concat(DiscardCardData).Concat(PendingCardData).ToList(),
+                _ => new List<ICardData>()
+            };
+        }
+
         private GlobalCardManager globalCardManager = GlobalCardManager.Instance; // 全局卡片管理器
 
         private List<GameObject> cards = new List<GameObject>(); // 卡片列表
 
         private CombatSystem combatSystem;
 
-        private Character player; // 玩家角色
-        private List<Enemy> enemy; // 敌人角色
-
         [SerializeField] private RectTransform uiRectTransform;
 
-        enum CardSource {
-            GlobalCardManager, 
+        public enum CardSource
+        {
+            GlobalCardManager,
             RandomCardData,
             LocalCardLib
         }
 
         [SerializeField] private CardSource cardSource = CardSource.GlobalCardManager;
 
-        public void init(CombatSystem combatSystem)
+        public void AddEnergy(int energy)
         {
-            this.NewCardData = cardSource switch
+            this.setEnergy(this.EnergyPoint + energy); // 增加能量点
+        }
+
+        public void init(CombatSystem combatSystem, Character character)
+        {
+            this.NewCardData = (cardSource switch
             {
                 CardSource.GlobalCardManager => globalCardManager.GetAllCards(), // 从全局卡片管理器获取随机卡片数据
                 CardSource.RandomCardData => ViewCards.randomCardData(),
                 CardSource.LocalCardLib => LocalCards.GetCards(),
                 _ => globalCardManager.GetAllCards()
-            };
+            }).Select(x => x.Clone()).ToList();
+
+            this.NewCardData.ForEach(x => x.Modify(character));
 
             setEnergy(Setting.RoundEnergy); // 设置能量点
             ResetNewCards();
             HandCardData = new List<ICardData>(); // 初始化手牌数据列表
             DiscardCardData = new List<ICardData>(); // 初始化弃牌数据列表
+            PendingCardData = new List<ICardData>(); // 初始化待处理卡片数据列表
 
             this.combatSystem = combatSystem; // 设置战斗系统
         }
 
-        public void ResetNewCards () {
+        private void ResetNewCards()
+        {
             foreach (var cardData in NewCardData)
             {
                 cardData.Reset();
@@ -80,9 +114,7 @@ namespace Combat
                 {
                     if (DiscardCardData.Count > 0) // 如果有弃牌
                     {
-                        NewCardData.AddRange(DiscardCardData); // 将弃牌添加到新卡片列表
-                        DiscardCardData.Clear(); // 清空弃牌列表
-                        ResetNewCards();
+                        MoveDiscardToDrawPile();
                     }
                     else
                     {
@@ -101,6 +133,118 @@ namespace Combat
             updateCardPosition();
         }
 
+        private CardStackType FindCard(ICardData cardData)
+        {
+            if (HandCardData.Contains(cardData))
+            {
+                return CardStackType.Hand; // 在手牌中
+            }
+            if (DiscardCardData.Contains(cardData))
+            {
+                return CardStackType.Discard; // 在弃牌中
+            }
+            if (NewCardData.Contains(cardData))
+            {
+                return CardStackType.DrawPile; // 在抽牌堆中
+            }
+            if (PendingCardData.Contains(cardData))
+            {
+                return CardStackType.Pending; // 在待处理卡片中
+            }
+            throw new System.Exception($"Card {cardData.CardName} not found in any card stack.");
+        }
+
+        private void RemoveFromHand(ICardData cardData, bool destroy = true)
+        {
+            if (FindCard(cardData) == CardStackType.Hand)
+            {
+                var card = cards.Find(c => c.GetComponent<Card>().CardData == cardData)?.GetComponent<Card>();
+                if (card != null)
+                {
+                    cards.Remove(card.cardObj); // 从卡片列表中移除
+                    if (destroy)
+                    {
+                        Destroy(card.cardObj);
+                    }
+                    HandCardData.Remove(cardData); // 从手牌数据列表中移除
+                }
+            }
+        }
+
+        private void AddToHand(ICardData cardData)
+        {
+            if (FindCard(cardData) == CardStackType.Hand)
+            {
+                return;
+            }
+            CreateCard(cardData);
+            updateCardPosition();
+        }
+
+        /// <summary>
+        /// 获取指定类型的卡片列表
+        /// </summary>
+        private List<ICardData> GetCardList(CardStackType type)
+        {
+            return type switch
+            {
+                CardStackType.Hand => HandCardData,
+                CardStackType.Discard => DiscardCardData,
+                CardStackType.DrawPile => NewCardData,
+                CardStackType.Pending => PendingCardData,
+                _ => throw new System.Exception($"不合法的卡片堆类型: {type}")
+            };
+        }
+
+        public void MoveTo(ICardData cardData, CardStackType type, bool destroy = true)
+        {
+            if (cardData == null)
+            {
+                Debug.LogWarning("尝试移动空卡片数据");
+                return;
+            }
+
+            CardStackType currentType = FindCard(cardData);
+            if (currentType == type)
+            {
+                return; // 如果卡片已经在目标堆中，则不进行任何操作
+            }
+
+            if (currentType == CardStackType.Hand)
+            {
+                RemoveFromHand(cardData, destroy); // 从手牌中移除
+            }
+            else
+            {
+                List<ICardData> currentList = GetCardList(currentType);
+                currentList.Remove(cardData); // 从当前堆中移除卡片数据
+            }
+
+            if (type == CardStackType.Hand)
+            {
+                AddToHand(cardData); // 添加到手牌
+            }
+            else
+            {
+                List<ICardData> targetList = GetCardList(type);
+                targetList.Add(cardData); // 添加到目标堆中
+                if (type == CardStackType.DrawPile)
+                {
+                    cardData.Reset(); // 如果是抽牌堆，重置卡片数据
+                }
+            }
+        }
+
+        public void MoveDiscardToDrawPile()
+        {
+            if (DiscardCardData.Count > 0)
+            {
+                NewCardData.AddRange(DiscardCardData); // 将弃牌添加到新卡片数据列表
+                DiscardCardData.Clear(); // 清空弃牌数据列表
+                ResetNewCards(); // 重置新卡片数据
+            }
+        }
+
         public void discardCard(Card card)
         {
             if (HandCardData.Exists(x => x == card.CardData))
@@ -111,6 +255,16 @@ namespace Combat
             }
             // 销毁卡片对象
             DestroyImmediate(card.cardObj); // 销毁卡片对象
+        }
+
+        public void DiscardCards(List<ICardData> cardDatas)
+        {
+            foreach (var cardData in cardDatas)
+            {
+                MoveTo(cardData, CardStackType.Discard); // 将卡片移动到弃牌堆
+            }
+            // 更新卡片位置
+            updateCardPosition();
         }
 
         public void discardAll()
@@ -131,27 +285,15 @@ namespace Combat
             updateCardPosition(); // 更新卡片位置
         }
 
-        public void addCharacter(Character player, List<Enemy> enemy)
+        public IEnumerator UseHandCard(Card card, Character source, List<Character> targets)
         {
-            this.player = player;
-            this.enemy = enemy;
-        }
-
-        public Character getUser(Card card)
-        {
-            return this.player;
-        }
-        public Character getTarget(Card card)
-        {
-            return this.enemy[0];
-        }
-
-        public void UseHandCard(Card card, Character source, Character target) {
             Assert.IsTrue(this.HandCardData.Contains(card.CardData));
-            if (this.EnergyPoint < card.CardCost) return;
+            if (this.EnergyPoint < card.CardCost) yield break;
             this.setEnergy(this.EnergyPoint - card.CardCost);
-            card.Effect.Work(source, target);
-            reportUse(card);
+            MoveTo(card.CardData, CardStackType.Pending, destroy: false);
+            yield return card.Effect.Work(source, targets);
+            MoveTo(card.CardData, CardStackType.Discard);
+            updateCardPosition();
         }
 
         public void reportUse(Card card)
@@ -169,6 +311,34 @@ namespace Combat
             card.updateCardStatus(cardData); // 更新卡片状态
             card.addManager(this); // 添加卡片管理器
             cards.Add(CardObj); // 添加卡片到列表
+        }
+
+        public void UpdateCardStatus(ICardData cardData)
+        {
+            if (cards.Find(card => card.GetComponent<Card>().CardData == cardData) is GameObject cardObj)
+            {
+                Card card = cardObj.GetComponent<Card>();
+                card.updateCardStatus(cardData); // 更新卡片状态
+            }
+        }
+
+        public enum ModifySubType
+        {
+            Add,
+            Mul
+        }
+
+        public void ModifyCard(ICardData cardData, float factor, ModifyType type, ModifySubType subType)
+        {
+            if (subType == ModifySubType.Add)
+            {
+                cardData.ModifyAdd(factor, type); // 添加修改
+            }
+            else if (subType == ModifySubType.Mul)
+            {
+                cardData.ModifyMul(factor, type); // 乘法修改
+            }
+            UpdateCardStatus(cardData); // 更新卡片状态
         }
 
         public void updateCardPosition()
@@ -200,6 +370,32 @@ namespace Combat
             {
                 EnergySpotText.text = this.energy.ToString(); // 更新能量点文本
             }
+        }
+
+        public Result IsPlayable(ICardData card)
+        {
+            // 检查卡牌是否在手牌中
+            if (!HandCardData.Contains(card))
+            {
+                return Result.Fail("卡牌不在手牌中");
+            }
+
+            if (card is ICardPlayable playableCard)
+            {
+                return playableCard.IsPlayable(combatSystem); // 如果卡牌实现了ICardPlayable接口，调用其IsPlayable方法
+            }
+
+            // 检查能量点是否足够
+            if (EnergyPoint < card.Cost)
+            {
+                return Result.Fail($"能量点不足: {EnergyPoint}/{card.Cost}");
+            }
+            // 检查卡牌效果目标是否有效
+            if (!card.CardEffectTarget.IsValidTarget())
+            {
+                return Result.Fail("卡牌不可用");
+            }
+            return Result.Ok(); // 卡牌可用
         }
     }
 }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3745868121274804394}
   m_Layer: 5
   m_Name: Indicator
-  m_TagString: Untagged
+  m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -560,7 +560,10 @@ MonoBehaviour:
   AmmorDamageTextPrefab: {fileID: 3863978677906495707, guid: 22b2803e2491b874f8d99d0c8cfc9c44, type: 3}
   HealTextPrefab: {fileID: 7171255566250591821, guid: b1235edb5ba99ca49ad856d1e94bc7fa, type: 3}
   BasicTextPrefab: {fileID: 5700190467429854540, guid: ebbc0c81528a7fd4b9f560cdef821f42, type: 3}
+  HealParticlePrefab: {fileID: 5731347950669677211, guid: b6e210032f7efb5438a2b9650ef3ada9, type: 3}
+  AmmorParticlePrefab: {fileID: 0}
   textRectTransform: {fileID: 6434083899016443662}
+  bootomRectTransform: {fileID: 1003283993850154093}
   indicator: {fileID: 333605889547987274}
 --- !u!1 &7745471018501220792
 GameObject:
@@ -637,6 +640,41 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &7784776848085581313
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1003283993850154093}
+  m_Layer: 5
+  m_Name: VFXBottomAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1003283993850154093
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7784776848085581313}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2280233093116617456}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -123.1}
+  m_SizeDelta: {x: 160, y: 50.4104}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &8780125417047320614
 GameObject:
   m_ObjectHideFlags: 0
@@ -669,6 +707,7 @@ RectTransform:
   - {fileID: 3580303198694031445}
   - {fileID: 3590276734458366773}
   - {fileID: 6434083899016443662}
+  - {fileID: 1003283993850154093}
   - {fileID: 4802671488126401034}
   - {fileID: 8683642487614454104}
   m_Father: {fileID: 0}

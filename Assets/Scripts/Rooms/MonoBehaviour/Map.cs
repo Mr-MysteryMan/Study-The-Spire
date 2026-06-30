@@ -171,7 +171,6 @@ public class Map : MonoBehaviour
     
     private void SaveMap()
     {
-      
         mapLayout.mapRoomDataList = new List<MapRoomData>();
         Debug.Log("222 " + mapLayout.mapRoomDataList.Count);
         // 添加已经生成的房间

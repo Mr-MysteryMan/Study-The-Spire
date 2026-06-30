@@ -16,14 +16,10 @@ namespace Combat
         // string版本的事件表，使用名称索引事件
         public Dictionary<string, Delegate> stringEventTable;
 
-        private void Initialize()
+        public void Initialize()
         {
             eventTable = new Dictionary<Type, Delegate>();
             stringEventTable = new Dictionary<string, Delegate>();
-        }
-
-        private void Awake() {
-            Initialize();
         }
 
         // 订阅事件

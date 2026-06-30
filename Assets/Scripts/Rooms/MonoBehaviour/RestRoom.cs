@@ -1,4 +1,5 @@
 using Combat;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -10,17 +11,13 @@ public class RestRoom : MonoBehaviour
 
     private void HandleCorrectAnswer()
     {
-        Debug.Log($"�ش���ȷ��");
-        cardManager.health += 100;
-        //���ص�ͼ
+        cardManager.CurAdvHealth = cardManager.CurAdvMaxHealth;
         loadMapEvent.RaiseEvent(null, this);
     }
 
     private void HandleWrongAnswer()
     {
-        Debug.Log($"�ش����");
-        cardManager.health -= 50;
-        //���ص�ͼ
+        cardManager.CurAdvHealth += cardManager.CurAdvMaxHealth / 4;
         loadMapEvent.RaiseEvent(null, this);
     }
 
@@ -29,8 +26,8 @@ public class RestRoom : MonoBehaviour
         var question = Instantiate(questionPrefab);
         QuestionManager questionManager = question.GetComponent<QuestionManager>();
         questionManager.init(
-            () => HandleCorrectAnswer(),  // ��ȷ�𰸻ص�
-            () => HandleWrongAnswer()    // ����𰸻ص�
+            () => HandleCorrectAnswer(),  
+            () => HandleWrongAnswer()
         );
         cardManager = CardManager.Instance;
      

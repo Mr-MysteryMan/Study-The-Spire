@@ -16,10 +16,19 @@ public class CardManager : MonoBehaviour
     public int gold { get; set; } = Setting.TreasureGoldNum;
 
     // 玩家血量
-    public int health { get; set; } = Setting.PlayerHp;
+    public int Health => AliveCharacters.Sum(c => c.Health);
+
+    public int MaxHealth => AliveCharacters.Sum(c => c.MaxHealth);
+
+    public int CharacterCount => AliveCharacters.Count;
+
+    public int CurAdvHealth { get => AliveCharacters.Last().Health; set => AliveCharacters.Last().Health = value; }
+    public int CurAdvMaxHealth { get => AliveCharacters.Last().MaxHealth; set => AliveCharacters.Last().MaxHealth = value; }
 
     // 选择
-    public List<CharacterType> characterTypes { get; private set; } = new List<CharacterType>();
+    public List<CharacterInfo> characterTypes { get; private set; } = new List<CharacterInfo>();
+
+    public List<CharacterInfo> AliveCharacters => characterTypes.Where(c => !c.IsDead).ToList();
 
     private void Awake()
     {
@@ -141,12 +150,36 @@ public class CardManager : MonoBehaviour
     
     public void ResetPlayerData(){
         gold = 200;
-        health = 100;
+        characterTypes.ForEach(c => c.Reset()) ;
     }
     
     public void SetCharacterTypes(List<CharacterType> types)
     {
-        characterTypes = types;
+        characterTypes.Clear();
+        foreach (var type in types)
+        {
+            characterTypes.Add(CharacterInfo.Create(type));
+        }
     }
 
+    public void RespawnCharacter()
+    {
+        if (AliveCharacters.Count < characterTypes.Count)
+        {
+            var deadCharacter = characterTypes.FirstOrDefault(c => c.IsDead);
+            if (deadCharacter != null)
+            {
+                deadCharacter.Respawn();
+                Debug.Log($"复活角色：{deadCharacter.characterType}");
+            }
+            else
+            {
+                Debug.LogWarning("没有死亡的角色可以复活");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("所有角色都已存活，无法复活");
+        }
+    }
 }

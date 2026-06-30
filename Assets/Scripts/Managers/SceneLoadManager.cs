@@ -14,10 +14,12 @@ public class SceneLoadManager : MonoBehaviour
     public AssetReference team;
 
     private Vector2Int currentRoomVector;
-    private Room currentRoom;
+    public Room currentRoom;
     private Room currentRoomSelect111;
     public ObjectEventSO updateRoomEvent;
     public ObjectEventSO afterRoomLoadedEvent;
+
+    public GameObject GameOverPanel;
 
     public Camera mainCamera;
 

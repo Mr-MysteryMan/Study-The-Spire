@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Combat.Characters;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,16 +12,14 @@ public class Treasure : MonoBehaviour
     public GameObject CardPrefab; // 卡片预制件
     // ----------------------基本信息---------------------//
     private int goldNum; // 金币数
-    private int health; // 生命值
     private List<ICardData> cardDataList = new List<ICardData>(); // 卡片数据列表
     private static CardManager cardManager;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
-    public void init(int health, OnClosed onClosed)
+    public void init(List<Adventurer> infos, OnClosed onClosed)
     {
         if (cardManager == null) // 如果卡片管理器为空
             cardManager = CardManager.Instance; // 获取卡片管理器实例
-        this.health = health; // 设置生命值
         // 生成金币数
         int goldNumBase = Setting.TreasureGoldNum; // 设置金币数
         goldNum = (int)Random.Range(goldNumBase * 0.5f, goldNumBase * 1.5f); // 随机生成金币数
@@ -54,8 +53,8 @@ public class Treasure : MonoBehaviour
             button.onClick.AddListener(() =>
             {
                 // 点击卡片时，应用宝物效果
-                Debug.Log(goldNum + " " + j + " " + health);
-                work(goldNum, cardData, health);
+                Debug.Log(goldNum + " " + j + " ");
+                work(goldNum, cardData, infos);
                 close(); // 关闭宝物
             });
         }
@@ -74,10 +73,13 @@ public class Treasure : MonoBehaviour
     public event OnClosed onClosed;
 
     // 应用宝物效果
-    public static void work(int GoldNum, ICardData cardData, int health)
+    public static void work(int GoldNum, ICardData cardData, List<Adventurer> advs)
     {
         cardManager.AddGold(GoldNum); // 设置金币
         cardManager.AddCard(cardData); // 添加卡片
-        cardManager.health = health; // 设置生命值
+        foreach (var adv in advs)
+        {
+            adv.SetToGlobalStatus();
+        }
     }
 }

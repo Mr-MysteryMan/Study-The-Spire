@@ -12,47 +12,31 @@ namespace Combat.Characters
     /// </summary>
     public class Adventurer : Character
     {
-        // 回合开始时的法力值
-        private ReactiveIntVariable turnMana;
-        private ReactiveIntVariable mana;
-
-        [SerializeField] private int initTurnMana = 0; // 初始法力值
-
         public int Mana => combatSystem.CardManager.EnergyPoint; // 目前直接以CardManager的法力值作为角色的法力值。
-        public int TurnMana => turnMana.Value;
 
-        protected override void Init(CombatSystem combatSystem)
+        private CharacterInfo oriCharacterInfo; // 原始角色信息，用于战斗结束后设置全局的状态
+        public CharacterType CharacterType;
+
+        public void InitOriInfo(CharacterInfo info)
         {
-            base.Init(combatSystem);
-            var eventManager = combatSystem.EventManager;
-            turnMana = new ReactiveIntVariable("TurnMana", initTurnMana, eventManager, this);
-            mana = new ReactiveIntVariable("Mana", 0, eventManager, this);
+            this.oriCharacterInfo = info;
         }
 
-        public void SetInitMana(int mana) // 设置初始化法力值数据
+        public CharacterInfo ToInfo()
         {
-            initTurnMana = mana;
+            return new CharacterInfo(
+                type: this.CharacterType, // 角色类型可以根据实际情况设置
+                health: this.CurHp,
+                maxHealth: this.MaxHp,
+                attackPower: AttackPower,
+                healPower: HealPower,
+                defensePower: DefensePower
+            );
         }
 
-        internal void SetMana(int mana)
+        public void SetToGlobalStatus()
         {
-            this.mana.Value = mana;
-        }
-
-        internal void UseMana(int mana)
-        {
-            if (this.mana.Value < mana)
-            {
-                // 也许法力值可以透支，Debug显示一下
-                Debug.LogError("法力值不足！");
-            }
-            this.mana.Value -= mana;
-        }
-
-        public override void OnTurnStart()
-        {
-            base.OnTurnStart();
-            this.mana.Value = turnMana.Value; // 回合开始时恢复法力值
+            oriCharacterInfo.Set(this.ToInfo());
         }
     }
 }

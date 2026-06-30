@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a250aede7b9a904883f15781fb1741e, type: 3}
+  m_Name: AdventurerLib
+  m_EditorClassIdentifier: 
+  adventurers:
+  - Type: 0
+    Prefab: {fileID: 3668985479852560169, guid: b3f373eca5b65c745ab377a09deab1e7, type: 3}
+  - Type: 1
+    Prefab: {fileID: 1561622668783957087, guid: cf311946dc8e6c94da63bf24b12b53ac, type: 3}
+  - Type: 2
+    Prefab: {fileID: 8311152527361756245, guid: b57a5edc50c90034d9ee641a14635623, type: 3}

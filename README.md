@@ -1,17 +1,72 @@
 # Study-The-Spire
 
-这里是 Study-The-Spire，开发这款软件吧少年！\
+## 项目介绍
 
-Mr-MysteryMan-孙 mr 触发 CI/CD 操作, **pym 是 commit 信息里面写 xxx 触发 CI/CD 操作**
+几个大学生的软件工程课程整活实践，欢迎试用
 
-sevspoons-李 l 触发 CI/CD 操作,～(∠・ω< )⌒★kira
+Study-The-Spire是一款带有一定科普性和学习性的游戏。玩家进入一个充满趣味与挑战的游戏世界，在探索剧情、完成任务的过程中，会触发嵌入式的知识问答关卡。在游戏内部接入了多种题库，每位玩家可以根据自己的兴趣和学习目标，自主选择不同主题的题库（如科学常识、历史文化、数学逻辑等，~~甚至包括二次元小知识~~），这些题目会自然融入关卡进程和休息房间中。答题正确能获得高额反馈，增强学习动力与成就感。游戏既保持娱乐性，又实现科普性内容的潜移默化传递。
 
-link-李 sm 触发 CI/CD 操作,有人有 Unity 2023.3 及以上的版本吗
+## 一些demo
 
-groundedlens-邓 xf 触发 CI/CD 操作
+### 开始界面
 
-Dong3gold-董 x 触发 CI/CD 操作, 有的，这样的版本还有unity 6（国区除外）
+<div align="center">   
+    <img src="img/新游戏.gif" width="48%" style="margin-right: 10px; zoom: 15%">   
+    <img src="img/继续游戏.gif" width="48%" style="zoom: 15%"> 
+</div>
 
-Kina-牛 触发 CI/CD 操作 dw
+### 组建队伍
 
-Nyx12333 触发 CI/CD 操作, 有的兄弟有的
+<img src="img/组队.gif" style="zoom: 22%;" />
+
+
+### 地图场景
+
+<img src="img/地图.png" style="zoom: 20%;" />
+
+
+### 战斗场景
+
+<div align="center">   
+    <img src="img/战斗1.gif" width="48%" style="margin-right: 10px; zoom: 15%">   
+    <img src="img/战斗2.gif" width="48%" style="zoom: 15%"> 
+</div>
+
+
+### 商店场景
+
+<img src="img/商店.gif" style="zoom: 20%;" />
+
+### 背包场景
+
+<img src="img/背包.gif" style="zoom: 20%;" />
+
+### 休息室
+
+<div align="center">   
+    <img src="img/休息室.gif" width="48%" style="margin-right: 10px; zoom: 15%">   
+    <img src="img/休息答题.gif" width="48%" style="zoom: 15%"> 
+</div>
+
+### 随机事件
+
+<img src="img/事件.gif" style="zoom: 20%;" />
+
+
+### 题目回答
+
+<div align="center">   
+    <img src="img/战斗答题.gif" width="48%" style="margin-right: 10px; zoom: 15%">   
+    <img src="img/休息答题.gif" width="48%" style="zoom: 15%"> 
+</div>
+
+<div align="center">   
+    <img src="img/题目笔记.gif" width="48%" style="margin-right: 10px; zoom: 15%">   
+    <img src="img/题库选择.gif" width="48%" style="zoom: 15%"> 
+</div>
+
+
+## 项目发布
+
+- [软件发布链接](https://github.com/Mr-MysteryMan/Study-The-Spire/releases/tag/Final)
+- [完整Demo演示链接](https://www.bilibili.com/video/BV1fXTizMEt1/?vd_source=5a5645ae4770b714297ef5a75136b132)
